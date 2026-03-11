@@ -1,0 +1,86 @@
+name: Update Article Sitemap
+
+on:
+  schedule:
+    # Runs every day at 2:00 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  update-sitemap:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate sitemap-articles.xml
+        env:
+          API_URL: ${{ secrets.DEKHO_API_URL }}
+          SITE_URL: https://elv8dgtl.in
+          ARTICLE_PAGE: dekho-article.html
+        run: |
+          # Google Apps Script redirects GET — follow redirect manually
+          REDIRECT=$(curl -s -o /dev/null -w "%{redirect_url}" "$API_URL?action=listSitemap")
+          if [ -z "$REDIRECT" ]; then
+            RESPONSE=$(curl -s "$API_URL?action=listSitemap")
+          else
+            RESPONSE=$(curl -s "$REDIRECT")
+          fi
+
+          echo "API response: $RESPONSE"
+
+          # Parse and generate XML using node
+          node -e "
+          const fs       = require('fs');
+          const siteUrl  = process.env.SITE_URL;
+          const page     = process.env.ARTICLE_PAGE;
+          const raw      = \`$RESPONSE\`;
+
+          let data;
+          try { data = JSON.parse(raw); } catch(e) {
+            console.error('Failed to parse API response:', raw.slice(0, 300));
+            process.exit(1);
+          }
+
+          if (!data.ok || !data.articles) {
+            console.error('API error:', data.error || 'Unknown');
+            process.exit(1);
+          }
+
+          const today    = new Date().toISOString().slice(0, 10);
+          const articles = data.articles;
+
+          let xml = '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n';
+          xml += '<!-- DEKHO article sitemap — auto-generated ' + today + ' -->\n';
+          xml += '<!-- ' + articles.length + ' published articles -->\n';
+          xml += '<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n\n';
+
+          articles.forEach(a => {
+            const loc     = a.slug
+              ? siteUrl + '/' + page + '?slug=' + encodeURIComponent(a.slug)
+              : siteUrl + '/' + page + '?id='   + encodeURIComponent(a.id);
+            const lastmod = (a.updatedAt || a.publishedAt || today).slice(0, 10);
+            const prio    = (a.category === 'review' || a.category === 'comparison') ? '0.75' : '0.70';
+
+            xml += '  <url>\n';
+            xml += '    <loc>' + loc + '</loc>\n';
+            xml += '    <lastmod>' + lastmod + '</lastmod>\n';
+            xml += '    <changefreq>monthly</changefreq>\n';
+            xml += '    <priority>' + prio + '</priority>\n';
+            xml += '  </url>\n\n';
+          });
+
+          xml += '</urlset>\n';
+
+          fs.writeFileSync('sitemap-articles.xml', xml, 'utf8');
+          console.log('✓ sitemap-articles.xml written with', articles.length, 'articles');
+          "
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sitemap-articles.xml
+          git diff --staged --quiet || git commit -m "chore: update sitemap-articles.xml [$(date -u +%Y-%m-%d)]"
+          git push
