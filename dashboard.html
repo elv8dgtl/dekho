@@ -1678,7 +1678,7 @@ var API = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvH
 // ── STATE ────────────────────────────────────────────────────────────────────
 var $ = {
   token: null, user: null, arts: [],
-  editId: null, delId: null, rejId: null, sel: null,
+  editId: null, editStatus: null, delId: null, rejId: null, sel: null,
   uplFile: null,
   uplTarget: 'body'
 };
@@ -2021,7 +2021,7 @@ function quickSubmit(id) {
 
 // ── EDITOR ───────────────────────────────────────────────────────────────────
 function newArt() {
-  $.editId = null;
+  $.editId = null; $.editStatus = null;
   ['ed-title','ed-slug','ed-tag','ed-cover','ed-excerpt',
    'seo-kw','seo-meta-title','seo-meta-desc','seo-og-img','seo-canonical'
   ].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
@@ -2060,7 +2060,7 @@ function openEdit(id, adminPreview) {
 }
 
 function loadIntoEditor(a, readOnly) {
-  $.editId = a.id;
+  $.editId = a.id; $.editStatus = a.status || 'draft';
   // Store playgrounds map on state so rewireEmbeds can use it
   $.playgrounds = a.playgrounds || {};
   document.getElementById('ed-title').value   = a.title    || '';
@@ -2137,7 +2137,7 @@ function buildArtPayload(status) {
     slug:        g('ed-slug'),
     category:    g('ed-cat'),
     tag:         g('ed-tag'),
-    status:      status || 'draft',
+    status:      status === 'published' ? 'published' : (status === 'review' ? 'review' : ($.editStatus === 'published' ? 'published' : (status || 'draft'))),
     coverImage:  g('ed-cover'),
     excerpt:     g('ed-excerpt'),
     content:     stripped.content,
@@ -2155,11 +2155,18 @@ function buildArtPayload(status) {
 function saveArt(status) {
   var title = document.getElementById('ed-title').value.trim();
   if (!title) { toast('Please add a title first.', 'bad'); return; }
-  var art = buildArtPayload(status);
+  // If article is already published and we're doing a routine draft-save,
+  // preserve 'published' so we don't accidentally unpublish it.
+  var effectiveStatus = status;
+  if (status === 'draft' && $.editStatus === 'published') {
+    effectiveStatus = 'published';
+  }
+  var art = buildArtPayload(effectiveStatus);
   callSaveArticle(art, $.token).then(function(r) {
     if (r.ok) {
       if (!$.editId) $.editId = r.id;
-      setSv('Saved ✓'); toast('Draft saved.', 'ok'); loadArts();
+      var msg = $.editStatus === 'published' ? 'Changes saved.' : 'Draft saved.';
+      setSv('Saved ✓'); toast(msg, 'ok'); loadArts();
     } else {
       setSv('Failed ✗');
       toast('Save failed: ' + (r.error || 'unknown error'), 'bad');
@@ -2176,6 +2183,7 @@ function submitReview() {
   callSaveArticle(art, $.token).then(function(r) {
     if (!r.ok) { setSv('Failed ✗'); toast('Save failed: ' + (r.error||''), 'bad'); return; }
     if (!$.editId) $.editId = r.id;
+    $.editStatus = 'review';
     toast('Submitted for review! Admin will approve shortly.', 'ok');
     setPill('review');
     setSv('Submitted ✓');
@@ -2185,12 +2193,16 @@ function submitReview() {
 
 function adminPub() {
   if (!document.getElementById('ed-title').value.trim()) { toast('Please add a title first.', 'bad'); return; }
-  var art = buildArtPayload('draft');
+  // Save with current editStatus so we don't overwrite a published article to draft first
+  var art = buildArtPayload($.editStatus === 'published' ? 'published' : 'draft');
   callSaveArticle(art, $.token).then(function(r) {
     if (!r.ok) { toast('Save failed: ' + (r.error||''), 'bad'); return; }
     if (!$.editId) $.editId = r.id;
     call('approveArticle', { token: $.token, id: $.editId }).then(function(r2) {
-      if (r2.ok) { toast('Published! 🎉', 'ok'); setPill('published'); loadArts(); }
+      if (r2.ok) {
+        $.editStatus = 'published'; // track that this article is now published
+        toast('Published! 🎉', 'ok'); setPill('published'); loadArts();
+      }
       else toast(r2.error, 'bad');
     });
   });
