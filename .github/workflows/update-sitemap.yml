@@ -17,7 +17,7 @@ jobs:
       - name: Generate sitemap-articles.xml
         env:
           API_URL: ${{ secrets.DEKHO_API_URL }}
-          SITE_URL: https://elv8dgtl.in
+          SITE_URL: https://dekho.elv8dgtl.in
           ARTICLE_PAGE: dekho-article.html
         run: |
           # Google Apps Script redirects GET — follow redirect manually
