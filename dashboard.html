@@ -707,6 +707,27 @@ table.t tr:hover td{background:var(--paper);}
 /* Pre block in editor */
 .ed-body pre{background:#1a1a1a;color:#e2e8f0;padding:1.25rem 1.5rem;border-radius:10px;font-family:'DM Mono',monospace;font-size:13px;line-height:1.7;overflow-x:auto;margin:1.25rem 0;white-space:pre-wrap;}
 
+/* ── Affiliate card placeholder (draggable token in editor) ── */
+.aff-placeholder{
+  display:flex;align-items:center;gap:.75rem;
+  background:#fff;border:2px dashed var(--accent);border-radius:12px;
+  padding:.75rem 1rem;margin:1rem 0;cursor:grab;
+  user-select:none;-webkit-user-select:none;
+  transition:border-style .15s,box-shadow .15s;
+}
+.aff-placeholder:active{cursor:grabbing;box-shadow:0 6px 20px rgba(0,0,0,.15);}
+.aff-placeholder.drag-over-top{border-top:3px solid var(--blue);}
+.aff-placeholder.drag-over-bottom{border-bottom:3px solid var(--blue);}
+.aff-ph-icon{font-size:1.3rem;flex-shrink:0;}
+.aff-ph-body{flex:1;min-width:0;}
+.aff-ph-name{font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.aff-ph-meta{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
+.aff-ph-drag{font-size:18px;color:#ccc;flex-shrink:0;cursor:grab;padding:0 3px;}
+.aff-ph-del{width:22px;height:22px;border-radius:50%;border:none;background:var(--surface);cursor:pointer;
+  font-size:13px;color:var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  transition:background .12s,color .12s;}
+.aff-ph-del:hover{background:var(--red);color:#fff;}
+
 </style>
 </head>
 
@@ -1221,6 +1242,25 @@ table.t tr:hover td{background:var(--paper);}
               <div class="mst">Focus Keyword</div>
               <input class="inp" id="seo-kw" placeholder="e.g. best gaming laptops 2025" oninput="seoUpdate()" style="margin-bottom:.4rem;">
               <p style="font-size:11px;color:var(--muted);line-height:1.5;margin:0;">The primary keyword this article should rank for.</p>
+            </div>
+
+            <div class="ms">
+              <div class="mst">Secondary Keywords</div>
+              <input class="inp" id="seo-secondary-kw" placeholder="e.g. gaming laptop, laptop for students" oninput="seoUpdate()" style="margin-bottom:.4rem;">
+              <p style="font-size:11px;color:var(--muted);line-height:1.5;margin:0;">Comma-separated. These are tracked for density but don't affect the main score.</p>
+            </div>
+
+            <div class="ms">
+              <div class="mst">Article Tags
+                <button onclick="addTagChip()" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--blue);font-family:'DM Mono',monospace;padding:0;">+ Add</button>
+              </div>
+              <div id="tag-chips-wrap" style="display:flex;flex-wrap:wrap;gap:5px;min-height:28px;margin-bottom:.4rem;"></div>
+              <div style="display:flex;gap:.4rem;">
+                <input class="inp" id="seo-tag-input" placeholder="e.g. laptops, gaming" style="flex:1;font-size:12px;" onkeydown="tagInputKey(event)">
+                <button class="btn btn-s" onclick="addTagChip()" style="padding:0 10px;font-size:12px;">Add</button>
+              </div>
+              <input type="hidden" id="seo-tags">
+              <p style="font-size:11px;color:var(--muted);line-height:1.5;margin:.4rem 0 0;">Press Enter or comma to add. Click a tag to remove it.</p>
             </div>
 
             <div class="ms">
@@ -2023,8 +2063,10 @@ function quickSubmit(id) {
 function newArt() {
   $.editId = null; $.editStatus = null;
   ['ed-title','ed-slug','ed-tag','ed-cover','ed-excerpt',
-   'seo-kw','seo-meta-title','seo-meta-desc','seo-og-img','seo-canonical'
+   'seo-kw','seo-secondary-kw','seo-meta-title','seo-meta-desc','seo-og-img','seo-canonical',
+   'seo-tags','seo-tag-input'
   ].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+  renderTagChips([]);
   document.getElementById('ed-body').innerHTML = '';
   document.getElementById('ed-html-src').value = '';
   document.getElementById('ed-cat').value  = 'review';
@@ -2080,18 +2122,26 @@ function loadIntoEditor(a, readOnly) {
 
   // Restore SEO fields from article data (if saved)
   var sset = function(id,val){ var el=document.getElementById(id); if(el) el.value=val||''; };
-  sset('seo-kw',          a.seoKeyword);
-  sset('seo-meta-title',  a.seoMetaTitle);
-  sset('seo-meta-desc',   a.seoMetaDesc);
-  sset('seo-og-img',      a.seoOgImage);
-  sset('seo-canonical',   a.seoCanonical);
+  sset('seo-kw',            a.seoKeyword);
+  sset('seo-secondary-kw',  a.seoSecondaryKeywords);
+  sset('seo-meta-title',    a.seoMetaTitle);
+  sset('seo-meta-desc',     a.seoMetaDesc);
+  sset('seo-og-img',        a.seoOgImage);
+  sset('seo-canonical',     a.seoCanonical);
+  // Restore tags — stored as comma-separated string, rendered as chips
+  var tagsArr = (a.seoTags || '').split(',').map(function(t){ return t.trim(); }).filter(Boolean);
+  renderTagChips(tagsArr);
   ratDisp(); upCover(); setPill(a.status || 'draft'); setSv('Loaded');
   if (_htmlMode) togHTML();
   go('editor');
   document.getElementById('tb-title').textContent = 'Editing: ' + (a.title || 'Untitled');
   sideTab('publish', document.querySelector('.ed-side-tab'));
+  // Trigger SEO score recalc with loaded data so panel isn't blank
+  setTimeout(seoUpdate, 200);
   // Restore playground embeds from tokens, then wire edit buttons + srcdoc
   setTimeout(rewireEmbeds, 150);
+  // Re-wire affiliate card drag handles (they survive innerHTML, just need event listeners)
+  setTimeout(rewireAffPlaceholders, 160);
 }
 
 // ── PLAYGROUND STRIP/RESTORE ──────────────────────────────────────────────────
@@ -2144,11 +2194,13 @@ function buildArtPayload(status) {
     playgrounds: stripped.playgrounds,
     readTime:    g('ed-rt'),
     rating:      g('ed-rate'),
-    seoKeyword:     g('seo-kw'),
-    seoMetaTitle:   g('seo-meta-title'),
-    seoMetaDesc:    g('seo-meta-desc'),
-    seoOgImage:     g('seo-og-img'),
-    seoCanonical:   g('seo-canonical')
+    seoKeyword:            g('seo-kw'),
+    seoSecondaryKeywords:  g('seo-secondary-kw'),
+    seoMetaTitle:          g('seo-meta-title'),
+    seoMetaDesc:           g('seo-meta-desc'),
+    seoOgImage:            g('seo-og-img'),
+    seoCanonical:          g('seo-canonical'),
+    seoTags:               g('seo-tags')
   };
 }
 
@@ -2919,7 +2971,19 @@ function seoUpdate() {
     var kwOccurrences = (bodyLower.split(kw).length - 1);
     var density = wordCount > 0 ? (kwOccurrences / wordCount * 100) : 0;
     checks.push({ pass: density>=0.5 && density<=3, warn: density>0 && density<0.5,
-      text: 'Keyword density ' + density.toFixed(1) + '% (ideal 0.5–3%)' });
+      text: 'Focus keyword density ' + density.toFixed(1) + '% (ideal 0.5–3%)' });
+  }
+  // Secondary keyword density (informational, not scored)
+  var secKwRaw = document.getElementById('seo-secondary-kw') ? document.getElementById('seo-secondary-kw').value.trim() : '';
+  if (secKwRaw) {
+    var secKws = secKwRaw.split(',').map(function(k){ return k.trim().toLowerCase(); }).filter(Boolean);
+    secKws.forEach(function(sk) {
+      if (!sk) return;
+      var skOcc = (bodyLower.split(sk).length - 1);
+      var skDen = wordCount > 0 ? (skOcc / wordCount * 100) : 0;
+      checks.push({ pass: skOcc > 0, warn: false,
+        text: 'Secondary "' + sk + '": ' + (skOcc > 0 ? skDen.toFixed(1) + '% density' : 'not found') });
+    });
   }
   checks.push({ pass: !!document.getElementById('ed-cover').value.trim() ||
                       (document.getElementById('cover-img').src && document.getElementById('cover-img').style.display!=='none'),
@@ -2955,37 +3019,137 @@ function seoUpdate() {
   _updateReadability(body);
 }
 
+// ── Syllable counter (Yoast-style approximation) ────────────────────────────
+// Algorithm:
+//   1. Count vowel groups (ae, ou, etc. = 1 syllable, not 2)
+//   2. Subtract 1 for silent trailing 'e' (e.g. "make", "write")
+//   3. Subtract 1 for '-ed' that doesn't add a syllable (e.g. "walked")
+//   4. Add 1 if word ends in '-le' preceded by a consonant (e.g. "little")
+//   5. Always at least 1 syllable per word
+function _countSyllables(word) {
+  word = word.toLowerCase().replace(/[^a-z]/g, '');
+  if (!word) return 0;
+  if (word.length <= 3) return 1; // "the", "and", "for" etc.
+  // Count vowel groups
+  var count = (word.match(/[aeiouy]+/g) || []).length;
+  // Subtract silent trailing 'e' — e.g. "make", "note", "write"
+  if (/e$/.test(word) && !/[aeiouy]{2}e$/.test(word) && word.length > 3) {
+    count--;
+  }
+  // Subtract silent '-ed' ending — e.g. "walked" → 1 syl, "hunted" → 2 syl
+  if (/[^aeiouy]ed$/.test(word)) count--;
+  // Add back '-le' preceded by consonant — e.g. "little", "puzzle", "able"
+  if (/[^aeiouy]le$/.test(word)) count++;
+  // Add back '-ion', '-ious', '-ial' — these usually get collapsed wrongly
+  if (/ion$/.test(word)) count++;
+  if (/ious$|ial$|eous$/.test(word)) count++;
+  return Math.max(1, count);
+}
+
 function _updateReadability(text) {
-  var sentences = (text.match(/[.!?]+/g)||[]).length || 1;
-  var words     = text.trim().split(/\s+/).filter(Boolean).length;
-  var syllables = 0;
-  text.split(/\s+/).forEach(function(w){
-    syllables += Math.max(1, w.toLowerCase().replace(/[^aeiou]/g,'').length);
-  });
+  // Count sentences using proper terminal punctuation
+  // Split on . ! ? but not on abbreviations like "e.g." or numbers "3.14"
+  var sentenceMatches = text.match(/[^.!?]*[.!?]+/g) || [];
+  var sentences = sentenceMatches.filter(function(s){ return s.trim().split(/\s+/).length > 2; }).length || 1;
+
+  // Words: split on whitespace, strip non-alpha
+  var wordArr = text.trim().split(/\s+/).filter(Boolean);
+  var words = wordArr.length;
+
   if (words < 20) {
     document.getElementById('read-grade').textContent = '–';
     document.getElementById('read-label').textContent = 'Write more to analyse';
     document.getElementById('read-detail').textContent = '';
     return;
   }
-  var fk = 206.835 - 1.015*(words/sentences) - 84.6*(syllables/words);
-  fk = Math.max(0, Math.min(100, fk));
-  var grade, detail;
-  if (fk>=90){grade='A+';detail='Very easy to read';}
-  else if(fk>=80){grade='A';detail='Easy to read';}
-  else if(fk>=70){grade='B';detail='Fairly easy';}
-  else if(fk>=60){grade='C';detail='Standard / Good';}
-  else if(fk>=50){grade='D';detail='Fairly difficult';}
-  else if(fk>=30){grade='E';detail='Difficult';}
-  else{grade='F';detail='Very difficult';}
+
+  // Count syllables using accurate algorithm
+  var syllables = 0;
+  wordArr.forEach(function(w){
+    syllables += _countSyllables(w);
+  });
+
+  // Standard Flesch Reading Ease formula
+  var fk = 206.835 - 1.015 * (words / sentences) - 84.6 * (syllables / words);
+  fk = Math.max(0, Math.min(100, Math.round(fk * 10) / 10));
+
+  var grade, detail, colour;
+  if (fk >= 90){ grade = 'A+'; detail = 'Very easy — 5th grade'; colour = '#16A34A'; }
+  else if (fk >= 80){ grade = 'A'; detail = 'Easy — 6th grade'; colour = '#16A34A'; }
+  else if (fk >= 70){ grade = 'B'; detail = 'Fairly easy — 7th grade'; colour = '#22c55e'; }
+  else if (fk >= 60){ grade = 'C'; detail = 'Standard — 8–9th grade'; colour = '#f59e0b'; }
+  else if (fk >= 50){ grade = 'D'; detail = 'Fairly difficult — 10–12th grade'; colour = '#f59e0b'; }
+  else if (fk >= 30){ grade = 'E'; detail = 'Difficult — college level'; colour = 'var(--accent)'; }
+  else              { grade = 'F'; detail = 'Very difficult — academic'; colour = 'var(--red)'; }
+
   var gradeEl = document.getElementById('read-grade');
   var lblEl   = document.getElementById('read-label');
   var detEl   = document.getElementById('read-detail');
-  if (gradeEl) gradeEl.textContent = grade;
+  if (gradeEl) { gradeEl.textContent = grade; gradeEl.style.color = colour; }
   if (lblEl)   lblEl.textContent   = detail;
-  if (detEl)   detEl.textContent   = Math.round(fk) + ' / 100 Flesch score';
+  if (detEl)   detEl.textContent   = 'Flesch score: ' + fk + ' / 100  ·  ' +
+                                      wordArr.length + ' words  ·  ~' + sentences + ' sentences';
 }
 
+
+// ── TAG CHIPS ────────────────────────────────────────────────────────────────
+// Tags are stored as a comma-separated string in #seo-tags (hidden input).
+// They're rendered as dismissible chips in #tag-chips-wrap.
+
+function renderTagChips(tags) {
+  var wrap = document.getElementById('tag-chips-wrap');
+  if (!wrap) return;
+  if (!tags || !tags.length) { wrap.innerHTML = ''; _syncTagsHidden([]); return; }
+  wrap.innerHTML = tags.map(function(t) {
+    return '<span style="display:inline-flex;align-items:center;gap:4px;background:var(--surface);' +
+           'border:1.5px solid var(--border);border-radius:999px;padding:3px 10px;font-size:11px;' +
+           'font-family:'DM Mono',monospace;cursor:pointer;transition:background .12s,color .12s;" ' +
+           'title="Click to remove" onclick="removeTag(this)">' +
+           esc(t) + '<span style="font-size:10px;color:var(--muted);margin-left:2px;">✕</span>' +
+           '</span>';
+  }).join('');
+  _syncTagsHidden(tags);
+}
+
+function _syncTagsHidden(tags) {
+  var h = document.getElementById('seo-tags');
+  if (h) h.value = tags.join(',');
+}
+
+function _getTagsArr() {
+  var h = document.getElementById('seo-tags');
+  return (h && h.value) ? h.value.split(',').map(function(t){ return t.trim(); }).filter(Boolean) : [];
+}
+
+function addTagChip() {
+  var inp = document.getElementById('seo-tag-input');
+  if (!inp) return;
+  var raw = inp.value.trim();
+  if (!raw) return;
+  // Split on comma in case user typed multiple tags
+  var newTags = raw.split(',').map(function(t){ return t.trim(); }).filter(Boolean);
+  var existing = _getTagsArr();
+  newTags.forEach(function(t) {
+    if (t && existing.indexOf(t) === -1) existing.push(t);
+  });
+  renderTagChips(existing);
+  inp.value = '';
+  inp.focus();
+}
+
+function removeTag(chipEl) {
+  var label = chipEl.textContent.replace('✕','').trim();
+  var tags = _getTagsArr().filter(function(t){ return t !== label; });
+  renderTagChips(tags);
+}
+
+function tagInputKey(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    addTagChip();
+  }
+}
+// ─────────────────────────────────────────────────────────────────────────────
 // ── FOCUS MODE ───────────────────────────────────────────────────────────────
 function toggleFocusMode(on) {
   var tbar = document.querySelector('.tbar-wrap');
@@ -3052,7 +3216,8 @@ function updateWordGoal() {
   document.addEventListener('input', function(e){
     if (e.target && e.target.id === 'ed-slug') syncSlugPreview();
     if (e.target && (e.target.id==='ed-title'||e.target.id==='seo-meta-title'||
-        e.target.id==='seo-meta-desc'||e.target.id==='ed-excerpt'||e.target.id==='seo-kw')) {
+        e.target.id==='seo-meta-desc'||e.target.id==='ed-excerpt'||e.target.id==='seo-kw'||
+        e.target.id==='seo-secondary-kw')) {
       seoUpdate();
     }
   });
@@ -4177,22 +4342,150 @@ function insTable() {
   fmt('insertHTML', h);
 }
 function insHR() { fmt('insertHTML','<hr style="border:none;border-top:1.5px solid #E2E0DA;margin:1.5rem 0;"><p></p>'); }
+// ── AFFILIATE CARD — Movable Placeholder System ─────────────────────────────
+// Inserts a draggable <div contenteditable="false"> placeholder into the editor.
+// The placeholder stores all card data in data-* attributes.
+// You can drag it anywhere in the article body.
+// On the public article page, dekho-article.html renders it as the full card.
+
 function insAff() {
-  var n = document.getElementById('aff-n').value || 'Product Name';
-  var p = document.getElementById('aff-p').value || '₹X,XXX';
-  var i = document.getElementById('aff-i').value || '';
-  var l = document.getElementById('aff-l').value || '#';
-  var h = '<div style="display:flex;gap:1.25rem;align-items:flex-start;background:#fff;border:1.5px solid #E2E0DA;border-radius:14px;padding:1.25rem;margin:1.5rem 0;">' +
-    (i?'<img src="'+i+'" alt="'+esc(n)+'" style="width:80px;height:80px;object-fit:contain;border-radius:8px;background:#F4F3F0;border:1px solid #E2E0DA;flex-shrink:0;">':'') +
-    '<div style="flex:1;"><div style="font-size:14px;font-weight:700;margin-bottom:4px;">'+esc(n)+'</div>' +
-    '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:1.5rem;color:#E8380D;margin-bottom:4px;">'+esc(p)+'</div>' +
-    '<div style="font-size:12px;color:#8A8880;margin-bottom:8px;">In stock on Amazon India</div>' +
-    '<a href="'+l+'" target="_blank" rel="noopener sponsored" style="display:inline-flex;align-items:center;gap:6px;background:#E8380D;color:#fff;font-weight:700;font-size:12px;padding:8px 18px;border-radius:999px;text-decoration:none;">🛒 Buy on Amazon</a>' +
-    '<p style="font-size:10px;color:#8A8880;margin-top:4px;font-family:monospace;">★ Affiliate link</p></div></div><p></p>';
-  document.getElementById('ed-body').focus();
-  fmt('insertHTML', h);
-  toast('Card inserted!', 'ok');
+  var n = document.getElementById('aff-n').value.trim() || 'Product Name';
+  var p = document.getElementById('aff-p').value.trim() || '₹X,XXX';
+  var i = document.getElementById('aff-i').value.trim() || '';
+  var l = document.getElementById('aff-l').value.trim() || '#';
+  var affId = 'aff_' + Date.now();
+
+  var placeholder = _buildAffPlaceholder(affId, n, p, i, l);
+
+  // Insert after the block currently holding the cursor
+  var body = document.getElementById('ed-body');
+  body.focus();
+  var sel = window.getSelection();
+  var inserted = false;
+  if (sel && sel.rangeCount) {
+    var node = sel.getRangeAt(0).startContainer;
+    if (node.nodeType === 3) node = node.parentNode;
+    while (node && node.parentNode !== body) node = node.parentNode;
+    if (node && node.parentNode === body) {
+      body.insertBefore(placeholder, node.nextSibling);
+      inserted = true;
+    }
+  }
+  if (!inserted) body.appendChild(placeholder);
+
+  // Insert an empty <p> after so cursor has somewhere to land
+  var after = document.createElement('p');
+  after.appendChild(document.createElement('br'));
+  placeholder.parentNode.insertBefore(after, placeholder.nextSibling);
+
+  toast('Amazon card inserted — drag it anywhere to reposition!', 'ok');
   ['aff-n','aff-p','aff-i','aff-l'].forEach(function(id){ document.getElementById(id).value=''; });
+}
+
+function _buildAffPlaceholder(affId, name, price, imgUrl, link) {
+  var wrap = document.createElement('div');
+  wrap.className = 'aff-placeholder';
+  wrap.setAttribute('contenteditable', 'false');
+  wrap.setAttribute('draggable', 'true');
+  wrap.setAttribute('data-aff-id',    affId);
+  wrap.setAttribute('data-aff-name',  name);
+  wrap.setAttribute('data-aff-price', price);
+  wrap.setAttribute('data-aff-img',   imgUrl);
+  wrap.setAttribute('data-aff-link',  link);
+  wrap.innerHTML =
+    '<span class="aff-ph-drag" title="Drag to reposition">⠿</span>' +
+    '<span class="aff-ph-icon">🛒</span>' +
+    '<div class="aff-ph-body">' +
+      '<div class="aff-ph-name">' + esc(name) + '</div>' +
+      '<div class="aff-ph-meta">Amazon Card · ' + esc(price) +
+        (imgUrl ? ' · 🖼 has image' : '') + '</div>' +
+    '</div>' +
+    '<button class="aff-ph-del" title="Remove card">✕</button>';
+  _wireAffPlaceholder(wrap);
+  return wrap;
+}
+
+function _wireAffPlaceholder(wrap) {
+  // Delete button
+  var delBtn = wrap.querySelector('.aff-ph-del');
+  if (delBtn) delBtn.onclick = function(e){ e.stopPropagation(); wrap.remove(); };
+
+  // Drag start
+  wrap.addEventListener('dragstart', function(e) {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/aff-id', wrap.getAttribute('data-aff-id'));
+    wrap._affDragging = true;
+    setTimeout(function(){ wrap.style.opacity = '0.4'; }, 0);
+  });
+  wrap.addEventListener('dragend', function() {
+    wrap.style.opacity = '';
+    wrap._affDragging = false;
+    // Clear all indicators
+    document.querySelectorAll('#ed-body > *').forEach(function(el){
+      el.style.borderTop = ''; el.style.borderBottom = '';
+    });
+  });
+}
+
+// Editor body drag-over/drop handler for affiliate placeholders
+(function() {
+  var body;
+  function getBody(){ return document.getElementById('ed-body'); }
+
+  document.addEventListener('dragover', function(e) {
+    body = getBody();
+    if (!body) return;
+    var src = e.dataTransfer.types && (Array.prototype.indexOf.call(e.dataTransfer.types,'text/aff-id') >= 0);
+    if (!src) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    // Clear all border indicators
+    body.querySelectorAll(':scope > *').forEach(function(c){ c.style.borderTop=''; c.style.borderBottom=''; });
+    // Find which child we're hovering over
+    var target = e.target;
+    if (!target || target === body) return;
+    while (target && target.parentNode !== body) target = target.parentNode;
+    if (!target) return;
+    var rect = target.getBoundingClientRect();
+    if (e.clientY < rect.top + rect.height / 2) target.style.borderTop = '2px solid var(--blue)';
+    else                                          target.style.borderBottom = '2px solid var(--blue)';
+  });
+
+  document.addEventListener('dragleave', function(e) {
+    body = getBody();
+    if (!body) return;
+    if (e.relatedTarget && body.contains(e.relatedTarget)) return;
+    body.querySelectorAll(':scope > *').forEach(function(c){ c.style.borderTop=''; c.style.borderBottom=''; });
+  });
+
+  document.addEventListener('drop', function(e) {
+    body = getBody();
+    if (!body) return;
+    var affId = e.dataTransfer.getData('text/aff-id');
+    if (!affId) return;
+    e.preventDefault();
+    // Clear indicators
+    body.querySelectorAll(':scope > *').forEach(function(c){ c.style.borderTop=''; c.style.borderBottom=''; });
+    var dragged = body.querySelector('[data-aff-id="' + affId + '"]');
+    if (!dragged) return;
+    // Find drop target
+    var target = e.target;
+    if (!target || target === body) { body.appendChild(dragged); return; }
+    while (target && target.parentNode !== body) target = target.parentNode;
+    if (!target || target === dragged) return;
+    var rect = target.getBoundingClientRect();
+    if (e.clientY < rect.top + rect.height / 2) body.insertBefore(dragged, target);
+    else body.insertBefore(dragged, target.nextSibling);
+  });
+})();
+
+// Re-wire affiliate placeholders after loading article into editor
+function rewireAffPlaceholders() {
+  var body = document.getElementById('ed-body');
+  if (!body) return;
+  body.querySelectorAll('.aff-placeholder').forEach(function(el) {
+    _wireAffPlaceholder(el);
+  });
 }
 
 // ── Selection ─────────────────────────────────────────────────────────────────
