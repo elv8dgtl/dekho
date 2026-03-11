@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEKHO by elv8 — Real Tech Reviews, Honest Picks</title>
+    <meta name="description" content="DEKHO by elv8 dgtl — India's honest tech review blog. Real comparisons, curated top picks, and buyer's guides for Indian consumers.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.elv8dgtl.in/dekho.html">
+    <meta property="og:title" content="DEKHO by elv8 — Real Tech Reviews">
+    <meta property="og:description" content="Honest reviews, comparisons and top picks for Indian buyers.">
+    <meta property="og:url" content="https://www.elv8dgtl.in/dekho.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- ── Google Analytics ──────────────────────────────────────── -->
+    <!-- REPLACE G-V77HPC9EX8 with your GA4 Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-V77HPC9EX8');
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --ink:     #0D0D0D;
+            --paper:   #FAFAF8;
+            --surface: #F2F1EE;
+            --border:  #E2E0DA;
+            --muted:   #8A8880;
+            --accent:  #E8380D;
+            --accent2: #1A6BFF;
+            --lime:    #CCF381;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body { background: var(--paper); color: var(--ink); font-family: 'Instrument Sans', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+        .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; line-height: 0.95; }
+        .mono    { font-family: 'DM Mono', monospace; }
+        .aff-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--paper); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        /* ── READ PROGRESS ──────────────────────────────── */
+        #read-progress {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: var(--accent); z-index: 100; width: 0%;
+            transition: width .1s linear;
+        }
+
+        /* ── NAVBAR ─────────────────────────────────────── */
+        #navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
+            background: rgba(250,250,248,0.95);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1.5px solid var(--border);
+            transition: box-shadow .3s;
+        }
+        #navbar.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+        .nav-inner {
+            max-width: 1280px; margin: auto; padding: 0 1.25rem;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 60px; gap: .75rem;
+        }
+
+        /* ── SEARCH BOX ─────────────────────────────────── */
+        #search-wrap {
+            display: none; align-items: center; gap: 8px;
+            background: #fff; border: 1.5px solid var(--border);
+            border-radius: 999px; padding: 7px 14px;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        #search-wrap.open { display: flex; }
+        #search-wrap:focus-within { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(13,13,13,.07); }
+        #search-input {
+            border: none; outline: none; background: transparent;
+            font-family: 'Instrument Sans', sans-serif; font-size: 13px;
+            color: var(--ink); width: 160px;
+        }
+        #search-input::placeholder { color: var(--muted); }
+        #search-results {
+            display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 49;
+            background: #fff; border-bottom: 1.5px solid var(--border);
+            box-shadow: 0 8px 24px rgba(0,0,0,.08);
+            max-height: 65vh; overflow-y: auto; padding: .75rem 1.25rem;
+        }
+        #search-results-inner { max-width: 1280px; margin: auto; }
+        .search-result-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 0; border-bottom: 1px solid var(--border);
+            text-decoration: none; color: var(--ink); transition: color .2s;
+        }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { color: var(--accent); }
+
+        /* ── TAGS ───────────────────────────────────────── */
+        .tag {
+            display: inline-block; font-family: 'DM Mono', monospace;
+            font-size: 10px; font-weight: 500; letter-spacing: .12em;
+            text-transform: uppercase; padding: 3px 9px; border-radius: 3px; white-space: nowrap;
+        }
+        .tag-review     { background: #FFF0ED; color: var(--accent);  border: 1px solid #FCCABB; }
+        .tag-comparison { background: #EDF3FF; color: var(--accent2); border: 1px solid #BCCFFF; }
+        .tag-top        { background: #F0FDE8; color: #2E7D10;        border: 1px solid #B6EDAA; }
+        .tag-guide      { background: #F5F0FF; color: #6B3FD4;        border: 1px solid #CDB8FF; }
+        .tag-news       { background: #EFF8FF; color: #0369A1;        border: 1px solid #BAE6FD; }
+        .tag-opinion    { background: #FFF7ED; color: #C2410C;        border: 1px solid #FED7AA; }
+
+        /* ── CARDS ──────────────────────────────────────── */
+        .card {
+            background: #fff; border: 1.5px solid var(--border);
+            border-radius: 14px; overflow: hidden;
+            transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+            display: flex; flex-direction: column; height: 100%;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,.10); border-color: var(--ink); }
+        .card:hover .card-img img { transform: scale(1.05); }
+        .card:hover .card-title   { color: var(--accent); }
+        .card-img { overflow: hidden; flex-shrink: 0; }
+        .card-img img { transition: transform .5s ease; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+        .card-title { transition: color .2s; }
+
+        /* ── LIST VIEW CARD ─────────────────────────────── */
+        .card.list-mode { flex-direction: row; }
+        .card.list-mode .card-img { width: 160px; flex-shrink: 0; aspect-ratio: 4/3; }
+        .card.list-mode .card-img img { height: 100%; }
+        @media (max-width: 500px) {
+            .card.list-mode { flex-direction: column; }
+            .card.list-mode .card-img { width: 100%; aspect-ratio: 16/9; }
+        }
+
+        /* ── RATING STAMP ───────────────────────────────── */
+        .rating-stamp {
+            position: absolute; top: 10px; right: 10px;
+            width: 42px; height: 42px; background: var(--ink); color: var(--lime);
+            border-radius: 50%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-family: 'Bebas Neue', sans-serif; font-size: 15px; line-height: 1;
+            border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.2); z-index: 2;
+        }
+        .rating-stamp span { font-family: 'DM Mono', monospace; font-size: 7px; color: #aaa; line-height: 1; }
+
+        /* ── HERO CARD ──────────────────────────────────── */
+        .hero-card {
+            background: #fff; border: 1.5px solid var(--border);
+            border-radius: 18px; overflow: hidden;
+            transition: box-shadow .3s, border-color .3s;
+        }
+        .hero-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,.10); border-color: var(--ink); }
+        .hero-card:hover .hero-img img { transform: scale(1.04); }
+        .hero-img { overflow: hidden; }
+        .hero-img img { transition: transform .6s ease; }
+
+        /* Desktop: side by side | Mobile: stacked */
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 340px; }
+        @media (max-width: 700px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-img { aspect-ratio: 16/9; }
+            .hero-img img { width: 100%; height: 100%; display: block; object-fit: cover; }
+            .hero-content { padding: 1.25rem !important; }
+        }
+
+        /* ── TICKER ─────────────────────────────────────── */
+        @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        .ticker-inner { display: flex; white-space: nowrap; animation: ticker 22s linear infinite; }
+
+        /* ── CATEGORY FILTER PILLS ──────────────────────── */
+        .cat-btn {
+            padding: 6px 16px; border-radius: 999px;
+            border: 1.5px solid var(--border);
+            font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+            color: var(--muted); background: #fff;
+            cursor: pointer; transition: all .2s; white-space: nowrap; flex-shrink: 0;
+        }
+        .cat-btn:hover { border-color: var(--ink); color: var(--ink); }
+        .cat-btn.active { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+        /* Horizontal scroll on mobile, no scroll bar showing */
+        .filter-row {
+            display: flex; gap: 6px; overflow-x: auto;
+            scrollbar-width: none; -ms-overflow-style: none;
+            padding-bottom: 2px; -webkit-overflow-scrolling: touch;
+        }
+        .filter-row::-webkit-scrollbar { display: none; }
+
+        /* ── ARTICLE GRID ───────────────────────────────── */
+        #article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+        #article-grid.list-view { grid-template-columns: 1fr; }
+        @media (max-width: 640px) { #article-grid { grid-template-columns: 1fr; } }
+
+        /* ── VIEW TOGGLE BUTTONS ────────────────────────── */
+        .view-btn {
+            width: 30px; height: 30px; border-radius: 6px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .2s; border: 1.5px solid var(--border);
+            background: #fff; color: var(--muted); flex-shrink: 0;
+        }
+        .view-btn.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+        /* ── REVEAL ANIMATION ───────────────────────────── */
+        .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* ── HINDI WATERMARK ────────────────────────────── */
+        .hindi-bg {
+            position: absolute; right: -40px; top: 50%; transform: translateY(-50%) rotate(-8deg);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(60px, 14vw, 180px);
+            color: rgba(13,13,13,.03);
+            pointer-events: none; user-select: none;
+            white-space: nowrap; z-index: 0;
+        }
+
+        /* ── NEWSLETTER ─────────────────────────────────── */
+        .nl-input {
+            flex: 1; border: none; outline: none; background: transparent;
+            font-family: 'Instrument Sans', sans-serif; font-size: 14px; color: #fff; min-width: 0;
+        }
+        .nl-input::placeholder { color: #555; }
+
+        /* ── MOBILE MENU ────────────────────────────────── */
+        #mobile-menu {
+            position: fixed; inset: 0; background: var(--paper); z-index: 60;
+            transform: translateX(100%);
+            transition: transform .4s cubic-bezier(.4,0,.2,1);
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; gap: 1.5rem; padding: 2rem;
+        }
+        #mobile-menu.open { transform: translateX(0); }
+
+        /* ── FOOTER ─────────────────────────────────────── */
+        .footer-link {
+            position: relative; color: #666; transition: color .2s;
+            text-decoration: none; font-size: 14px;
+        }
+        .footer-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--ink); transition: width .3s; }
+        .footer-link:hover { color: var(--ink); }
+        .footer-link:hover::after { width: 100%; }
+
+        /* ── BACK TO TOP ────────────────────────────────── */
+        #back-top {
+            position: fixed; bottom: 5.5rem; right: 1.25rem; z-index: 39;
+            width: 38px; height: 38px; background: var(--ink); color: #fff;
+            border: none; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,.2);
+            opacity: 0; pointer-events: none;
+            transition: opacity .3s, transform .2s;
+        }
+        #back-top.visible { opacity: 1; pointer-events: auto; }
+        #back-top:hover { transform: scale(1.1); }
+
+        /* ── TOAST ──────────────────────────────────────── */
+        #toast {
+            position: fixed; bottom: 1.5rem; left: 50%;
+            transform: translateX(-50%) translateY(12px);
+            background: var(--ink); color: #fff;
+            padding: .6rem 1.25rem; border-radius: 999px;
+            font-family: 'DM Mono', monospace; font-size: 12px;
+            letter-spacing: .04em; z-index: 200;
+            opacity: 0; transition: opacity .3s, transform .3s;
+            pointer-events: none; white-space: nowrap;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ── SKELETON LOADERS ───────────────────────────── */
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .skel-card { background: #fff; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+        .skel-img  { aspect-ratio: 16/9; background: linear-gradient(90deg, #f0f0ee 25%, #e6e6e4 50%, #f0f0ee 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+        .skel-body { padding: 1.25rem; }
+        .skel-line { height: 11px; border-radius: 6px; margin-bottom: 10px; background: linear-gradient(90deg, #f0f0ee 25%, #e6e6e4 50%, #f0f0ee 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+        .skel-line.w60 { width: 60%; }
+        .skel-line.w40 { width: 40%; }
+
+        /* ── PLAYGROUND EMBED ───────────────────────────── */
+        .pg-embed { margin: 1.25rem 0; border-radius: 10px; overflow: hidden; }
+        .pg-embed iframe { width: 100%; border: none; display: block; transition: height .3s ease; }
+        .img-crop-wrap { overflow: hidden; display: block; max-width: 100%; line-height: 0; }
+        .img-crop-wrap img { display: block; width: 100%; }
+
+        /* ── MISC UTILS ─────────────────────────────────── */
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── MOBILE-SPECIFIC TWEAKS ─────────────────────── */
+        @media (max-width: 640px) {
+            .hide-sm { display: none !important; }
+            main { padding: 1.5rem 1rem 4rem !important; }
+            .nl-box { padding: 1.75rem 1.25rem !important; gap: 1.25rem !important; }
+            .nl-form { width: 100% !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="read-progress"></div>
+
+<!-- ── NAVBAR ──────────────────────────────────────────────────────── -->
+<nav id="navbar">
+    <div class="nav-inner">
+        <!-- Back link -->
+        <a href="index.html" style="display:flex;align-items:center;gap:5px;color:var(--muted);font-size:11px;text-decoration:none;flex-shrink:0;" class="mono">
+            <i data-lucide="arrow-left" style="width:13px;height:13px;"></i>
+            <span class="hide-sm">elv8dgtl.in</span>
+        </a>
+
+        <!-- Wordmark -->
+        <a href="dekho.html" style="display:flex;flex-direction:column;align-items:center;text-decoration:none;line-height:1;">
+            <span class="display" style="font-size:1.85rem;color:var(--ink);letter-spacing:.1em;">DEKHO</span>
+            <span class="mono" style="font-size:8px;color:var(--muted);letter-spacing:.2em;margin-top:1px;">BY ELV8 DGTL</span>
+        </a>
+
+        <!-- Right controls -->
+        <div style="display:flex;align-items:center;gap:.5rem;">
+            <!-- Expandable search box -->
+            <div id="search-wrap">
+                <i data-lucide="search" style="width:13px;height:13px;color:var(--muted);flex-shrink:0;"></i>
+                <input type="text" id="search-input" placeholder="Search…" autocomplete="off" aria-label="Search articles">
+                <button onclick="closeSearch()" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--muted);line-height:0;" title="Close search">
+                    <i data-lucide="x" style="width:13px;height:13px;"></i>
+                </button>
+            </div>
+            <button onclick="openSearch()" id="search-btn" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink);" title="Search (/)">
+                <i data-lucide="search" style="width:18px;height:18px;"></i>
+            </button>
+            <a href="contact.html" class="hide-sm" style="display:flex;align-items:center;gap:5px;background:var(--accent);color:#fff;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
+                Work with us <i data-lucide="arrow-up-right" style="width:11px;height:11px;"></i>
+            </a>
+            <button id="menu-btn" onclick="toggleMobileMenu()" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink);">
+                <i data-lucide="menu" style="width:21px;height:21px;"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Search results dropdown -->
+<div id="search-results">
+    <div id="search-results-inner"></div>
+</div>
+
+<!-- ── MOBILE MENU ──────────────────────────────────────────────────── -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <button onclick="toggleMobileMenu()" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;cursor:pointer;" aria-label="Close menu">
+        <i data-lucide="x" style="width:24px;height:24px;color:var(--ink);"></i>
+    </button>
+    <a href="index.html"    onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">HOME</a>
+    <a href="dekho.html"    onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--accent);text-decoration:none;">DEKHO</a>
+    <a href="services.html" onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">SERVICES</a>
+    <a href="about.html"    onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">ABOUT</a>
+    <a href="contact.html"  onclick="toggleMobileMenu()" style="margin-top:.5rem;background:var(--accent);color:#fff;padding:11px 32px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;">Get a Quote</a>
+    <div style="display:flex;gap:10px;margin-top:.25rem;">
+        <a href="https://instagram.com/elv8dgtl.in" target="_blank" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);" aria-label="Instagram"><i data-lucide="instagram" style="width:15px;height:15px;"></i></a>
+        <a href="https://linkedin.com/company/elv8dgtl" target="_blank" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);" aria-label="LinkedIn"><i data-lucide="linkedin" style="width:15px;height:15px;"></i></a>
+        <a href="https://x.com/elv8dgtl?s=21" target="_blank" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);" aria-label="Twitter/X"><i data-lucide="twitter" style="width:15px;height:15px;"></i></a>
+        <a href="https://wa.me/918052743378" target="_blank" style="width:34px;height:34px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;color:#fff;" aria-label="WhatsApp"><i data-lucide="message-circle" style="width:15px;height:15px;"></i></a>
+    </div>
+</div>
+
+<!-- ── HEADER ───────────────────────────────────────────────────────── -->
+<header style="padding-top:60px;border-bottom:1.5px solid var(--border);background:var(--paper);">
+    <div style="max-width:1280px;margin:auto;padding:1.75rem 1.25rem 0;">
+
+        <!-- Ticker -->
+        <div style="overflow:hidden;background:var(--ink);border-radius:8px;padding:9px 0;margin-bottom:1.75rem;">
+            <div class="ticker-inner">
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">TECH REVIEWS</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">COMPARISONS</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">TOP PICKS FOR INDIA</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">BUYER'S GUIDES</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">HONEST OPINIONS</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">TECH REVIEWS</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">COMPARISONS</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">TOP PICKS FOR INDIA</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">BUYER'S GUIDES</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">HONEST OPINIONS</span>
+                <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+            </div>
+        </div>
+
+        <!-- Masthead -->
+        <div style="position:relative;overflow:hidden;padding-bottom:1.75rem;">
+            <div class="hindi-bg">&#2342;&#2375;&#2326;&#2379;</div>
+            <div style="position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;">
+                <div>
+                    <p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.2em;margin-bottom:.35rem;">// VOL.01 &middot; ISSUE 001 &middot; 2026</p>
+                    <h1 class="display" style="font-size:clamp(52px,12vw,150px);color:var(--ink);line-height:.9;">DEKHO</h1>
+                    <p style="font-size:clamp(13px,1.8vw,16px);color:var(--muted);margin-top:.55rem;max-width:460px;line-height:1.65;">
+                        Real reviews. Honest comparisons. Curated picks &mdash; for Indian buyers who actually care what they spend on.
+                    </p>
+                </div>
+                <!-- Live stats -->
+                <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+                    <div style="border-left:2px solid var(--border);padding-left:1rem;">
+                        <div class="display" id="hero-article-count" style="font-size:2rem;color:var(--accent);">&#8212;</div>
+                        <div class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;">ARTICLES</div>
+                    </div>
+                    <div id="stats-cats" style="border-left:2px solid var(--border);padding-left:1rem;display:none;">
+                        <div class="display" id="hero-cat-count" style="font-size:2rem;color:var(--ink);">&#8212;</div>
+                        <div class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;">CATEGORIES</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter + sort bar -->
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.8rem 0;border-top:1.5px solid var(--border);flex-wrap:wrap;">
+            <div class="filter-row">
+                <button class="cat-btn active" onclick="filterCat('all')"        data-cat="all">All</button>
+                <button class="cat-btn"        onclick="filterCat('review')"     data-cat="review">Reviews</button>
+                <button class="cat-btn"        onclick="filterCat('comparison')" data-cat="comparison">Comparisons</button>
+                <button class="cat-btn"        onclick="filterCat('top')"        data-cat="top">Top Lists</button>
+                <button class="cat-btn"        onclick="filterCat('guide')"      data-cat="guide">Guides</button>
+                <button class="cat-btn"        onclick="filterCat('news')"       data-cat="news">News</button>
+                <button class="cat-btn"        onclick="filterCat('opinion')"    data-cat="opinion">Opinion</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;">
+                <span class="mono hide-sm" style="font-size:10px;color:var(--muted);">Sort:</span>
+                <select id="sort-select" onchange="sortArticles()" style="border:1.5px solid var(--border);background:#fff;border-radius:8px;padding:5px 9px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);cursor:pointer;outline:none;">
+                    <option value="newest">Newest</option>
+                    <option value="rating">Top Rated</option>
+                    <option value="readtime">Quick Reads</option>
+                </select>
+                <!-- Grid view -->
+                <button id="vbtn-grid" class="view-btn active" onclick="setView('grid')" title="Grid view">
+                    <i data-lucide="layout-grid" style="width:13px;height:13px;pointer-events:none;"></i>
+                </button>
+                <!-- List view -->
+                <button id="vbtn-list" class="view-btn" onclick="setView('list')" title="List view">
+                    <i data-lucide="list" style="width:13px;height:13px;pointer-events:none;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ── MAIN ─────────────────────────────────────────────────────────── -->
+<main style="max-width:1280px;margin:auto;padding:2rem 1.25rem 5rem;">
+
+    <!-- Skeleton loaders -->
+    <div id="loading-state">
+        <div id="skel-hero" style="background:#fff;border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:2rem;display:grid;grid-template-columns:1fr 1fr;min-height:300px;">
+            <div class="skel-img" style="aspect-ratio:auto;min-height:220px;"></div>
+            <div style="padding:2rem;display:flex;flex-direction:column;gap:.75rem;justify-content:center;">
+                <div class="skel-line w40"></div>
+                <div class="skel-line" style="height:28px;"></div>
+                <div class="skel-line"></div>
+                <div class="skel-line w60"></div>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;" id="skel-grid">
+            <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line"></div><div class="skel-line w60"></div></div></div>
+            <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line"></div><div class="skel-line w60"></div></div></div>
+            <div class="skel-card hide-sm"><div class="skel-img"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line"></div><div class="skel-line w60"></div></div></div>
+        </div>
+    </div>
+
+    <!-- Error -->
+    <div id="error-state" style="display:none;text-align:center;padding:4rem 0;">
+        <p class="display" style="font-size:2.5rem;color:var(--border);">OOPS</p>
+        <p style="color:var(--muted);margin-top:.5rem;font-size:14px;" id="error-msg">Could not load articles.</p>
+        <button onclick="loadArticles()" style="margin-top:1.5rem;padding:9px 24px;background:var(--ink);color:#fff;border:none;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;">Try Again</button>
+    </div>
+
+    <!-- Empty -->
+    <div id="empty-state" style="display:none;text-align:center;padding:4rem 0;">
+        <p class="display" style="font-size:2.5rem;color:var(--border);">COMING SOON</p>
+        <p style="color:var(--muted);margin-top:.5rem;font-size:14px;">No published articles yet. Check back soon.</p>
+    </div>
+
+    <!-- Articles -->
+    <div id="articles-loaded" style="display:none;">
+
+        <!-- Featured hero -->
+        <div id="featured-wrap" style="margin-bottom:1.75rem;"></div>
+
+        <!-- Toolbar row -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+            <p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.12em;">
+                <span id="article-count">0</span> ARTICLES PUBLISHED
+            </p>
+            <p class="mono" style="font-size:10px;color:var(--accent);" id="active-filter-label"></p>
+        </div>
+
+        <!-- Grid -->
+        <div id="article-grid"></div>
+
+        <!-- No results -->
+        <div id="no-results" style="display:none;text-align:center;padding:3.5rem 0;">
+            <p class="display" style="font-size:2.5rem;color:var(--border);">NO RESULTS</p>
+            <p style="color:var(--muted);margin-top:.5rem;font-size:14px;">Try a different category or search term.</p>
+            <button onclick="filterCat('all')" style="margin-top:1.25rem;padding:8px 22px;background:var(--ink);color:#fff;border:none;border-radius:999px;font-size:12px;font-family:'DM Mono',monospace;cursor:pointer;letter-spacing:.05em;">Clear filter</button>
+        </div>
+
+        <!-- Load more -->
+        <div id="load-more-wrap" style="display:none;text-align:center;margin-top:2.5rem;">
+            <button id="load-more-btn" onclick="loadMore()" style="padding:11px 32px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.05em;">
+                Load more articles
+            </button>
+        </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="nl-box" style="margin-top:3.5rem;background:var(--ink);border-radius:18px;padding:2.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem;position:relative;overflow:hidden;">
+        <div class="hindi-bg" style="right:-20px;color:rgba(255,255,255,.03);">&#2342;&#2375;&#2326;&#2379;</div>
+        <div style="position:relative;z-index:1;">
+            <p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.2em;margin-bottom:.35rem;">// STAY IN THE LOOP</p>
+            <h3 class="display" style="font-size:clamp(1.5rem,4vw,2.25rem);color:#fff;line-height:1.1;">GET DEKHO IN YOUR INBOX</h3>
+            <p style="color:#555;margin-top:.35rem;font-size:13px;">New reviews every week. No spam. Unsubscribe anytime.</p>
+        </div>
+        <form onsubmit="handleNewsletter(event)" style="position:relative;z-index:1;display:flex;gap:0;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:999px;padding:5px 5px 5px 18px;width:min(100%,400px);">
+            <input type="email" class="nl-input" placeholder="your@email.com" required>
+            <button type="submit" style="background:var(--accent);color:#fff;border:none;padding:9px 20px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .2s;">Subscribe</button>
+        </form>
+    </div>
+
+</main>
+
+<!-- ── FOOTER ───────────────────────────────────────────────────────── -->
+<footer style="background:var(--surface);border-top:1.5px solid var(--border);padding:3rem 1.25rem 1.75rem;">
+    <div style="max-width:1280px;margin:auto;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:2rem;padding-bottom:2rem;border-bottom:1.5px solid var(--border);margin-bottom:1.25rem;">
+
+            <!-- Brand -->
+            <div>
+                <h4 class="display" style="font-size:1.85rem;color:var(--ink);margin-bottom:.25rem;">DEKHO</h4>
+                <p class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:.85rem;">BY ELV8 DGTL</p>
+                <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:210px;">Real tech reviews for Indian buyers. Honest picks, no sponsored fluff.</p>
+                <p class="aff-note" style="margin-top:.75rem;">This site contains Amazon affiliate links.</p>
+                <!-- Live IST clock -->
+                <p class="mono" style="font-size:10px;color:var(--muted);margin-top:.5rem;display:flex;align-items:center;gap:5px;">
+                    <i data-lucide="clock" style="width:11px;height:11px;"></i>
+                    <span id="ist-clock">--:-- IST</span>
+                </p>
+            </div>
+
+            <!-- Categories -->
+            <div>
+                <p class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:.9rem;">CATEGORIES</p>
+                <div style="display:flex;flex-direction:column;gap:.5rem;">
+                    <a href="dekho.html" class="footer-link" onclick="setTimeout(function(){filterCat('review')},100)">Reviews</a>
+                    <a href="dekho.html" class="footer-link" onclick="setTimeout(function(){filterCat('comparison')},100)">Comparisons</a>
+                    <a href="dekho.html" class="footer-link" onclick="setTimeout(function(){filterCat('top')},100)">Top Lists</a>
+                    <a href="dekho.html" class="footer-link" onclick="setTimeout(function(){filterCat('guide')},100)">Guides</a>
+                    <a href="dekho.html" class="footer-link" onclick="setTimeout(function(){filterCat('news')},100)">News</a>
+                    <a href="dekho.html" class="footer-link" onclick="setTimeout(function(){filterCat('opinion')},100)">Opinion</a>
+                </div>
+            </div>
+
+            <!-- Site links -->
+            <div>
+                <p class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:.9rem;">ELV8 DGTL</p>
+                <div style="display:flex;flex-direction:column;gap:.5rem;">
+                    <a href="index.html"    class="footer-link">Home</a>
+                    <a href="services.html" class="footer-link">Services</a>
+                    <a href="about.html"    class="footer-link">About</a>
+                    <a href="contact.html"  class="footer-link">Contact</a>
+                </div>
+            </div>
+
+            <!-- Reach us — PLAIN EMAIL, NO OBFUSCATION -->
+            <div>
+                <p class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:.9rem;">REACH US</p>
+                <div style="display:flex;flex-direction:column;gap:.65rem;">
+                    <a href="mailto:hello@elv8dgtl.in" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+                        <i data-lucide="mail" style="width:14px;height:14px;flex-shrink:0;"></i><span>hello@elv8dgtl.in</span>
+                    </a>
+                    <a href="https://wa.me/918052743378" target="_blank" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--muted)'">
+                        <i data-lucide="message-circle" style="width:14px;height:14px;flex-shrink:0;"></i>+91 80527 43378
+                    </a>
+                    <!-- Social icons -->
+                    <div style="display:flex;gap:8px;margin-top:4px;">
+                        <a href="https://instagram.com/elv8dgtl.in" target="_blank" aria-label="Instagram" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#E1306C';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
+                            <i data-lucide="instagram" style="width:14px;height:14px;"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/elv8dgtl" target="_blank" aria-label="LinkedIn" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#0077B5';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
+                            <i data-lucide="linkedin" style="width:14px;height:14px;"></i>
+                        </a>
+                        <a href="https://x.com/elv8dgtl?s=21" target="_blank" aria-label="X / Twitter" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='var(--ink)';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
+                            <i data-lucide="twitter" style="width:14px;height:14px;"></i>
+                        </a>
+                        <a href="https://wa.me/918052743378" target="_blank" aria-label="WhatsApp" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#25D366';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
+                            <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;">
+            <p class="mono" style="font-size:10px;color:var(--muted);">&copy; 2026 DEKHO by elv8 dgtl. All rights reserved.</p>
+            <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+                Back to top <i data-lucide="arrow-up" style="width:13px;height:13px;"></i>
+            </button>
+        </div>
+    </div>
+</footer>
+
+<!-- WhatsApp float -->
+<a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+   style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:40;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:transform .2s;"
+   onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+    <i data-lucide="message-circle" style="width:24px;height:24px;color:#fff;"></i>
+</a>
+
+<!-- Back to top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <i data-lucide="arrow-up" style="width:16px;height:16px;"></i>
+</button>
+
+<!-- Toast -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────────────
+var API = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvHjqt2hYisva_Ghn3rDGszn-t6F-qCEHiFcM5L-Z/exec';
+
+// ── STATE ─────────────────────────────────────────────────────────
+var allArticles   = [];
+var sortedArticles = [];
+var activeFilter  = 'all';
+var activeSearch  = '';
+var currentView   = 'grid';
+var PAGE_SIZE     = 9;
+var currentPage   = 0;   // pages already rendered (0 = none yet)
+
+// ── LOCAL CACHE (5 min TTL) ──────────────────────────────────────
+var CACHE_KEY = 'dekho_articles';
+var CACHE_TTL = 5 * 60 * 1000;
+function getCached() {
+    try {
+        var r = localStorage.getItem(CACHE_KEY);
+        if (!r) return null;
+        var e = JSON.parse(r);
+        if (!e || !e.ts || !e.data) return null;
+        if (Date.now() - e.ts > CACHE_TTL) return null;
+        return e.data;
+    } catch(x) { return null; }
+}
+function setCache(data) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data })); } catch(x) {}
+}
+
+// ── PLAYGROUND: auto-height messaging ────────────────────────────
+window.addEventListener('message', function(e) {
+    if (!e.data || e.data.type !== 'pg-resize') return;
+    var h = parseInt(e.data.h);
+    if (!h || h < 50) return;
+    document.querySelectorAll('.pg-embed iframe').forEach(function(f) {
+        try { if (f.contentWindow === e.source) f.style.height = (h + 24) + 'px'; } catch(x) {}
+    });
+});
+
+function restorePlaygrounds(content, playgrounds) {
+    if (!content) return content || '';
+    if (!playgrounds || !Object.keys(playgrounds).length) return content;
+    return content.replace(/(?:<span[^>]*data-pg-token="([^"]+)"[^>]*>[\s\S]*?<\/span>|\[\[PG:([^\]]+)\]\])/g, function(match, uid1, uid2) {
+        var uid = uid1 || uid2; if (!uid) return '';
+        var pg  = playgrounds[uid]; if (!pg) return '';
+        var isAuto = pg.autoheight !== '0';
+        var height = isAuto ? '200px' : (pg.height || '400px');
+        var border = pg.border === '1' ? 'border:1.5px solid #E2E0DA;' : '';
+        var scroll = pg.scroll === '1' ? 'auto' : 'hidden';
+        var autoScript = isAuto ? '<scr'+'ipt>(function(){function r(){var h=document.documentElement.scrollHeight||document.body.scrollHeight;parent.postMessage({type:"pg-resize",h:h},"*");}window.addEventListener("load",r);window.addEventListener("resize",r);setTimeout(r,200);setTimeout(r,800);})();<\/scr'+'ipt>' : '';
+        var doc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;}</style>'+(pg.css?'<style>'+pg.css+'</style>':'')+autoScript+'</head><body>'+(pg.html||'')+(pg.js?'<scr'+'ipt>'+pg.js+'<\/scr'+'ipt>':'')+'</body></html>';
+        var safeDoc = doc.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+        return '<div class="pg-embed" style="'+border+'"><iframe data-srcdoc="'+safeDoc+'" style="width:100%;height:'+height+';border:none;display:block;overflow:'+scroll+';transition:height .3s ease;" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>';
+    });
+}
+function initPlaygrounds(container) {
+    (container || document).querySelectorAll('iframe[data-srcdoc]').forEach(function(iframe) {
+        var enc = iframe.getAttribute('data-srcdoc'); if (!enc) return;
+        var doc = enc.replace(/&quot;/g,'"').replace(/&amp;/g,'&');
+        iframe.removeAttribute('data-srcdoc');
+        try { iframe.srcdoc = doc; } catch(e) { iframe.src = URL.createObjectURL(new Blob([doc],{type:'text/html'})); }
+    });
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+    lucide.createIcons();
+
+    // Scroll: progress bar + navbar shadow + back-to-top
+    var navbar = document.getElementById('navbar');
+    var backTop = document.getElementById('back-top');
+    var prog = document.getElementById('read-progress');
+    window.addEventListener('scroll', function() {
+        var sy   = window.scrollY;
+        var docH = document.documentElement.scrollHeight - window.innerHeight;
+        if (prog && docH > 0) prog.style.width = Math.min(100, sy / docH * 100) + '%';
+        navbar.classList.toggle('scrolled', sy > 40);
+        backTop.classList.toggle('visible', sy > 500);
+    }, { passive: true });
+
+    // Footer live IST clock
+    var clockEl = document.getElementById('ist-clock');
+    function tickClock() {
+        if (clockEl) clockEl.textContent = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', timeZone:'Asia/Kolkata' }) + ' IST';
+    }
+    tickClock(); setInterval(tickClock, 30000);
+
+    // Mobile menu
+    window.toggleMobileMenu = function() {
+        var m = document.getElementById('mobile-menu');
+        m.classList.toggle('open');
+        document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
+    };
+
+    // Search input live
+    document.getElementById('search-input').addEventListener('input', function() {
+        activeSearch = this.value.toLowerCase().trim();
+        renderSearchOverlay(activeSearch);
+        applyFilterAndSearch();
+    });
+
+    // Close search / overlay on outside click
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('#search-wrap') && !e.target.closest('#search-results') && !e.target.closest('#search-btn')) {
+            document.getElementById('search-results').style.display = 'none';
+        }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault(); openSearch();
+        }
+        if (e.key === 'Escape') {
+            closeSearch();
+            var m = document.getElementById('mobile-menu');
+            if (m.classList.contains('open')) toggleMobileMenu();
+        }
+    });
+
+    // Restore saved view preference
+    try {
+        var sv = localStorage.getItem('dekho_view');
+        if (sv === 'list') setView('list');
+    } catch(x) {}
+
+    loadArticles();
+});
+
+// ── SEARCH OPEN / CLOSE ───────────────────────────────────────────
+function openSearch() {
+    document.getElementById('search-wrap').classList.add('open');
+    document.getElementById('search-btn').style.display = 'none';
+    setTimeout(function() { document.getElementById('search-input').focus(); }, 50);
+}
+function closeSearch() {
+    document.getElementById('search-wrap').classList.remove('open');
+    document.getElementById('search-btn').style.display = '';
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-results').style.display = 'none';
+    activeSearch = '';
+    applyFilterAndSearch();
+}
+window.toggleSearch = function() {
+    document.getElementById('search-wrap').classList.contains('open') ? closeSearch() : openSearch();
+};
+
+// ── LOAD ARTICLES ─────────────────────────────────────────────────
+function loadArticles() {
+    show('loading-state'); hide('error-state'); hide('empty-state'); hide('articles-loaded');
+    var cached = getCached();
+    if (cached) {
+        hide('loading-state');
+        allArticles = cached;
+        onLoaded(allArticles);
+        // Background revalidate (stale-while-revalidate)
+        fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({action:'listPublished'}) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){ if(d.ok && d.articles){ setCache(d.articles); if(d.articles.length !== allArticles.length){ allArticles=d.articles; onLoaded(allArticles); } } })
+        .catch(function(){});
+        return;
+    }
+    fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({action:'listPublished'}) })
+    .then(function(r) { if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(d) {
+        hide('loading-state');
+        if (!d.ok) { showError(d.error || 'Failed to load.'); return; }
+        allArticles = d.articles || [];
+        setCache(allArticles);
+        onLoaded(allArticles);
+    })
+    .catch(function(err) { hide('loading-state'); showError('Could not reach the server. Check your connection.'); console.error(err); });
+}
+
+function onLoaded(arts) {
+    if (!arts.length) { show('empty-state'); return; }
+    var count = arts.length;
+    document.getElementById('article-count').textContent = count;
+    var hc = document.getElementById('hero-article-count');
+    if (hc) hc.textContent = count;
+    // Category count stat
+    var cats = new Set(arts.map(function(a){ return a.category; }).filter(Boolean));
+    var sw = document.getElementById('stats-cats'), cc = document.getElementById('hero-cat-count');
+    if (sw && cc) { cc.textContent = cats.size; sw.style.display = ''; }
+
+    sortedArticles = arts.slice();
+    renderAll();
+    show('articles-loaded');
+    initReveal();
+}
+
+// ── RENDER ALL ────────────────────────────────────────────────────
+function renderAll() {
+    renderFeatured();
+    renderGrid();
+}
+
+// ── FEATURED CARD ─────────────────────────────────────────────────
+function renderFeatured() {
+    var a    = sortedArticles[0];
+    var wrap = document.getElementById('featured-wrap');
+    if (!a) { wrap.innerHTML = ''; return; }
+    var tc   = tagCls(a.category);
+    var tl   = tagDisplay(a.category);
+    var dt   = fmtDate(a.publishedAt);
+    var cov  = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80';
+    var rat  = a.rating ? parseFloat(a.rating).toFixed(1) : '';
+    var ini  = (a.authorName || 'D').charAt(0).toUpperCase();
+    var url  = 'dekho-article.html?id=' + encodeURIComponent(a.id);
+    wrap.innerHTML =
+        '<div class="article-item reveal" data-cat="'+esc(a.category)+'" data-rating="'+(a.rating||0)+'" data-date="'+dateSortKey(a.publishedAt)+'">' +
+        '<a href="'+url+'" style="text-decoration:none;">' +
+        '<div class="hero-card">' +
+        '<div class="hero-grid">' +
+        '<div class="hero-img" style="position:relative;">' +
+        '<img src="'+esc(cov)+'" alt="'+esc(a.title)+'" style="width:100%;height:100%;min-height:200px;object-fit:cover;display:block;" onerror="this.src=\'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80\'">' +
+        '<div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,rgba(255,255,255,.15));pointer-events:none;"></div>' +
+        '<div style="position:absolute;top:12px;left:12px;"><span class="tag '+tc+'">'+tl+'</span></div>' +
+        (rat ? '<div class="rating-stamp">'+rat+'<span>/ 10</span></div>' : '') +
+        '</div>' +
+        '<div class="hero-content" style="padding:2rem;display:flex;flex-direction:column;justify-content:center;background:#fff;">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:.8rem;">' +
+        '<span class="tag '+tc+'">'+tl+'</span>' +
+        '<span class="mono" style="font-size:10px;color:var(--muted);">'+(a.readTime||5)+' min read &middot; '+dt+'</span>' +
+        '</div>' +
+        '<h2 class="display card-title" style="font-size:clamp(20px,2.4vw,34px);color:var(--ink);line-height:1.05;margin-bottom:.8rem;">'+esc(a.title)+'</h2>' +
+        '<p style="color:var(--muted);line-height:1.7;margin-bottom:1.25rem;font-size:14px;">'+esc(a.excerpt||'')+'</p>' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+        '<div style="width:28px;height:28px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;color:var(--lime);font-family:\'Bebas Neue\',sans-serif;font-size:13px;flex-shrink:0;">'+ini+'</div>' +
+        '<span style="font-size:13px;color:var(--muted);">'+esc(a.authorName||'')+'</span>' +
+        '</div>' +
+        '<span style="color:var(--accent);font-size:13px;font-weight:600;">'+readCTA(a.category)+'</span>' +
+        '</div></div></div></div></a></div>';
+}
+
+// ── GRID RENDER + PAGINATION ──────────────────────────────────────
+function renderGrid() {
+    var grid = document.getElementById('article-grid');
+    var rest = sortedArticles.slice(1);
+    currentPage = 0;
+    grid.innerHTML = '';
+    if (!rest.length) { updateLoadMore(0,0); return; }
+    appendCards(rest, 0, PAGE_SIZE);
+    currentPage = 1;
+    updateLoadMore(rest.length, PAGE_SIZE);
+    if (currentView === 'list') applyListCards();
+    initReveal();
+}
+
+function loadMore() {
+    var rest  = sortedArticles.slice(1);
+    var start = currentPage * PAGE_SIZE;
+    appendCards(rest, start, start + PAGE_SIZE);
+    currentPage++;
+    updateLoadMore(rest.length, currentPage * PAGE_SIZE);
+    if (currentView === 'list') applyListCards();
+    initReveal();
+}
+
+function appendCards(arr, start, end) {
+    var grid  = document.getElementById('article-grid');
+    var chunk = arr.slice(start, end);
+    chunk.forEach(function(a, i) {
+        var el = document.createElement('div');
+        el.innerHTML = cardHTML(a, start + i);
+        grid.appendChild(el.firstChild);
+    });
+}
+
+function updateLoadMore(total, shown) {
+    var w = document.getElementById('load-more-wrap');
+    if (w) w.style.display = shown < total ? 'block' : 'none';
+}
+
+function cardHTML(a, i) {
+    var tc   = tagCls(a.category);
+    var tl   = tagDisplay(a.category);
+    var cov  = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80';
+    var rat  = a.rating ? parseFloat(a.rating).toFixed(1) : '';
+    var url  = 'dekho-article.html?id=' + encodeURIComponent(a.id);
+    var del  = (i % 3) * 0.07;
+    return '<div class="article-item reveal" data-cat="'+esc(a.category)+'" data-rating="'+(a.rating||0)+'" data-date="'+dateSortKey(a.publishedAt)+'" style="transition-delay:'+del+'s;">' +
+        '<a href="'+url+'" style="text-decoration:none;">' +
+        '<div class="card">' +
+        '<div class="card-img" style="aspect-ratio:16/9;position:relative;">' +
+        '<img src="'+esc(cov)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80\'">' +
+        (rat ? '<div class="rating-stamp">'+rat+'<span>/ 10</span></div>' : '') +
+        '</div>' +
+        '<div class="card-body">' +
+        '<div style="display:flex;align-items:center;gap:7px;margin-bottom:.6rem;">' +
+        '<span class="tag '+tc+'">'+tl+'</span>' +
+        '<span class="mono" style="font-size:10px;color:var(--muted);">'+(a.readTime||5)+' min</span>' +
+        '</div>' +
+        '<h3 class="card-title display" style="font-size:21px;color:var(--ink);line-height:1.15;margin-bottom:.6rem;">'+esc(a.title)+'</h3>' +
+        '<p style="color:var(--muted);font-size:13px;line-height:1.65;flex:1;margin-bottom:.85rem;">'+esc(a.excerpt||'')+'</p>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<div><span class="aff-note">By '+esc(a.authorName||'DEKHO')+'</span>' +
+        '<div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px;">'+fmtDate(a.publishedAt)+'</div></div>' +
+        '<span style="color:var(--accent);font-size:12px;font-weight:600;">'+readCTA(a.category)+'</span>' +
+        '</div></div></div></a></div>';
+}
+
+// ── VIEW TOGGLE (grid / list) ─────────────────────────────────────
+window.setView = function(v) {
+    currentView = v;
+    var gb = document.getElementById('vbtn-grid');
+    var lb = document.getElementById('vbtn-list');
+    var grid = document.getElementById('article-grid');
+    if (v === 'list') {
+        gb.classList.remove('active'); lb.classList.add('active');
+        grid.classList.add('list-view');
+        applyListCards();
+    } else {
+        lb.classList.remove('active'); gb.classList.add('active');
+        grid.classList.remove('list-view');
+        grid.querySelectorAll('.card').forEach(function(c) {
+            c.classList.remove('list-mode');
+            var img = c.querySelector('.card-img');
+            if (img) { img.style.width=''; img.style.flexShrink=''; }
+        });
+    }
+    try { localStorage.setItem('dekho_view', v); } catch(x) {}
+};
+function applyListCards() {
+    document.getElementById('article-grid').querySelectorAll('.card').forEach(function(c) {
+        c.classList.add('list-mode');
+        var img = c.querySelector('.card-img');
+        if (img) { img.style.width='160px'; img.style.flexShrink='0'; }
+    });
+}
+
+// ── FILTER ────────────────────────────────────────────────────────
+window.filterCat = function(cat) {
+    activeFilter = cat;
+    document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+    var btn = document.querySelector('.cat-btn[data-cat="'+cat+'"]');
+    if (btn) { btn.classList.add('active'); btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' }); }
+    applyFilterAndSearch();
+};
+
+function applyFilterAndSearch() {
+    var items   = document.querySelectorAll('.article-item');
+    var visible = 0;
+    var lbl     = document.getElementById('active-filter-label');
+    items.forEach(function(item) {
+        var catMatch    = activeFilter === 'all' || item.dataset.cat === activeFilter;
+        var titleEl     = item.querySelector('h2, h3');
+        var titleText   = titleEl ? titleEl.textContent.toLowerCase() : '';
+        var descEl      = item.querySelector('p');
+        var descText    = descEl ? descEl.textContent.toLowerCase() : '';
+        var searchMatch = !activeSearch || titleText.includes(activeSearch) || descText.includes(activeSearch);
+        var isVis       = catMatch && searchMatch;
+        item.style.transition = 'opacity .3s';
+        if (isVis) { item.style.display = ''; item.style.opacity = '1'; visible++; }
+        else { item.style.opacity = '0'; setTimeout(function(el){ return function(){ if(el.style.opacity==='0') el.style.display='none'; }; }(item), 300); }
+    });
+    // Featured card
+    var fw = document.getElementById('featured-wrap');
+    if (fw) {
+        var fi = fw.querySelector('.article-item');
+        if (fi) {
+            var fv = (activeFilter==='all' || fi.dataset.cat===activeFilter) && (!activeSearch || fw.textContent.toLowerCase().includes(activeSearch));
+            fw.style.display = fv ? '' : 'none';
+        }
+    }
+    // Active filter label
+    if (lbl) {
+        if (activeFilter !== 'all') lbl.textContent = tagDisplay(activeFilter).toUpperCase() + ' only';
+        else if (activeSearch)      lbl.textContent = 'Searching: "' + activeSearch + '"';
+        else                        lbl.textContent = '';
+    }
+    document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+}
+
+// ── SORT ──────────────────────────────────────────────────────────
+window.sortArticles = function() {
+    var val = document.getElementById('sort-select').value;
+    sortedArticles = allArticles.slice().sort(function(a, b) {
+        if (val === 'rating')   return parseFloat(b.rating||0) - parseFloat(a.rating||0);
+        if (val === 'readtime') return parseInt(a.readTime||99) - parseInt(b.readTime||99);
+        return new Date(b.publishedAt) - new Date(a.publishedAt);
+    });
+    renderAll();
+    applyFilterAndSearch();
+};
+
+// ── SEARCH OVERLAY ────────────────────────────────────────────────
+function renderSearchOverlay(q) {
+    var results = document.getElementById('search-results');
+    var inner   = document.getElementById('search-results-inner');
+    if (!q) { results.style.display = 'none'; return; }
+    var matches = allArticles.filter(function(a) {
+        return (a.title||'').toLowerCase().includes(q) || (a.excerpt||'').toLowerCase().includes(q) || (a.tag||'').toLowerCase().includes(q);
+    });
+    if (!matches.length) {
+        inner.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:.5rem 0;">No articles found for &ldquo;'+esc(q)+'&rdquo;</p>';
+    } else {
+        inner.innerHTML =
+            '<p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem;">'+matches.length+' RESULT'+(matches.length>1?'S':'')+'</p>' +
+            matches.slice(0, 8).map(function(a) {
+                var url = 'dekho-article.html?id=' + encodeURIComponent(a.id);
+                return '<a href="'+url+'" class="search-result-item">' +
+                    '<span class="tag '+tagCls(a.category)+'">'+tagDisplay(a.category)+'</span>' +
+                    '<span style="font-size:13px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(a.title)+'</span>' +
+                    '<span class="mono" style="font-size:10px;color:var(--muted);flex-shrink:0;">'+(a.readTime||5)+' min</span>' +
+                    '<span style="flex-shrink:0;font-size:12px;color:var(--accent);">&rarr;</span>' +
+                    '</a>';
+            }).join('') +
+            (matches.length > 8 ? '<p style="font-size:12px;color:var(--muted);text-align:center;padding:.5rem 0;">+' + (matches.length-8) + ' more &mdash; keep typing to narrow down</p>' : '');
+    }
+    results.style.display = 'block';
+}
+
+// ── REVEAL (scroll animation) ─────────────────────────────────────
+function initReveal() {
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('active'); });
+        return;
+    }
+    var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.reveal:not(.active)').forEach(function(el) { obs.observe(el); });
+}
+
+// ── NEWSLETTER ────────────────────────────────────────────────────
+window.handleNewsletter = function(e) {
+    e.preventDefault();
+    var btn   = e.target.querySelector('button[type="submit"]');
+    var input = e.target.querySelector('input[type="email"]');
+    btn.textContent = 'Subscribed!';
+    btn.style.background = '#16A34A';
+    btn.disabled = true;
+    if (input) input.disabled = true;
+    showToast('Welcome to DEKHO! You\'re subscribed.');
+};
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(msg) {
+    var t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3200);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function tagCls(cat) {
+    var m = { review:'tag-review', comparison:'tag-comparison', top:'tag-top', guide:'tag-guide', news:'tag-news', opinion:'tag-opinion' };
+    return m[cat] || 'tag-review';
+}
+function tagDisplay(cat) {
+    var m = { review:'Review', comparison:'Comparison', top:'Top List', guide:'Guide', news:'News', opinion:'Opinion' };
+    return m[cat] ? m[cat] : (cat ? cat.charAt(0).toUpperCase()+cat.slice(1) : 'Article');
+}
+function readCTA(cat) {
+    var m = { review:'Read full review', comparison:'See comparison', top:'View top list', guide:'Read guide', news:'Read more', opinion:'Read opinion' };
+    return (m[cat] || 'Read article') + ' \u2192';
+}
+function fmtDate(iso) {
+    if (!iso) return '';
+    try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }); } catch(e) { return ''; }
+}
+function dateSortKey(iso) {
+    if (!iso) return '0';
+    try { return new Date(iso).getTime().toString(); } catch(e) { return '0'; }
+}
+function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function show(id) { var el=document.getElementById(id); if(el) el.style.display=''; }
+function hide(id) { var el=document.getElementById(id); if(el) el.style.display='none'; }
+function showError(msg) {
+    show('error-state');
+    var em = document.getElementById('error-msg');
+    if (em) em.textContent = msg || 'Could not load articles.';
+}
+</script>
+</body>
+</html>
