@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ═══════════════════════════════════════════════════════════════════
-  SITEMAP — elv8dgtl.in
-  Last updated: 2026-03-11
-  
-  PRIORITY GUIDE:
-    1.0  = Homepage (highest)
-    0.95 = DEKHO blog listing (high-traffic, updates weekly)
-    0.90 = Core service / about pages
-    0.80 = Contact, work portfolio
-    0.70 = Individual project case studies
-    0.60 = Article pages (individually fetched by Google)
-    0.50 = Misc/secondary pages
-  
-  NOTE: Article pages (dekho-article.html?id=...) are JS-rendered.
-  For full Google indexing, consider Static HTML generation per article.
-  ═══════════════════════════════════════════════════════════════════
--->
+
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-
-  <!-- ═══════════════════════════════════════════════════════════
-       CORE PAGES — Highest priority
-       ═══════════════════════════════════════════════════════════ -->
-
-  <url>
-    <loc>https://elv8dgtl.in/</loc>
-    <lastmod>2026-03-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
 
   <!-- ═══════════════════════════════════════════════════════════
        DEKHO BLOG — High priority (active content hub)
@@ -41,98 +13,8 @@
     <loc>https://dekho.elv8dgtl.in/</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.95</priority>
+    <priority>1.0</priority>
   </url>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       SERVICES & ABOUT — High priority (conversion pages)
-       ═══════════════════════════════════════════════════════════ -->
-
-  <url>
-    <loc>https://elv8dgtl.in/services.html</loc>
-    <lastmod>2026-02-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.90</priority>
-  </url>
-
-  <url>
-    <loc>https://elv8dgtl.in/about.html</loc>
-    <lastmod>2026-02-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <url>
-    <loc>https://elv8dgtl.in/work.html</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://elv8dgtl.in/contact.html</loc>
-    <lastmod>2026-01-01</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.75</priority>
-  </url>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       PROJECT CASE STUDIES — Medium priority
-       ═══════════════════════════════════════════════════════════ -->
-
-  <url>
-    <loc>https://elv8dgtl.in/project-rass.html</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-
-  <url>
-    <loc>https://elv8dgtl.in/project-friction.html</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-
-  <url>
-    <loc>https://elv8dgtl.in/midnightcafe.html</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.60</priority>
-  </url>
-
-  <url>
-    <loc>https://elv8dgtl.in/scarface.html</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.60</priority>
-  </url>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       DEKHO ARTICLE PAGES
-       
-       HOW TO KEEP THIS UPDATED:
-       Option A (manual): Add each article URL below once published.
-       Option B (automated): Add a sitemap generator endpoint in
-                             Code.gs (action: 'generateSitemap') that
-                             returns all published article URLs, then
-                             have a script fetch and regenerate this file.
-       
-       URL pattern: https://elv8dgtl.in/dekho-article.html?id=ARTICLE_ID
-       Or with slug: https://elv8dgtl.in/dekho-article.html?slug=ARTICLE_SLUG
-       
-       NOTE: Google may struggle to index JS-rendered ?id= URLs.
-       For best SEO, generate static /dekho/SLUG.html pages per article.
-       ═══════════════════════════════════════════════════════════ -->
-
-  <!-- ADD PUBLISHED ARTICLE URLS BELOW THIS LINE -->
-  <!-- Example:
-  <url>
-    <loc>https://elv8dgtl.in/dekho-article.html?slug=best-budget-phones-india-2026</loc>
-    <lastmod>2026-03-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  -->
 
 </urlset>
