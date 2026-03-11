@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEKHO by elv8 — Loading…</title>
+  <meta name="description" content="">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="" id="meta-canonical">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="DEKHO by elv8 dgtl">
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:image" content="">
+  <meta property="og:url" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@elv8dgtl">
+  <meta name="twitter:title" content="">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="">
+  <script type="application/ld+json" id="json-ld"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-V77HPC9EX8', { page_location: window.location.href, page_title: document.title });
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --ink:      #1a1a1a;
+      --accent:   #E84B35;
+      --accent2:  #1a6bff;
+      --lime:     #c8f135;
+      --muted:    #6b6b6b;
+      --muted2:   #999;
+      --border:   #e5e5e5;
+      --surface:  #f8f8f6;
+      --yellow:   #fffbeb;
+      --yborder:  #fde68a;
+      --bg:       #ffffff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Read progress ── */
+    #read-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0; z-index: 9999; transition: width .1s linear; }
+
+    /* ── Navbar ── */
+    #navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .2s;
+    }
+    #navbar.scrolled { box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 1.25rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 58px;
+    }
+    .nav-logo {
+      text-decoration: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: .06em;
+      color: var(--ink); line-height: 1;
+      display: flex; align-items: baseline; gap: 6px;
+    }
+    .nav-logo-sub { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .2em; color: var(--muted2); text-transform: uppercase; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-link {
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      text-decoration: none; padding: 4px 0;
+      border-bottom: 2px solid transparent; transition: all .15s;
+    }
+    .nav-link:hover { color: var(--ink); border-bottom-color: var(--accent); }
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      color: var(--ink); text-decoration: none;
+      border: 1.5px solid var(--border); border-radius: 4px;
+      padding: 5px 12px; background: var(--surface); transition: all .15s;
+      white-space: nowrap;
+    }
+    .btn-back:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+
+    /* ── Tag pills ── */
+    .tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 3px; letter-spacing: .05em; text-transform: uppercase; }
+    .tag-review     { background: #fff0ed; color: var(--accent);  border: 1px solid #fccabb; }
+    .tag-comparison { background: #edf3ff; color: var(--accent2); border: 1px solid #bccfff; }
+    .tag-top        { background: #fefce8; color: #92400e;        border: 1px solid #fde68a; }
+    .tag-guide      { background: #f5f0ff; color: #6b3fd4;        border: 1px solid #cdb8ff; }
+    .tag-news       { background: #eff8ff; color: #0369a1;        border: 1px solid #bae6fd; }
+    .tag-opinion    { background: #fff7ed; color: #c2410c;        border: 1px solid #fed7aa; }
+
+    /* ── Page wrapper ── */
+    .page-outer { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb {
+      padding: .75rem 0;
+      font-size: 12px; color: var(--muted2);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+    }
+    .breadcrumb a { color: var(--accent); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb .sep { color: var(--border); }
+    .breadcrumb .cur { color: var(--muted); }
+
+    /* ── Two-column layout ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2.5rem;
+      padding: 1.5rem 0 4rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .article-sidebar { order: -1; }
+    }
+
+    /* ══════════════════════════════════════
+       MAIN ARTICLE COLUMN
+    ══════════════════════════════════════ */
+    .article-main {}
+
+    /* Category badge row */
+    .art-badge-row { display: flex; align-items: center; gap: 10px; margin-bottom: .75rem; }
+
+    /* Title — large, bold, serif */
+    .art-title {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700; line-height: 1.3;
+      color: var(--ink); margin-bottom: .6rem;
+      letter-spacing: -.01em;
+    }
+
+    /* Excerpt / standfirst — italic grey */
+    .art-excerpt {
+      font-size: 15px; color: var(--muted);
+      line-height: 1.7; margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    /* Byline */
+    .art-byline {
+      display: flex; align-items: center; gap: 10px;
+      padding: .65rem 0; margin-bottom: 1.25rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .byline-avatar {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      background: var(--ink); color: var(--lime);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 14px;
+    }
+    .byline-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .byline-sub  { font-size: 12px; color: var(--muted2); }
+    .byline-dot  { color: var(--border); font-size: 16px; }
+    .byline-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted2); }
+    .byline-share-btns { margin-left: auto; display: flex; gap: .5rem; }
+    .byline-share-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 4px 10px; text-decoration: none; color: var(--muted);
+      background: #fff; cursor: pointer; transition: all .15s;
+    }
+    .byline-share-btn:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+    @media (max-width: 600px) { .byline-share-btns { display: none; } }
+
+    /* Rating card */
+    #rating-wrap { margin-bottom: 1.25rem; }
+    .rating-card {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--ink); color: #fff;
+      padding: .75rem 1.5rem; border-radius: 6px;
+    }
+    .rating-num   { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--lime); line-height: 1; }
+    .rating-denom { font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,.35); align-self: flex-end; padding-bottom: 4px; }
+    .rating-lbl   { font-family: 'DM Mono', monospace; font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: .1em; }
+
+    /* Hero image — contained, below title */
+    .art-cover {
+      width: 100%; overflow: hidden;
+      border-radius: 6px; margin-bottom: 1.5rem;
+      background: var(--surface);
+    }
+    .art-cover img { width: 100%; display: block; max-height: 440px; object-fit: cover; }
+    .art-cover-caption { font-size: 11px; color: var(--muted2); padding: 5px 8px; background: rgba(0,0,0,.03); font-style: italic; }
+    @media (max-width: 600px) { .art-cover img { max-height: 240px; } }
+
+    /* Article body — Merriweather serif for readability */
+    .article-body {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 16px; line-height: 1.9; color: #2d2d2d;
+    }
+    .article-body h1,.article-body h2,.article-body h3,
+    .article-body h4,.article-body h5,.article-body h6 {
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      color: var(--ink); line-height: 1.3; margin: 2rem 0 .75rem;
+    }
+    .article-body h2 { font-size: 1.35em; padding-bottom: .4rem; border-bottom: 2px solid var(--border); }
+    .article-body h3 { font-size: 1.15em; }
+    .article-body h4 { font-size: 1.05em; }
+    .article-body p  { margin-bottom: 1.3rem; }
+    .article-body a  { color: var(--accent); text-underline-offset: 3px; }
+    .article-body a:hover { text-decoration: none; }
+    .article-body ul,.article-body ol { margin: .75rem 0 1.3rem 1.5rem; }
+    .article-body li { margin-bottom: .45rem; }
+    .article-body strong { font-weight: 700; color: var(--ink); }
+    .article-body em { font-style: italic; }
+    .article-body blockquote {
+      border-left: 4px solid var(--accent);
+      padding: .75rem 1.25rem; margin: 1.5rem 0;
+      background: var(--surface); border-radius: 0 5px 5px 0;
+      font-style: italic; color: var(--muted); font-size: 15px;
+    }
+    .article-body pre,.article-body code {
+      font-family: 'DM Mono', monospace; font-size: .85em;
+      background: #1e1e1e; color: #d4d4d4; border-radius: 5px;
+    }
+    .article-body pre  { padding: 1rem 1.25rem; overflow-x: auto; margin: 1.25rem 0; }
+    .article-body code { padding: 2px 6px; }
+    .article-body pre code { background: transparent; padding: 0; }
+    .article-body img  { max-width: 100%; border-radius: 6px; display: block; margin: 1.5rem auto; border: 1px solid var(--border); }
+    .article-body hr   { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+    .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 14px; font-family: 'Inter', sans-serif; }
+    .article-body th { background: var(--surface); padding: .55rem .8rem; text-align: left; font-weight: 700; border: 1px solid var(--border); }
+    .article-body td { padding: .5rem .8rem; border: 1px solid var(--border); }
+    .article-body tr:nth-child(even) td { background: var(--surface); }
+    .img-crop-wrap { overflow: hidden; display: block; max-width: 100%; line-height: 0; border-radius: 6px; margin: 1.5rem auto; border: 1px solid var(--border); }
+    .img-crop-wrap img { display: block; width: 100%; }
+    .aff-card { display: flex; align-items: center; gap: 1rem; border: 1.5px solid var(--border); border-radius: 7px; padding: 1rem 1.25rem; background: var(--surface); margin: 1.5rem 0; text-decoration: none; color: var(--ink); transition: border-color .2s; }
+    .aff-card:hover { border-color: var(--accent); }
+    .aff-card-img   { width: 68px; height: 68px; object-fit: contain; border-radius: 5px; flex-shrink: 0; }
+    .aff-card-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; }
+    .aff-card-title { font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; margin: 3px 0; }
+    .aff-card-cta   { font-size: 12px; color: var(--muted); font-family: 'Inter', sans-serif; }
+    .pg-embed { margin: 1.5rem 0; border-radius: 6px; overflow: hidden; }
+    .pg-embed iframe { width: 100%; border: none; display: block; transition: height .3s ease; }
+
+    /* Tags at bottom */
+    .art-tags { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .art-tags .tags-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-right: 4px; }
+
+    /* Related articles — numbered, below body */
+    .related-bottom { margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--ink); }
+    .related-bottom-title { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--ink); }
+    .related-bottom-list {}
+    .related-b-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: .75rem 0; border-bottom: 1px solid var(--border);
+      text-decoration: none; color: var(--ink);
+    }
+    .related-b-item:last-child { border-bottom: none; }
+    .related-b-item:hover .related-b-title { color: var(--accent); }
+    .related-b-num { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent); flex-shrink: 0; width: 28px; line-height: 1.1; }
+    .related-b-thumb { width: 70px; height: 55px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: var(--border); }
+    .related-b-title { font-size: 14px; font-weight: 600; line-height: 1.45; transition: color .15s; }
+    .related-b-meta  { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); margin-top: 4px; }
+
+    /* Author card */
+    .author-card {
+      margin-top: 2rem;
+      background: #1a1a1a; color: #fff;
+      border-radius: 8px; padding: 1.5rem;
+      display: flex; gap: 1.25rem; align-items: flex-start;
+    }
+    .author-card-avatar {
+      width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 24px;
+    }
+    .author-card-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: .2rem; }
+    .author-card-role { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,.45); margin-bottom: .65rem; }
+    .author-card-bio  { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.65; }
+    .author-card-socials { display: flex; gap: .5rem; margin-top: .85rem; }
+    .author-social-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.6);
+      text-decoration: none; transition: all .15s;
+    }
+    .author-social-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ══════════════════════════════════════
+       SIDEBAR
+    ══════════════════════════════════════ */
+    .article-sidebar { position: sticky; top: 72px; }
+    @media (max-width: 900px) { .article-sidebar { position: static; } }
+
+    /* Sidebar card */
+    .scard { margin-bottom: 1.5rem; }
+    .scard-title {
+      font-family: 'Inter', sans-serif; font-size: 13px;
+      font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+      color: var(--ink); padding-bottom: .6rem;
+      border-bottom: 2px solid var(--ink); margin-bottom: 1rem;
+    }
+
+    /* Share buttons in sidebar */
+    .share-btn {
+      display: flex; align-items: center; gap: 7px;
+      width: 100%; padding: .55rem .8rem; border-radius: 4px;
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      border: 1px solid var(--border); background: #fff;
+      color: var(--ink); cursor: pointer; transition: all .15s;
+      text-decoration: none; margin-bottom: .4rem;
+    }
+    .share-btn:last-child { margin-bottom: 0; }
+    .share-btn:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+
+    /* TOC */
+    .toc-list { list-style: none; }
+    .toc-list li { border-bottom: 1px solid var(--border); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a { display: block; padding: .4rem 0; font-size: 13px; color: var(--muted); text-decoration: none; transition: color .15s; line-height: 1.45; }
+    .toc-list a:hover,.toc-list a.active { color: var(--accent); font-weight: 600; }
+    .toc-h3 { padding-left: .9rem !important; font-size: 12px !important; }
+
+    /* Sidebar related — with thumbnails like Beebom trending */
+    .srel-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: .75rem 0; border-bottom: 1px solid var(--border);
+      text-decoration: none; color: var(--ink);
+    }
+    .srel-item:first-child { padding-top: 0; }
+    .srel-item:last-child  { border-bottom: none; }
+    .srel-item:hover .srel-title { color: var(--accent); }
+    .srel-num   { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #ddd; flex-shrink: 0; line-height: 1.1; width: 22px; }
+    .srel-thumb { width: 62px; height: 50px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: var(--border); }
+    .srel-title { font-size: 13px; font-weight: 600; line-height: 1.4; transition: color .15s; }
+    .srel-meta  { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); margin-top: 3px; }
+
+    /* DEKHO promo in sidebar */
+    .scard-promo {
+      background: var(--ink); border-radius: 7px;
+      padding: 1.25rem; text-align: center;
+    }
+    .scard-promo-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.85rem; color: var(--lime); letter-spacing: .06em; }
+    .scard-promo-sub  { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .18em; color: rgba(255,255,255,.35); margin-bottom: .7rem; }
+    .scard-promo-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.6; margin-bottom: 1rem; }
+    .scard-promo-btn  { display: inline-block; padding: .5rem 1.25rem; background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; text-decoration: none; border-radius: 4px; transition: opacity .15s; }
+    .scard-promo-btn:hover { opacity: .85; }
+
+    /* ── Skeleton ── */
+    .skel { background: linear-gradient(90deg,#efefed 25%,#f7f7f5 50%,#efefed 75%); background-size: 200% 100%; animation: sk 1.4s infinite; border-radius: 4px; }
+    @keyframes sk { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    #loading-state { max-width: 1200px; margin: 1.5rem auto; padding: 0 1.25rem; display: grid; grid-template-columns: 1fr 300px; gap: 2.5rem; }
+    @media (max-width:900px) { #loading-state { grid-template-columns: 1fr; } }
+    .skel-line { height: 14px; margin-bottom: 10px; }
+
+    /* ── Error ── */
+    #error-state { display:none; text-align:center; padding:5rem 1.25rem; }
+    #error-state h2 { font-family:'Bebas Neue',sans-serif; font-size:2rem; margin:.75rem 0 .5rem; }
+    #error-state p  { color:var(--muted); margin-bottom:1.5rem; font-size:14px; }
+
+    /* ── Footer ── */
+    footer { background: #1a1a1a; color: #fff; padding: 3rem 1.25rem 1.5rem; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 1.25rem; }
+    .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.85rem; color: var(--lime); letter-spacing: .06em; }
+    .footer-tagline { font-family: 'DM Mono', monospace; font-size: 9px; color: rgba(255,255,255,.3); letter-spacing: .18em; margin: .2rem 0 .8rem; }
+    .footer-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.65; }
+    .footer-col-ttl { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: .75rem; }
+    .footer-lnk { font-size: 13px; color: rgba(255,255,255,.55); text-decoration: none; display: block; margin-bottom: .4rem; transition: color .15s; }
+    .footer-lnk:hover { color: var(--lime); }
+    .footer-copy { max-width: 1200px; margin: 0 auto; font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,.25); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+
+    /* ── Back to top ── */
+    #back-top { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--lime); border: none; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,.2); transition: transform .2s; }
+    #back-top:hover { transform: translateY(-3px); }
+    #back-top.show  { display: flex; }
+  </style>
+</head>
+<body>
+
+<div id="read-progress"></div>
+
+<!-- ── Navbar ── -->
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="dekho.html" class="nav-logo">
+      DEKHO
+      <span class="nav-logo-sub">by elv8 dgtl</span>
+    </a>
+    <div class="nav-right">
+      <a href="dekho.html" class="nav-link">All Articles</a>
+      <a href="dekho.html" class="nav-link">Reviews</a>
+      <a href="dekho.html" class="nav-link">Guides</a>
+      <a href="https://elv8dgtl.in" class="nav-link">elv8dgtl.in</a>
+      <a href="dekho.html" class="btn-back">
+        <i data-lucide="arrow-left" style="width:12px;height:12px;"></i>
+        All Articles
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Loading ── -->
+<div id="loading-state">
+  <div>
+    <div class="skel skel-line" style="width:40%;margin-bottom:1rem;"></div>
+    <div class="skel skel-line" style="width:95%;height:28px;margin-bottom:.4rem;"></div>
+    <div class="skel skel-line" style="width:70%;height:28px;margin-bottom:1rem;"></div>
+    <div class="skel skel-line" style="width:50%;height:12px;margin-bottom:1.25rem;"></div>
+    <div class="skel" style="width:100%;height:360px;border-radius:6px;margin-bottom:1.5rem;"></div>
+    <div class="skel skel-line"></div>
+    <div class="skel skel-line" style="width:95%;"></div>
+    <div class="skel skel-line" style="width:88%;"></div>
+    <div class="skel skel-line" style="width:92%;"></div>
+    <div class="skel skel-line" style="width:70%;"></div>
+  </div>
+  <div>
+    <div class="skel" style="height:220px;border-radius:6px;margin-bottom:1rem;"></div>
+    <div class="skel skel-line" style="width:80%;margin-bottom:.5rem;"></div>
+    <div class="skel skel-line" style="width:60%;"></div>
+  </div>
+</div>
+
+<!-- ── Error ── -->
+<div id="error-state" role="alert">
+  <div style="font-size:2.5rem;">📭</div>
+  <h2>Article Not Found</h2>
+  <p id="error-msg">This article doesn't exist or may have been removed.</p>
+  <a href="dekho.html" class="btn-back" style="display:inline-flex;margin:0 auto;">
+    <i data-lucide="arrow-left" style="width:12px;height:12px;"></i>
+    Back to all articles
+  </a>
+</div>
+
+<!-- ── Article ── -->
+<div id="article-wrap" style="display:none;">
+  <div class="page-outer">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="https://elv8dgtl.in">Home</a>
+      <span class="sep">›</span>
+      <a href="dekho.html">DEKHO</a>
+      <span class="sep">›</span>
+      <a href="dekho.html" id="breadcrumb-cat-link">Articles</a>
+      <span class="sep">›</span>
+      <span class="cur" id="breadcrumb-title">Loading…</span>
+    </nav>
+
+    <div class="content-grid">
+
+      <!-- ── MAIN COLUMN ── -->
+      <main class="article-main">
+
+        <!-- Category badge -->
+        <div class="art-badge-row">
+          <span id="meta-tag" class="tag"></span>
+        </div>
+
+        <!-- Title — BIG, above image -->
+        <h1 class="art-title" id="art-title"></h1>
+
+        <!-- Standfirst / excerpt -->
+        <p class="art-excerpt" id="art-excerpt"></p>
+
+        <!-- Byline row with inline share -->
+        <div class="art-byline">
+          <div class="byline-avatar" id="author-avatar"></div>
+          <div>
+            <div class="byline-name" id="author-name"></div>
+            <div class="byline-sub" id="author-date"></div>
+          </div>
+          <span class="byline-dot">·</span>
+          <span class="byline-meta" id="meta-readtime"></span>
+          <span class="byline-dot">·</span>
+          <span class="byline-meta" id="meta-date"></span>
+          <div class="byline-share-btns">
+            <a id="byline-twitter" class="byline-share-btn" target="_blank" rel="noopener noreferrer">
+              <i data-lucide="twitter" style="width:11px;height:11px;"></i> X
+            </a>
+            <a id="byline-whatsapp" class="byline-share-btn" target="_blank" rel="noopener noreferrer">
+              <i data-lucide="message-circle" style="width:11px;height:11px;"></i> WhatsApp
+            </a>
+            <button class="byline-share-btn" onclick="copyLink()">
+              <i data-lucide="link" style="width:11px;height:11px;"></i>
+              <span id="copy-label">Copy link</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Rating (reviews only) -->
+        <div id="rating-wrap" style="display:none;">
+          <div class="rating-card">
+            <div class="rating-num" id="rating-num"></div>
+            <div class="rating-denom">/ 10</div>
+            <div>
+              <div class="rating-lbl">DEKHO</div>
+              <div class="rating-lbl">RATING</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cover image — BELOW title, full column width -->
+        <div class="art-cover">
+          <img id="hero-img" src="" alt="" loading="eager">
+          <div class="art-cover-caption">Image Credit: DEKHO by elv8 dgtl</div>
+        </div>
+
+        <!-- Article body -->
+        <article class="article-body" id="article-body" itemprop="articleBody"></article>
+
+        <!-- Tags -->
+        <div class="art-tags">
+          <span class="tags-label">Tags:</span>
+          <span id="bottom-tag" class="tag"></span>
+          <span id="bottom-category" class="tag" style="background:var(--surface);color:var(--ink);border:1px solid var(--border);"></span>
+        </div>
+
+        <!-- Related articles (numbered list like Beebom) -->
+        <div class="related-bottom" id="related-bottom" style="display:none;">
+          <div class="related-bottom-title">Related Articles</div>
+          <div class="related-bottom-list" id="related-list"></div>
+        </div>
+
+        <!-- Author card at very bottom -->
+        <div class="author-card">
+          <div class="author-card-avatar" id="author-card-avatar"></div>
+          <div>
+            <div class="author-card-name" id="author-card-name"></div>
+            <div class="author-card-role" id="author-card-meta"></div>
+            <div class="author-card-bio">Writer at DEKHO by elv8 dgtl — covering tech, gadgets and digital trends for Indian consumers. Real reviews, honest picks.</div>
+            <div class="author-card-socials">
+              <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="author-social-btn" title="Instagram">
+                <i data-lucide="instagram" style="width:14px;height:14px;"></i>
+              </a>
+              <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="author-social-btn" title="LinkedIn">
+                <i data-lucide="linkedin" style="width:14px;height:14px;"></i>
+              </a>
+              <a href="https://twitter.com/elv8dgtl" target="_blank" class="author-social-btn" title="X/Twitter">
+                <i data-lucide="twitter" style="width:14px;height:14px;"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- ── SIDEBAR ── -->
+      <aside class="article-sidebar" aria-label="Article sidebar">
+
+        <!-- Share -->
+        <div class="scard">
+          <div class="scard-title">Share this article</div>
+          <a id="share-twitter" class="share-btn" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="twitter" style="width:13px;height:13px;flex-shrink:0;"></i>
+            Share on X / Twitter
+          </a>
+          <a id="share-whatsapp" class="share-btn" target="_blank" rel="noopener noreferrer">
+            <i data-lucide="message-circle" style="width:13px;height:13px;flex-shrink:0;"></i>
+            Share on WhatsApp
+          </a>
+          <button class="share-btn" onclick="copyLink()">
+            <i data-lucide="link" style="width:13px;height:13px;flex-shrink:0;"></i>
+            <span id="copy-label2">Copy link</span>
+          </button>
+        </div>
+
+        <!-- TOC -->
+        <div class="scard" id="toc-card" style="display:none;">
+          <div class="scard-title">In this article</div>
+          <ul class="toc-list" id="toc-list"></ul>
+        </div>
+
+        <!-- Related / Trending in sidebar (numbered + thumbs like Beebom) -->
+        <div class="scard" id="related-card" style="display:none;">
+          <div class="scard-title">Trending on DEKHO</div>
+          <div id="related-sidebar-list"></div>
+        </div>
+
+        <!-- DEKHO promo -->
+        <div class="scard-promo">
+          <div class="scard-promo-logo">DEKHO</div>
+          <div class="scard-promo-sub">BY ELV8 DGTL</div>
+          <p class="scard-promo-desc">India's honest tech review platform. Real reviews, curated picks for Indian buyers.</p>
+          <a href="https://elv8dgtl.in" target="_blank" class="scard-promo-btn">Visit elv8dgtl.in →</a>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">DEKHO</div>
+      <div class="footer-tagline">BY ELV8 DGTL</div>
+      <p class="footer-desc">India's honest tech review platform. Real comparisons, curated picks for Indian buyers.</p>
+    </div>
+    <div>
+      <div class="footer-col-ttl">DEKHO</div>
+      <a href="dekho.html" class="footer-lnk">All Articles</a>
+      <a href="dekho.html" class="footer-lnk">Reviews</a>
+      <a href="dekho.html" class="footer-lnk">Comparisons</a>
+      <a href="dekho.html" class="footer-lnk">Guides</a>
+    </div>
+    <div>
+      <div class="footer-col-ttl">ELV8 DGTL</div>
+      <a href="https://elv8dgtl.in" class="footer-lnk">Home</a>
+      <a href="https://elv8dgtl.in/services.html" class="footer-lnk">Services</a>
+      <a href="https://elv8dgtl.in/about.html" class="footer-lnk">About</a>
+      <a href="https://elv8dgtl.in/contact.html" class="footer-lnk">Contact</a>
+    </div>
+    <div>
+      <div class="footer-col-ttl">CONTACT</div>
+      <a href="/cdn-cgi/l/email-protection#69010c050506290c051f510d0e1d05470007" class="footer-lnk"><span class="__cf_email__" data-cfemail="6109040d0d0e21040d17590506150d4f080f">[email&#160;protected]</span></a>
+      <a href="https://wa.me/918052743378" target="_blank" class="footer-lnk">WhatsApp</a>
+      <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="footer-lnk">Instagram</a>
+      <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="footer-lnk">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>© <span id="footer-year"></span> elv8 dgtl. All rights reserved.</span>
+    <span>DEKHO — Real Reviews. Honest Picks.</span>
+  </div>
+</footer>
+
+<button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i data-lucide="chevron-up" style="width:18px;height:18px;"></i>
+</button>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+var API  = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvHjqt2hYisva_Ghn3rDGszn-t6F-qCEHiFcM5L-Z/exec';
+var SITE = 'https://www.elv8dgtl.in';
+var GA_ID = 'G-V77HPC9EX8';
+
+function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(iso) { if (!iso) return ''; try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return ''; } }
+function tagCls(cat) { var m={review:'tag-review',comparison:'tag-comparison',top:'tag-top',guide:'tag-guide',news:'tag-news',opinion:'tag-opinion'}; return m[cat]||'tag-review'; }
+function tagDisplay(cat) { var m={review:'Review',comparison:'Comparison',top:'Top List',guide:'Guide',news:'News',opinion:'Opinion'}; return m[cat]?(m[cat]):(cat?cat.charAt(0).toUpperCase()+cat.slice(1):'Article'); }
+function getParam(key) { return new URLSearchParams(window.location.search).get(key); }
+function show(id) { var el=document.getElementById(id); if(el) el.style.display=''; }
+function hide(id) { var el=document.getElementById(id); if(el) el.style.display='none'; }
+
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'pg-resize') return;
+  var h = parseInt(e.data.h); if (!h || h < 50) return;
+  document.querySelectorAll('.pg-embed iframe').forEach(function(f) { try { if (f.contentWindow === e.source) f.style.height = (h + 24) + 'px'; } catch(x) {} });
+});
+
+function restorePlaygrounds(content, playgrounds) {
+  if (!content) return content || '';
+  if (!playgrounds || !Object.keys(playgrounds).length) return content;
+  return content.replace(/(?:<span[^>]*data-pg-token="([^"]+)"[^>]*>[\s\S]*?<\/span>|\[\[PG:([^\]]+)\]\])/g, function(match, uid1, uid2) {
+    var uid = uid1 || uid2; if (!uid) return '';
+    var pg  = playgrounds[uid]; if (!pg) return '';
+    var isAuto = pg.autoheight !== '0';
+    var height = isAuto ? '200px' : (pg.height || '400px');
+    var border = pg.border === '1' ? 'border:1.5px solid #E2E0DA;border-radius:8px;' : '';
+    var scroll = pg.scroll === '1' ? 'auto' : 'hidden';
+    var autoScript = isAuto ? '<scr'+'ipt>(function(){function r(){var h=document.documentElement.scrollHeight||document.body.scrollHeight;parent.postMessage({type:"pg-resize",h:h},"*");}window.addEventListener("load",r);window.addEventListener("resize",r);setTimeout(r,200);setTimeout(r,800);})();<\/scr'+'ipt>' : '';
+    var doc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;}</style>'+(pg.css?'<style>'+pg.css+'</style>':'')+autoScript+'</head><body>'+(pg.html||'')+(pg.js?'<scr'+'ipt>'+pg.js+'<\/scr'+'ipt>':'')+'</body></html>';
+    var safeDoc = doc.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    return '<div class="pg-embed" style="'+border+'"><iframe data-srcdoc="'+safeDoc+'" style="width:100%;height:'+height+';border:none;display:block;overflow:'+scroll+';transition:height .3s ease;" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>';
+  });
+}
+function initPlaygrounds(container) {
+  (container || document).querySelectorAll('iframe[data-srcdoc]').forEach(function(iframe) {
+    var enc = iframe.getAttribute('data-srcdoc'); if (!enc) return;
+    var doc = enc.replace(/&quot;/g,'"').replace(/&amp;/g,'&');
+    iframe.removeAttribute('data-srcdoc');
+    try { iframe.srcdoc = doc; } catch(e) { iframe.src = URL.createObjectURL(new Blob([doc],{type:'text/html'})); }
+  });
+}
+
+function injectSEO(article) {
+  var title     = article.seoMetaTitle || article.title + ' — DEKHO by elv8';
+  var desc      = article.seoMetaDesc  || article.excerpt || '';
+  var ogImg     = article.seoOgImage   || article.coverImage || '';
+  var canonical = article.seoCanonical ||
+    (article.slug
+      ? SITE + '/dekho-article.html?slug=' + encodeURIComponent(article.slug)
+      : SITE + '/dekho-article.html?id='   + encodeURIComponent(article.id));
+  document.title = title;
+  setMeta('name','description',desc); setMeta('name','robots','index, follow'); setMeta('name','author',article.authorName||'DEKHO');
+  if (article.seoKeyword) setMeta('name','keywords',article.seoKeyword);
+  var canonEl = document.getElementById('meta-canonical'); if (canonEl) canonEl.setAttribute('href',canonical);
+  setMeta('property','og:title',title); setMeta('property','og:description',desc); setMeta('property','og:image',ogImg);
+  setMeta('property','og:url',canonical); setMeta('property','og:type','article'); setMeta('property','og:site_name','DEKHO by elv8 dgtl');
+  if (article.publishedAt) setMeta('property','article:published_time',article.publishedAt);
+  setMeta('property','article:author',article.authorName||'DEKHO'); setMeta('property','article:section',tagDisplay(article.category));
+  setMeta('name','twitter:title',title); setMeta('name','twitter:description',desc); setMeta('name','twitter:image',ogImg);
+  setMeta('name','twitter:card','summary_large_image'); setMeta('name','twitter:site','@elv8dgtl');
+  var ld = { '@context':'https://schema.org', '@type':article.category==='review'?'Review':'Article', headline:article.title, description:desc, image:ogImg, url:canonical, datePublished:article.publishedAt, dateModified:article.updatedAt||article.publishedAt, author:{'@type':'Person',name:article.authorName||'DEKHO'}, publisher:{'@type':'Organization',name:'elv8 dgtl',logo:{'@type':'ImageObject',url:SITE+'/logo.png'}}, mainEntityOfPage:{'@type':'WebPage','@id':canonical} };
+  if (article.rating && article.category==='review') ld.reviewRating = {'@type':'Rating',ratingValue:parseFloat(article.rating).toFixed(1),bestRating:'10',worstRating:'0'};
+  var ldEl = document.getElementById('json-ld'); if (ldEl) ldEl.textContent = JSON.stringify(ld);
+  if (window.gtag) gtag('event','page_view',{page_title:title,page_location:window.location.href});
+}
+function setMeta(attr,name,content) {
+  if (!content) return;
+  var el = document.querySelector('meta['+attr+'="'+name+'"]');
+  if (el) el.setAttribute('content',content);
+  else { var m=document.createElement('meta'); m.setAttribute(attr,name); m.setAttribute('content',content); document.head.appendChild(m); }
+}
+
+function buildTOC() {
+  var body=document.getElementById('article-body'), tocList=document.getElementById('toc-list'), tocCard=document.getElementById('toc-card');
+  var headings=body.querySelectorAll('h2, h3'); if (headings.length < 3) return;
+  tocList.innerHTML='';
+  headings.forEach(function(h,i) {
+    var id='section-'+i; h.id=id;
+    var li=document.createElement('li'), a=document.createElement('a');
+    a.href='#'+id; a.textContent=h.textContent;
+    if (h.tagName==='H3') a.classList.add('toc-h3');
+    li.appendChild(a); tocList.appendChild(li);
+  });
+  tocCard.style.display='';
+  var obs=new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      var link=tocList.querySelector('a[href="#'+e.target.id+'"]'); if (!link) return;
+      if (e.isIntersecting) { tocList.querySelectorAll('a').forEach(function(a){a.classList.remove('active');}); link.classList.add('active'); }
+    });
+  },{rootMargin:'0px 0px -60% 0px'});
+  headings.forEach(function(h){obs.observe(h);});
+}
+
+function renderRelated(currentArticle, allArticles) {
+  var related = allArticles.filter(function(a) { return a.id!==currentArticle.id&&(a.category===currentArticle.category||a.tag===currentArticle.tag); }).slice(0,4);
+  if (!related.length) related=allArticles.filter(function(a){return a.id!==currentArticle.id;}).slice(0,4);
+  if (!related.length) return;
+
+  var fallbackImg = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=200&q=60';
+
+  // Bottom list (numbered like Beebom)
+  var relatedBottom=document.getElementById('related-bottom'), relatedList=document.getElementById('related-list');
+  relatedList.innerHTML=related.map(function(a,i) {
+    var cover=a.coverImage||fallbackImg;
+    var href='dekho-article.html?'+(a.slug?'slug='+encodeURIComponent(a.slug):'id='+encodeURIComponent(a.id));
+    return '<a href="'+href+'" class="related-b-item">'+
+           '<span class="related-b-num">0'+(i+1)+'</span>'+
+           '<img class="related-b-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+fallbackImg+'\'">'+
+           '<div><div class="related-b-title">'+esc(a.title)+'</div>'+
+           '<div class="related-b-meta">'+tagDisplay(a.category)+' · '+(a.readTime||'5')+' min read</div></div></a>';
+  }).join('');
+  relatedBottom.style.display='';
+
+  // Sidebar list (thumbs + title like Beebom trending)
+  var relatedCard=document.getElementById('related-card'), sidebarList=document.getElementById('related-sidebar-list');
+  sidebarList.innerHTML=related.map(function(a,i) {
+    var cover=a.coverImage||fallbackImg;
+    var href2='dekho-article.html?'+(a.slug?'slug='+encodeURIComponent(a.slug):'id='+encodeURIComponent(a.id));
+    return '<a href="'+href2+'" class="srel-item">'+
+           '<span class="srel-num">0'+(i+1)+'</span>'+
+           '<img class="srel-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+fallbackImg+'\'">'+
+           '<div><div class="srel-title">'+esc(a.title)+'</div>'+
+           '<div class="srel-meta">'+tagDisplay(a.category)+'</div></div></a>';
+  }).join('');
+  relatedCard.style.display='';
+}
+
+function setupShare(title,url) {
+  var tw=document.getElementById('share-twitter'), wa=document.getElementById('share-whatsapp');
+  if (tw) tw.href='https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url)+'&via=elv8dgtl';
+  if (wa) wa.href='https://wa.me/?text='+encodeURIComponent(title+' — '+url);
+  var btw=document.getElementById('byline-twitter'), bwa=document.getElementById('byline-whatsapp');
+  if (btw) btw.href='https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url)+'&via=elv8dgtl';
+  if (bwa) bwa.href='https://wa.me/?text='+encodeURIComponent(title+' — '+url);
+}
+function copyLink() {
+  var label=document.getElementById('copy-label'), label2=document.getElementById('copy-label2');
+  navigator.clipboard.writeText(window.location.href).then(function(){
+    if(label) label.textContent='Copied! ✓'; if(label2) label2.textContent='Copied! ✓';
+    setTimeout(function(){ if(label) label.textContent='Copy link'; if(label2) label2.textContent='Copy link'; },2000);
+  }).catch(function(){
+    var ta=document.createElement('textarea');ta.value=window.location.href;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    if(label) label.textContent='Copied! ✓'; if(label2) label2.textContent='Copied! ✓';
+    setTimeout(function(){ if(label) label.textContent='Copy link'; if(label2) label2.textContent='Copy link'; },2000);
+  });
+}
+
+function renderArticle(article) {
+  var cover = article.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80';
+  var heroImg=document.getElementById('hero-img'); heroImg.src=cover; heroImg.alt=article.title||'';
+  heroImg.onerror=function(){this.src='https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80';};
+
+  // Tag + breadcrumb
+  var tagEl=document.getElementById('meta-tag'); tagEl.className='tag '+tagCls(article.category); tagEl.textContent=tagDisplay(article.category);
+  var bcCatLink=document.getElementById('breadcrumb-cat-link'); if(bcCatLink) bcCatLink.textContent=tagDisplay(article.category);
+  var bcTitle=document.getElementById('breadcrumb-title'); if(bcTitle) bcTitle.textContent=(article.title||'').substring(0,60)+((article.title||'').length>60?'…':'');
+
+  // Meta
+  document.getElementById('meta-readtime').textContent=(article.readTime||'5')+' min read';
+  document.getElementById('meta-date').textContent=fmtDate(article.publishedAt);
+  document.getElementById('art-title').textContent=article.title||'';
+  document.getElementById('art-excerpt').textContent=article.excerpt||'';
+
+  // Rating
+  if (article.rating && parseFloat(article.rating)>0) {
+    document.getElementById('rating-num').textContent=parseFloat(article.rating).toFixed(1);
+    document.getElementById('rating-wrap').style.display='';
+  }
+
+  // Author
+  var ini=(article.authorName||'D').charAt(0).toUpperCase();
+  document.getElementById('author-avatar').textContent=ini;
+  document.getElementById('author-name').textContent=article.authorName||'DEKHO';
+  document.getElementById('author-date').textContent='Published '+fmtDate(article.publishedAt);
+  document.getElementById('author-card-avatar').textContent=ini;
+  document.getElementById('author-card-name').textContent=article.authorName||'DEKHO';
+  document.getElementById('author-card-meta').textContent='Writer · DEKHO by elv8 dgtl';
+
+  // Body
+  var content=restorePlaygrounds(article.content||'',article.playgrounds||{});
+  var bodyEl=document.getElementById('article-body'); bodyEl.innerHTML=content; initPlaygrounds(bodyEl);
+
+  // Tags
+  var btTag=document.getElementById('bottom-tag'); btTag.className='tag '+tagCls(article.category); btTag.textContent=tagDisplay(article.category);
+  if (article.tag) { document.getElementById('bottom-category').textContent='#'+article.tag; document.getElementById('bottom-category').style.display=''; }
+  else { document.getElementById('bottom-category').style.display='none'; }
+
+  setupShare(article.title, window.location.href);
+  injectSEO(article);
+  buildTOC();
+  var fy=document.getElementById('footer-year'); if(fy) fy.textContent=new Date().getFullYear();
+  hide('loading-state'); show('article-wrap');
+  if (window.gtag) gtag('event','article_view',{article_id:article.id,article_title:article.title,article_category:article.category,article_author:article.authorName});
+}
+
+function fetchArticle(id, slug) {
+  var body = id ? {action:'getPublishedArticle',id:id} : {action:'getPublishedArticle',slug:slug};
+  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)})
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if (!data||!data.ok||!data.article){showError(data&&data.error?data.error:'Article not found.');return;}
+    var article = data.article;
+
+    // ── Rewrite URL to slug-based if we have a slug ──────────────────────────
+    // This ensures the address bar always shows the clean slug URL,
+    // even if the page was opened via ?id=. Search engines will index the slug URL.
+    if (article.slug) {
+      var currentSlug = getParam('slug');
+      if (currentSlug !== article.slug) {
+        // Replace ?id=xxx (or any other param) with ?slug=the-slug
+        var cleanURL = window.location.pathname + '?slug=' + encodeURIComponent(article.slug);
+        try { window.history.replaceState({slug: article.slug}, '', cleanURL); } catch(e){}
+      }
+    }
+
+    renderArticle(article);
+    fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'listPublished'})})
+    .then(function(r){return r.json();})
+    .then(function(listData){if(listData&&listData.ok&&listData.articles)renderRelated(article,listData.articles);})
+    .catch(function(){});
+  })
+  .catch(function(){showError('Could not load article. Please check your connection.');});
+}
+
+function showError(msg) {
+  hide('loading-state');hide('article-wrap');
+  var msgEl=document.getElementById('error-msg'); if(msgEl&&msg) msgEl.textContent=msg;
+  show('error-state'); document.title='Article Not Found — DEKHO by elv8';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  lucide.createIcons();
+  var fy=document.getElementById('footer-year'); if(fy) fy.textContent=new Date().getFullYear();
+  var navbar=document.getElementById('navbar'), backTop=document.getElementById('back-top'), prog=document.getElementById('read-progress');
+  window.addEventListener('scroll', function() {
+    var sy=window.scrollY, docH=document.documentElement.scrollHeight-window.innerHeight;
+    if(prog&&docH>0) prog.style.width=Math.min(100,sy/docH*100)+'%';
+    if(navbar) navbar.classList.toggle('scrolled',sy>40);
+    if(backTop) backTop.classList.toggle('show',sy>400);
+  });
+
+  // ── Slug-first URL resolution ──────────────────────────────────────────────
+  // Priority: ?slug= first (clean SEO URL), then ?id= as fallback.
+  // If only ?id= is present and the article has a slug, we rewrite the URL
+  // to use ?slug= so the browser address bar and search engines see the slug.
+  var slug = getParam('slug');
+  var id   = getParam('id');
+
+  if (!slug && !id) {
+    showError('No article specified. Use ?slug=your-slug or ?id=... in the URL.');
+    return;
+  }
+
+  fetchArticle(id, slug);
+});
+</script>
+</body>
+</html>
