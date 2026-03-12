@@ -3139,7 +3139,7 @@ function renderTagChips(tags) {
   wrap.innerHTML = tags.map(function(t) {
     return '<span style="display:inline-flex;align-items:center;gap:4px;background:var(--surface);' +
            'border:1.5px solid var(--border);border-radius:999px;padding:3px 10px;font-size:11px;' +
-           'font-family:'DM Mono',monospace;cursor:pointer;transition:background .12s,color .12s;" ' +
+           'font-family:\'DM Mono\',monospace;cursor:pointer;transition:background .12s,color .12s;" ' +
            'title="Click to remove" onclick="removeTag(this)">' +
            esc(t) + '<span style="font-size:10px;color:var(--muted);margin-left:2px;">✕</span>' +
            '</span>';
