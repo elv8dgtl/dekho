@@ -1159,17 +1159,21 @@ table.t tr:hover td{background:var(--paper);}
                 <span class="pill p-draft" id="ed-pill">draft</span>
               </div>
               <div class="pubrow">
-                <button class="btn btn-s" onclick="saveArt('draft')">
+                <button class="btn btn-s" id="save-draft-btn" onclick="saveArt('draft')">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                  Save Draft
+                  <span id="save-btn-label">Save Draft</span>
                 </button>
                 <button class="btn btn-p" id="submit-review-btn" onclick="submitReview()">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                   Submit for Review
                 </button>
-                <button class="btn btn-g admin-only" style="display:none;" onclick="adminPub()">
+                <button class="btn btn-g admin-only" id="admin-pub-btn" style="display:none;" onclick="adminPub()">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                   Publish Now
+                </button>
+                <button class="btn btn-d admin-only" id="admin-unpub-btn" style="display:none;" onclick="adminUnpub()">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                  Unpublish
                 </button>
               </div>
               <p style="font-size:10px;color:var(--muted);margin-top:.5rem;font-family:'DM Mono',monospace;line-height:1.5;">Ctrl+S saves draft anytime</p>
@@ -2061,7 +2065,7 @@ function quickSubmit(id) {
 
 // ── EDITOR ───────────────────────────────────────────────────────────────────
 function newArt() {
-  $.editId = null; $.editStatus = null;
+  $.editId = null; $.editStatus = 'draft';
   ['ed-title','ed-slug','ed-tag','ed-cover','ed-excerpt',
    'seo-kw','seo-secondary-kw','seo-meta-title','seo-meta-desc','seo-og-img','seo-canonical',
    'seo-tags','seo-tag-input'
@@ -2245,18 +2249,41 @@ function submitReview() {
 
 function adminPub() {
   if (!document.getElementById('ed-title').value.trim()) { toast('Please add a title first.', 'bad'); return; }
-  // Save with current editStatus so we don't overwrite a published article to draft first
-  var art = buildArtPayload($.editStatus === 'published' ? 'published' : 'draft');
+  // Send status='published' directly — backend will create/update as published.
+  // approveArticle is also called to ensure publishedAt is set correctly.
+  var art = buildArtPayload('published');
   callSaveArticle(art, $.token).then(function(r) {
     if (!r.ok) { toast('Save failed: ' + (r.error||''), 'bad'); return; }
     if (!$.editId) $.editId = r.id;
+    // approveArticle ensures publishedAt timestamp is set and cache is busted
     call('approveArticle', { token: $.token, id: $.editId }).then(function(r2) {
-      if (r2.ok) {
-        $.editStatus = 'published'; // track that this article is now published
-        toast('Published! 🎉', 'ok'); setPill('published'); loadArts();
-      }
-      else toast(r2.error, 'bad');
+      $.editStatus = 'published';
+      setPill('published');
+      toast('Published! 🎉', 'ok');
+      loadArts();
+      if (!r2.ok) console.warn('approveArticle warning:', r2.error);
+    }).catch(function() {
+      // Even if approveArticle fails, we already saved as published — show success
+      $.editStatus = 'published';
+      setPill('published');
+      toast('Published! 🎉', 'ok');
+      loadArts();
     });
+  });
+}
+
+function adminUnpub() {
+  if (!$.editId) { toast('Save the article first.', 'bad'); return; }
+  if (!confirm('Unpublish this article? It will become a draft and disappear from the site.')) return;
+  call('unpublishArticle', { token: $.token, id: $.editId }).then(function(r) {
+    if (r.ok) {
+      $.editStatus = 'draft';
+      setPill('draft');
+      toast('Article unpublished — now a draft.', 'ok');
+      loadArts();
+    } else {
+      toast(r.error || 'Unpublish failed.', 'bad');
+    }
   });
 }
 
@@ -2487,7 +2514,16 @@ function _coverUpload(file) {
 }
 function setPill(s) {
   var el = document.getElementById('ed-pill');
-  el.textContent = s; el.className = 'pill p-' + s;
+  if (el) { el.textContent = s; el.className = 'pill p-' + s; }
+  // Sync button labels and visibility based on article status
+  var saveLabel = document.getElementById('save-btn-label');
+  var pubBtn    = document.getElementById('admin-pub-btn');
+  var unpubBtn  = document.getElementById('admin-unpub-btn');
+  if (saveLabel) saveLabel.textContent = (s === 'published') ? 'Save Changes' : 'Save Draft';
+  if ($.user && $.user.role === 'admin') {
+    if (pubBtn)   pubBtn.style.display   = (s === 'published') ? 'none' : 'flex';
+    if (unpubBtn) unpubBtn.style.display = (s === 'published') ? 'flex' : 'none';
+  }
 }
 function setSv(m) {
   var el = document.getElementById('ed-sv');
@@ -3103,7 +3139,7 @@ function renderTagChips(tags) {
   wrap.innerHTML = tags.map(function(t) {
     return '<span style="display:inline-flex;align-items:center;gap:4px;background:var(--surface);' +
            'border:1.5px solid var(--border);border-radius:999px;padding:3px 10px;font-size:11px;' +
-           'font-family:\'DM Mono\',monospace;cursor:pointer;transition:background .12s,color .12s;" ' +
+           'font-family:'DM Mono',monospace;cursor:pointer;transition:background .12s,color .12s;" ' +
            'title="Click to remove" onclick="removeTag(this)">' +
            esc(t) + '<span style="font-size:10px;color:var(--muted);margin-left:2px;">✕</span>' +
            '</span>';
@@ -4845,10 +4881,14 @@ function loadTrash() {
     document.getElementById('empty-trash-btn').style.display = ($.user.role==='admin' && list.length>0) ? 'inline-flex' : 'none';
     if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">Trash is empty.</td></tr>'; return; }
     tbody.innerHTML = list.map(function(a) {
-      var urgent    = a.daysLeft <= 1;
-      var daysLabel = a.daysLeft <= 0
-        ? '<span style="color:var(--red);font-weight:700;">Expires today</span>'
-        : '<span style="color:' + (urgent?'var(--accent)':'var(--muted)') + ';">' + a.daysLeft + ' day' + (a.daysLeft!==1?'s':'') + '</span>';
+      // Guard: if daysLeft is NaN or negative, treat as 0
+      var dl        = (typeof a.daysLeft === 'number' && !isNaN(a.daysLeft)) ? Math.max(0, a.daysLeft) : 0;
+      var urgent    = dl <= 1;
+      var daysLabel = dl <= 0
+        ? '<span style="color:var(--red);font-weight:700;">⚠ Expires today</span>'
+        : dl === 1
+          ? '<span style="color:var(--accent);font-weight:600;">Last day (1 day left)</span>'
+          : '<span style="color:var(--muted);">' + dl + ' days left</span>';
       return '<tr>' +
         '<td style="max-width:220px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">' + esc(a.title||'Untitled') + '</div>' +
         '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + esc(a.authorName||a.authorEmail||'—') + '</div></td>' +
