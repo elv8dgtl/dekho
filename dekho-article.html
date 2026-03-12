@@ -89,6 +89,7 @@
       white-space: nowrap;
     }
     .btn-back:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+    @media (max-width: 640px) { .nav-hide-mobile { display: none; } }
 
     /* ── Tag pills ── */
     .tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 3px; letter-spacing: .05em; text-transform: uppercase; }
@@ -123,8 +124,8 @@
       align-items: start;
     }
     @media (max-width: 900px) {
-      .content-grid { grid-template-columns: 1fr; }
-      .article-sidebar { order: -1; }
+      .content-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      /* Sidebar goes BELOW article on mobile — no order swap */
     }
 
     /* ══════════════════════════════════════
@@ -200,6 +201,23 @@
     .art-cover img { width: 100%; display: block; max-height: 440px; object-fit: cover; }
     .art-cover-caption { font-size: 11px; color: var(--muted2); padding: 5px 8px; background: rgba(0,0,0,.03); font-style: italic; }
     @media (max-width: 600px) { .art-cover img { max-height: 240px; } }
+
+    /* ── Mobile inline TOC ── */
+    .mobile-toc {
+      display: none;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 6px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+    }
+    .mobile-toc-title {
+      font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: .65rem;
+    }
+    .mobile-toc ul { list-style: none; margin: 0; padding: 0; }
+    .mobile-toc li { border-bottom: 1px solid var(--border); }
+    .mobile-toc li:last-child { border-bottom: none; }
+    .mobile-toc a { display: block; padding: .35rem 0; font-size: 13px; color: var(--muted); text-decoration: none; }
+    .mobile-toc a:hover { color: var(--accent); }
+    @media (max-width: 900px) { .mobile-toc { display: block; } }
 
     /* Article body — Merriweather serif for readability */
     .article-body {
@@ -301,6 +319,11 @@
     ══════════════════════════════════════ */
     .article-sidebar { position: sticky; top: 72px; }
     @media (max-width: 900px) { .article-sidebar { position: static; } }
+    /* On mobile: hide TOC + related sidebar cards — they reappear inline */
+    @media (max-width: 900px) {
+      #toc-card { display: none !important; }
+      #related-card { display: none !important; }
+    }
 
     /* Sidebar card */
     .scard { margin-bottom: 1.5rem; }
@@ -361,6 +384,7 @@
     @keyframes sk { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     #loading-state { max-width: 1200px; margin: 1.5rem auto; padding: 0 1.25rem; display: grid; grid-template-columns: 1fr 300px; gap: 2.5rem; }
     @media (max-width:900px) { #loading-state { grid-template-columns: 1fr; } }
+    @media (max-width:900px) { #loading-state > div:last-child { display: none; } }
     .skel-line { height: 14px; margin-bottom: 10px; }
 
     /* ── Error ── */
@@ -397,10 +421,9 @@
       <span class="nav-logo-sub">by elv8 dgtl</span>
     </a>
     <div class="nav-right">
-      <a href="https://dekho.elv8dgtl.in/" class="nav-link">All Articles</a>
-      <a href="https://dekho.elv8dgtl.in/" class="nav-link">Reviews</a>
-      <a href="https://dekho.elv8dgtl.in/" class="nav-link">Guides</a>
-      <a href="https://elv8dgtl.in" class="nav-link">elv8dgtl.in</a>
+      <a href="https://dekho.elv8dgtl.in/" class="nav-link nav-hide-mobile">Reviews</a>
+      <a href="https://dekho.elv8dgtl.in/" class="nav-link nav-hide-mobile">Guides</a>
+      <a href="https://elv8dgtl.in" class="nav-link nav-hide-mobile">elv8dgtl.in</a>
       <a href="https://dekho.elv8dgtl.in/" class="btn-back">
         <i data-lucide="arrow-left" style="width:12px;height:12px;"></i>
         All Articles
@@ -515,6 +538,12 @@
           <div class="art-cover-caption">Image Credit: DEKHO by elv8 dgtl</div>
         </div>
 
+        <!-- Mobile-only inline TOC (populated by buildTOC) -->
+        <div class="mobile-toc" id="mobile-toc" style="display:none;">
+          <div class="mobile-toc-title">In This Article</div>
+          <ul id="mobile-toc-list"></ul>
+        </div>
+
         <!-- Article body -->
         <article class="article-body" id="article-body" itemprop="articleBody"></article>
 
@@ -623,7 +652,7 @@
     </div>
     <div>
       <div class="footer-col-ttl">CONTACT</div>
-      <a href="/cdn-cgi/l/email-protection#69010c050506290c051f510d0e1d05470007" class="footer-lnk"><span class="__cf_email__" data-cfemail="6109040d0d0e21040d17590506150d4f080f">[email&#160;protected]</span></a>
+      <a href="mailto:hello@elv8dgtl.in" class="footer-lnk">hello@elv8dgtl.in</a>
       <a href="https://wa.me/918052743378" target="_blank" class="footer-lnk">WhatsApp</a>
       <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="footer-lnk">Instagram</a>
       <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="footer-lnk">LinkedIn</a>
@@ -639,7 +668,7 @@
   <i data-lucide="chevron-up" style="width:18px;height:18px;"></i>
 </button>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 var API  = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvHjqt2hYisva_Ghn3rDGszn-t6F-qCEHiFcM5L-Z/exec';
 var SITE = 'https://dekho.elv8dgtl.in';
 var GA_ID = 'G-V77HPC9EX8';
@@ -714,24 +743,55 @@ function setMeta(attr,name,content) {
 }
 
 function buildTOC() {
-  var body=document.getElementById('article-body'), tocList=document.getElementById('toc-list'), tocCard=document.getElementById('toc-card');
-  var headings=body.querySelectorAll('h2, h3'); if (headings.length < 3) return;
-  tocList.innerHTML='';
-  headings.forEach(function(h,i) {
-    var id='section-'+i; h.id=id;
-    var li=document.createElement('li'), a=document.createElement('a');
-    a.href='#'+id; a.textContent=h.textContent;
-    if (h.tagName==='H3') a.classList.add('toc-h3');
+  var body     = document.getElementById('article-body');
+  var tocList  = document.getElementById('toc-list');
+  var tocCard  = document.getElementById('toc-card');
+  var mobToc   = document.getElementById('mobile-toc');
+  var mobList  = document.getElementById('mobile-toc-list');
+  var headings = body.querySelectorAll('h2, h3');
+  if (headings.length < 3) return;
+
+  tocList.innerHTML = '';
+  if (mobList) mobList.innerHTML = '';
+
+  headings.forEach(function(h, i) {
+    var id = 'section-' + i;
+    h.id = id;
+
+    // Sidebar TOC item
+    var li = document.createElement('li');
+    var a  = document.createElement('a');
+    a.href = '#' + id; a.textContent = h.textContent;
+    if (h.tagName === 'H3') a.classList.add('toc-h3');
     li.appendChild(a); tocList.appendChild(li);
+
+    // Mobile inline TOC item (same links, same text)
+    if (mobList) {
+      var mLi = document.createElement('li');
+      var mA  = document.createElement('a');
+      mA.href = '#' + id; mA.textContent = h.textContent;
+      mLi.appendChild(mA); mobList.appendChild(mLi);
+    }
   });
-  tocCard.style.display='';
-  var obs=new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      var link=tocList.querySelector('a[href="#'+e.target.id+'"]'); if (!link) return;
-      if (e.isIntersecting) { tocList.querySelectorAll('a').forEach(function(a){a.classList.remove('active');}); link.classList.add('active'); }
-    });
-  },{rootMargin:'0px 0px -60% 0px'});
-  headings.forEach(function(h){obs.observe(h);});
+
+  tocCard.style.display = '';
+  // Show mobile TOC (CSS media query controls actual visibility)
+  if (mobToc) mobToc.style.display = '';
+
+  // Intersection observer for active-link highlighting (sidebar TOC only)
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        var link = tocList.querySelector('a[href="#' + e.target.id + '"]');
+        if (!link) return;
+        if (e.isIntersecting) {
+          tocList.querySelectorAll('a').forEach(function(a){ a.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '0px 0px -60% 0px' });
+    headings.forEach(function(h){ obs.observe(h); });
+  }
 }
 
 function renderRelated(currentArticle, allArticles) {
@@ -836,33 +896,46 @@ function renderArticle(article) {
   if (window.gtag) gtag('event','article_view',{article_id:article.id,article_title:article.title,article_category:article.category,article_author:article.authorName});
 }
 
+// Hardened fetch wrapper: handles Apps Script 302 redirects, bad JSON, network errors
+function apiFetch(payload) {
+  return fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    redirect: 'follow',
+    body: JSON.stringify(payload)
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('Server error ' + r.status);
+    return r.text();
+  })
+  .then(function(text) {
+    try { return JSON.parse(text); }
+    catch(e) { throw new Error('Bad response from server. Try again.'); }
+  });
+}
+
 function fetchArticle(id, slug) {
   var body = id ? {action:'getPublishedArticle',id:id} : {action:'getPublishedArticle',slug:slug};
-  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)})
-  .then(function(r){return r.json();})
+  apiFetch(body)
   .then(function(data){
     if (!data||!data.ok||!data.article){showError(data&&data.error?data.error:'Article not found.');return;}
     var article = data.article;
 
-    // ── Rewrite URL to slug-based if we have a slug ──────────────────────────
-    // This ensures the address bar always shows the clean slug URL,
-    // even if the page was opened via ?id=. Search engines will index the slug URL.
+    // ── Rewrite URL to slug-based if we have a slug ────────────────────────────────────────────
     if (article.slug) {
       var currentSlug = getParam('slug');
       if (currentSlug !== article.slug) {
-        // Replace ?id=xxx (or any other param) with ?slug=the-slug
         var cleanURL = window.location.pathname + '?slug=' + encodeURIComponent(article.slug);
         try { window.history.replaceState({slug: article.slug}, '', cleanURL); } catch(e){}
       }
     }
 
     renderArticle(article);
-    fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'listPublished'})})
-    .then(function(r){return r.json();})
+    apiFetch({action:'listPublished'})
     .then(function(listData){if(listData&&listData.ok&&listData.articles)renderRelated(article,listData.articles);})
     .catch(function(){});
   })
-  .catch(function(){showError('Could not load article. Please check your connection.');});
+  .catch(function(e){showError('Could not load article. ' + (e&&e.message?e.message:'Check your connection.'));});
 }
 
 function showError(msg) {
