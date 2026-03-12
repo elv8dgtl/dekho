@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEKHO CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* ── RESET & BASE ───────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --lime:#CCF381;
+  --dark:#120E16;
+  --purple:#4831D4;
+  --red:#E8380D;
+  --dark2:#1C1626;
+  --dark3:#241E30;
+  --dark4:#2E2840;
+  --muted:#6B6480;
+  --text:#E8E0F0;
+  --text2:#B0A8C8;
+  --border:#2E2840;
+  --success:#3ECF8E;
+  --warning:#F59E0B;
+  --danger:#EF4444;
+  --ff-head:'Bebas Neue',sans-serif;
+  --ff-body:'Instrument Sans',sans-serif;
+  --ff-mono:'DM Mono',monospace;
+  --rad:8px;
+  --rad-lg:12px;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+}
+html,body{height:100%;background:var(--dark);color:var(--text);font-family:var(--ff-body);font-size:14px;line-height:1.6;overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--ff-body)}
+input,textarea,select{font-family:var(--ff-body)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--dark2)}
+::-webkit-scrollbar-thumb{background:var(--dark4);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+
+/* ── UTILITY ───────────────────────────────────────────────── */
+.hidden{display:none!important}
+.flex{display:flex}
+.flex-col{display:flex;flex-direction:column}
+.items-center{align-items:center}
+.justify-between{justify-content:space-between}
+.gap-2{gap:8px}
+.gap-3{gap:12px}
+.gap-4{gap:16px}
+.gap-6{gap:24px}
+.w-full{width:100%}
+.text-sm{font-size:12px}
+.text-xs{font-size:11px}
+.text-muted{color:var(--muted)}
+.text-lime{color:var(--lime)}
+.text-red{color:var(--red)}
+.text-success{color:var(--success)}
+.text-warning{color:var(--warning)}
+.fw-600{font-weight:600}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.pill-draft{background:rgba(107,100,128,.2);color:var(--text2)}
+.pill-review{background:rgba(245,158,11,.15);color:var(--warning)}
+.pill-published{background:rgba(62,207,142,.15);color:var(--success)}
+.pill-rejected{background:rgba(239,68,68,.15);color:var(--danger)}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.dot-review{background:var(--warning)}
+.dot-published{background:var(--success)}
+.dot-draft{background:var(--muted)}
+.dot-rejected{background:var(--danger)}
+
+/* ── TOAST ─────────────────────────────────────────────────── */
+#toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{padding:12px 18px;border-radius:var(--rad);font-size:13px;font-weight:500;pointer-events:all;animation:toastIn .25s ease;backdrop-filter:blur(12px);border:1px solid;max-width:340px}
+.toast-success{background:rgba(62,207,142,.15);border-color:rgba(62,207,142,.3);color:var(--success)}
+.toast-error{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:var(--danger)}
+.toast-info{background:rgba(204,243,129,.1);border-color:rgba(204,243,129,.25);color:var(--lime)}
+.toast-warn{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:var(--warning)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateX(20px)}}
+
+/* ── CONFIG SCREEN ──────────────────────────────────────────── */
+#config-screen{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:8000}
+.config-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rad-lg);padding:40px;width:100%;max-width:460px}
+.config-logo{font-family:var(--ff-head);font-size:36px;letter-spacing:.05em;margin-bottom:4px}
+.config-logo span{color:var(--red)}
+.config-sub{color:var(--muted);font-size:13px;margin-bottom:32px}
+.config-card label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:6px}
+.config-card input{width:100%;background:var(--dark3);border:1px solid var(--border);border-radius:var(--rad);padding:10px 14px;color:var(--text);font-size:13px;font-family:var(--ff-mono);outline:none;transition:border-color .2s}
+.config-card input:focus{border-color:var(--lime)}
+.config-field{margin-bottom:16px}
+.btn-config{width:100%;background:var(--lime);color:var(--dark);border:none;border-radius:var(--rad);padding:12px;font-size:14px;font-weight:700;margin-top:8px;transition:opacity .2s}
+.btn-config:hover{opacity:.9}
+.config-hint{font-size:11px;color:var(--muted);margin-top:20px;line-height:1.7}
+.config-hint code{color:var(--lime);font-family:var(--ff-mono);font-size:10px}
+
+/* ── AUTH SCREEN ────────────────────────────────────────────── */
+#auth-screen{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:7000}
+.auth-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rad-lg);padding:40px;width:100%;max-width:400px}
+.auth-logo{font-family:var(--ff-head);font-size:42px;letter-spacing:.1em;text-align:center;margin-bottom:2px}
+.auth-logo span{color:var(--red)}
+.auth-tagline{text-align:center;color:var(--muted);font-size:12px;margin-bottom:32px;letter-spacing:.08em;text-transform:uppercase}
+.auth-tabs{display:flex;gap:2px;background:var(--dark3);border-radius:var(--rad);padding:3px;margin-bottom:24px}
+.auth-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;transition:all .2s;border:none;background:transparent;color:var(--muted)}
+.auth-tab.active{background:var(--dark4);color:var(--text)}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:5px}
+.auth-field input{width:100%;background:var(--dark3);border:1px solid var(--border);border-radius:var(--rad);padding:10px 14px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s}
+.auth-field input:focus{border-color:var(--lime)}
+.btn-auth{width:100%;background:var(--lime);color:var(--dark);border:none;border-radius:var(--rad);padding:12px;font-size:14px;font-weight:700;margin-top:8px;transition:opacity .2s}
+.btn-auth:hover{opacity:.9}
+.auth-err{color:var(--danger);font-size:12px;margin-top:8px;text-align:center;min-height:18px}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+#app{display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ────────────────────────────────────────────────── */
+#sidebar{width:220px;min-width:220px;background:var(--dark2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;transition:width .25s}
+.sidebar-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo-text{font-family:var(--ff-head);font-size:28px;letter-spacing:.08em;line-height:1}
+.sidebar-logo-text span{color:var(--red)}
+.sidebar-logo-sub{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.sidebar-user{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:white}
+.user-info{min-width:0}
+.user-name{font-size:13px;font-weight:600;truncate:overflow}
+.user-role{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.sidebar-nav{flex:1;padding:12px 8px;overflow-y:auto}
+.nav-section{margin-bottom:8px}
+.nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:6px 10px;margin-bottom:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rad);cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;border:none;background:transparent;width:100%;text-align:left;position:relative}
+.nav-item:hover{background:var(--dark3);color:var(--text)}
+.nav-item.active{background:rgba(204,243,129,.1);color:var(--lime)}
+.nav-item .nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--red);color:white;border-radius:999px;font-size:10px;font-weight:700;padding:1px 6px;min-width:18px;text-align:center}
+.sidebar-footer{padding:12px 8px;border-top:1px solid var(--border)}
+
+/* ── MAIN CONTENT ───────────────────────────────────────────── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:56px;min-height:56px;background:var(--dark2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:16px}
+.topbar-title{font-family:var(--ff-head);font-size:22px;letter-spacing:.06em}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.content-area{flex:1;overflow-y:auto;padding:24px}
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rad);font-size:13px;font-weight:600;border:1px solid transparent;transition:all .15s;cursor:pointer;white-space:nowrap}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--lime);color:var(--dark);border-color:var(--lime)}
+.btn-primary:hover:not(:disabled){background:#b8e060}
+.btn-secondary{background:var(--dark3);color:var(--text);border-color:var(--border)}
+.btn-secondary:hover:not(:disabled){background:var(--dark4)}
+.btn-ghost{background:transparent;color:var(--text2);border-color:transparent}
+.btn-ghost:hover:not(:disabled){background:var(--dark3);color:var(--text)}
+.btn-danger{background:rgba(239,68,68,.12);color:var(--danger);border-color:rgba(239,68,68,.25)}
+.btn-danger:hover:not(:disabled){background:rgba(239,68,68,.2)}
+.btn-success{background:rgba(62,207,142,.12);color:var(--success);border-color:rgba(62,207,142,.25)}
+.btn-success:hover:not(:disabled){background:rgba(62,207,142,.2)}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px}
+.btn-icon{padding:7px;border-radius:var(--rad)}
+
+/* ── ARTICLE LIST ───────────────────────────────────────────── */
+.art-grid{display:flex;flex-direction:column;gap:2px}
+.art-row{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rad);padding:14px 16px;display:flex;align-items:center;gap:14px;transition:border-color .15s;cursor:default}
+.art-row:hover{border-color:var(--dark4)}
+.art-cover{width:48px;height:48px;border-radius:6px;object-fit:cover;background:var(--dark3);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px}
+.art-cover img{width:100%;height:100%;object-fit:cover}
+.art-info{flex:1;min-width:0}
+.art-title{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.art-meta{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px}
+.art-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.art-row .reject-reason{font-size:11px;color:var(--danger);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
+
+/* ── EMPTY STATE ────────────────────────────────────────────── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:var(--muted);text-align:center;gap:12px}
+.empty-state-icon{font-size:36px;opacity:.4}
+.empty-state-title{font-size:15px;font-weight:600;color:var(--text2)}
+.empty-state-sub{font-size:13px}
+
+/* ── EDITOR PANEL ───────────────────────────────────────────── */
+#editor-panel{display:none;position:fixed;inset:0;z-index:5000;background:var(--dark);overflow-y:auto}
+#editor-panel.open{display:flex;flex-direction:column}
+.editor-topbar{height:56px;min-height:56px;background:var(--dark2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:16px;position:sticky;top:0;z-index:10}
+.editor-topbar-left{display:flex;align-items:center;gap:14px}
+.editor-title-input{background:transparent;border:none;color:var(--text);font-size:18px;font-weight:700;outline:none;width:100%;padding:4px 0;caret-color:var(--lime)}
+.editor-title-input::placeholder{color:var(--muted)}
+.editor-body{display:flex;gap:0;flex:1;height:calc(100vh - 56px)}
+.editor-left{flex:1;display:flex;flex-direction:column;min-width:0;border-right:1px solid var(--border)}
+.editor-toolbar{display:flex;align-items:center;gap:2px;padding:8px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--dark2)}
+.tb-btn{background:transparent;border:1px solid transparent;border-radius:5px;padding:5px 8px;color:var(--text2);cursor:pointer;font-size:13px;font-family:var(--ff-mono);transition:all .15s;line-height:1}
+.tb-btn:hover{background:var(--dark3);color:var(--text);border-color:var(--border)}
+.tb-btn.active{background:rgba(204,243,129,.12);color:var(--lime);border-color:rgba(204,243,129,.25)}
+.tb-sep{width:1px;height:18px;background:var(--border);margin:0 4px}
+#ed-body{flex:1;padding:24px;outline:none;font-size:14px;line-height:1.8;caret-color:var(--lime);overflow-y:auto;color:var(--text)}
+#ed-body:empty::before{content:attr(data-placeholder);color:var(--muted);pointer-events:none}
+#ed-body h1{font-family:var(--ff-head);font-size:32px;letter-spacing:.04em;margin:16px 0 8px;color:var(--text)}
+#ed-body h2{font-family:var(--ff-head);font-size:24px;letter-spacing:.03em;margin:14px 0 6px;color:var(--text)}
+#ed-body h3{font-size:18px;font-weight:700;margin:12px 0 6px}
+#ed-body p{margin:6px 0}
+#ed-body blockquote{border-left:3px solid var(--lime);padding:8px 16px;margin:12px 0;color:var(--text2);font-style:italic;background:rgba(204,243,129,.04)}
+#ed-body code{font-family:var(--ff-mono);background:var(--dark3);padding:2px 6px;border-radius:4px;font-size:12px;color:var(--lime)}
+#ed-body pre{background:var(--dark3);border:1px solid var(--border);border-radius:var(--rad);padding:16px;margin:12px 0;overflow-x:auto}
+#ed-body pre code{background:none;padding:0;color:var(--text)}
+#ed-body ul,#ed-body ol{padding-left:20px;margin:6px 0}
+#ed-body li{margin:3px 0}
+#ed-body a{color:var(--lime);text-decoration:underline}
+#ed-body img{max-width:100%;border-radius:var(--rad);margin:8px 0}
+#ed-body hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+#ed-body .playground-block{background:var(--dark2);border:1px solid var(--purple);border-radius:var(--rad);padding:12px 16px;margin:12px 0;position:relative}
+#ed-body .playground-block::before{content:'CODE PLAYGROUND';font-family:var(--ff-mono);font-size:10px;color:var(--purple);letter-spacing:.08em;display:block;margin-bottom:8px;font-weight:500}
+.editor-right{width:320px;min-width:320px;overflow-y:auto;background:var(--dark2)}
+.meta-panel{padding:0}
+.meta-section{border-bottom:1px solid var(--border)}
+.meta-section-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);user-select:none}
+.meta-section-head:hover{color:var(--text)}
+.meta-section-body{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+.meta-field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px}
+.meta-field input,.meta-field textarea,.meta-field select{width:100%;background:var(--dark3);border:1px solid var(--border);border-radius:var(--rad);padding:8px 10px;color:var(--text);font-size:12px;outline:none;transition:border-color .2s;font-family:var(--ff-body);resize:none}
+.meta-field input:focus,.meta-field textarea:focus,.meta-field select:focus{border-color:rgba(204,243,129,.5)}
+.meta-field select option{background:var(--dark3)}
+.cover-preview{width:100%;aspect-ratio:16/9;background:var(--dark3);border:1px solid var(--border);border-radius:var(--rad);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;cursor:pointer;margin-bottom:6px}
+.cover-preview img{width:100%;height:100%;object-fit:cover}
+.cover-preview:hover::after{content:'Change';position:absolute;inset:0;background:rgba(18,14,22,.7);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--lime)}
+.word-count{font-size:10px;color:var(--muted);text-align:right;padding:4px 16px;background:var(--dark2);border-top:1px solid var(--border)}
+
+/* ── MODAL ──────────────────────────────────────────────────── */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:8500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rad-lg);padding:28px;width:100%;max-width:440px;animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text2);margin-bottom:5px}
+.modal-field input,.modal-field textarea{width:100%;background:var(--dark3);border:1px solid var(--border);border-radius:var(--rad);padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:border-color .2s;resize:none;font-family:var(--ff-body)}
+.modal-field input:focus,.modal-field textarea:focus{border-color:rgba(204,243,129,.5)}
+
+/* ── ADMIN USERS TAB ────────────────────────────────────────── */
+.user-row{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rad);padding:14px 16px;display:flex;align-items:center;gap:14px}
+.user-row .user-avatar{width:38px;height:38px;font-size:15px}
+.user-details{flex:1;min-width:0}
+.user-email{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-since{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* ── STATS CARDS ────────────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:var(--dark2);border:1px solid var(--border);border-radius:var(--rad-lg);padding:18px}
+.stat-value{font-family:var(--ff-head);font-size:36px;letter-spacing:.04em;line-height:1;margin-bottom:4px}
+.stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+/* ── LOADING ────────────────────────────────────────────────── */
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--lime);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-screen{display:flex;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--muted)}
+
+/* ── TABS ───────────────────────────────────────────────────── */
+.tabs{display:flex;gap:2px;background:var(--dark3);border-radius:var(--rad);padding:3px;margin-bottom:20px;align-self:flex-start}
+.tab{padding:7px 16px;font-size:12px;font-weight:600;border-radius:6px;cursor:pointer;transition:all .2s;border:none;background:transparent;color:var(--muted);display:flex;align-items:center;gap:6px}
+.tab.active{background:var(--dark4);color:var(--text)}
+.tab .badge{background:var(--red);color:white;border-radius:999px;font-size:10px;padding:1px 5px;min-width:16px;text-align:center}
+
+/* ── SEARCH ─────────────────────────────────────────────────── */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--dark3);border:1px solid var(--border);border-radius:var(--rad);padding:8px 12px;margin-bottom:16px}
+.search-bar input{background:transparent;border:none;color:var(--text);font-size:13px;outline:none;flex:1}
+.search-bar input::placeholder{color:var(--muted)}
+
+/* ── REJECT PANEL ───────────────────────────────────────────── */
+#reject-panel .modal{max-width:380px}
+
+/* ── RESPONSIVE TWEAKS ──────────────────────────────────────── */
+@media(max-width:768px){
+  #sidebar{width:56px;min-width:56px}
+  .sidebar-logo-text,.sidebar-logo-sub,.user-info,.nav-item span,.nav-label{display:none}
+  .nav-item{justify-content:center;padding:10px}
+  .nav-item .nav-icon{width:auto}
+  .editor-right{width:260px;min-width:260px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- CONFIG SCREEN -->
+<div id="config-screen">
+  <div class="config-card">
+    <div class="config-logo">DEK<span>H</span>O <span style="font-size:16px;color:var(--muted);font-family:var(--ff-body);font-weight:400;text-transform:none;letter-spacing:0">CMS</span></div>
+    <div class="config-sub">Connect your Supabase project to get started</div>
+    <div class="config-field">
+      <label>Supabase Project URL</label>
+      <input type="text" id="cfg-url" placeholder="https://xxxx.supabase.co" autocomplete="off">
+    </div>
+    <div class="config-field">
+      <label>Supabase Anon Key</label>
+      <input type="text" id="cfg-key" placeholder="eyJhbGciOiJIUzI1NiIs..." autocomplete="off">
+    </div>
+    <button class="btn-config" onclick="saveConfig()">Connect & Continue →</button>
+    <div class="config-hint">
+      Find these in your Supabase dashboard under <code>Project Settings → API</code>.<br>
+      These are stored locally in your browser. Run the SQL schema first — see the migration guide.
+    </div>
+  </div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="hidden">
+  <div class="auth-card">
+    <div class="auth-logo">DEK<span>H</span>O</div>
+    <div class="auth-tagline">Editorial CMS by elv8 dgtl</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+    <div id="auth-login">
+      <div class="auth-field"><label>Email</label><input type="email" id="l-email" placeholder="you@example.com"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn-auth" onclick="doLogin()">Login</button>
+    </div>
+    <div id="auth-signup" class="hidden">
+      <div class="auth-field"><label>Full Name</label><input type="text" id="s-name" placeholder="Your name"></div>
+      <div class="auth-field"><label>Email</label><input type="email" id="s-email" placeholder="you@example.com"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="s-pass" placeholder="Min 6 characters" onkeydown="if(event.key==='Enter')doSignup()"></div>
+      <button class="btn-auth" onclick="doSignup()">Create Account</button>
+    </div>
+    <div class="auth-err" id="auth-err"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">DEK<span>H</span>O</div>
+      <div class="sidebar-logo-sub">CMS Dashboard</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sb-avatar">D</div>
+      <div class="user-info">
+        <div class="user-name truncate" id="sb-name">User</div>
+        <div class="user-role" id="sb-role">writer</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-label">Content</div>
+        <button class="nav-item" id="nav-my-articles" onclick="showView('my-articles')">
+          <span class="nav-icon">📝</span><span>My Articles</span>
+        </button>
+        <button class="nav-item" id="nav-new-article" onclick="openEditor(null)">
+          <span class="nav-icon">✏️</span><span>New Article</span>
+        </button>
+      </div>
+      <div class="nav-section" id="nav-admin-section" style="display:none">
+        <div class="nav-label">Admin</div>
+        <button class="nav-item" id="nav-review" onclick="showView('review')">
+          <span class="nav-icon">👁️</span><span>Pending Review</span>
+          <span class="nav-badge hidden" id="review-badge">0</span>
+        </button>
+        <button class="nav-item" id="nav-all-articles" onclick="showView('all-articles')">
+          <span class="nav-icon">📚</span><span>All Articles</span>
+        </button>
+        <button class="nav-item" id="nav-users" onclick="showView('users')">
+          <span class="nav-icon">👥</span><span>Users</span>
+        </button>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="nav-item w-full" onclick="doLogout()" style="color:var(--muted)">
+        <span class="nav-icon">🚪</span><span>Logout</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">My Articles</div>
+      <div class="topbar-actions" id="topbar-actions"></div>
+    </div>
+    <div class="content-area" id="content-area">
+      <div class="loading-screen"><div class="spinner"></div> Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- EDITOR PANEL -->
+<div id="editor-panel">
+  <div class="editor-topbar">
+    <div class="editor-topbar-left">
+      <button class="btn btn-ghost btn-icon" onclick="closeEditor()" title="Close">←</button>
+      <input type="text" class="editor-title-input" id="ed-title" placeholder="Article title...">
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="ed-status-pill"></span>
+      <button class="btn btn-secondary btn-sm" onclick="saveDraft()" id="btn-save-draft">Save Draft</button>
+      <button class="btn btn-primary btn-sm" onclick="submitReview()" id="btn-submit-review" title="Submit for review">Submit for Review</button>
+      <span id="ed-admin-actions"></span>
+    </div>
+  </div>
+  <div class="editor-body">
+    <div class="editor-left">
+      <div class="editor-toolbar">
+        <button class="tb-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
+        <button class="tb-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
+        <button class="tb-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
+        <button class="tb-btn" onclick="fmt('strikeThrough')" title="Strike">S̶</button>
+        <span class="tb-sep"></span>
+        <button class="tb-btn" onclick="fmtBlock('h1')" title="H1">H1</button>
+        <button class="tb-btn" onclick="fmtBlock('h2')" title="H2">H2</button>
+        <button class="tb-btn" onclick="fmtBlock('h3')" title="H3">H3</button>
+        <button class="tb-btn" onclick="fmtBlock('p')" title="Paragraph">¶</button>
+        <span class="tb-sep"></span>
+        <button class="tb-btn" onclick="fmt('insertUnorderedList')" title="Bullet list">• List</button>
+        <button class="tb-btn" onclick="fmt('insertOrderedList')" title="Numbered list">1. List</button>
+        <button class="tb-btn" onclick="fmtBlock('blockquote')" title="Blockquote">" "</button>
+        <span class="tb-sep"></span>
+        <button class="tb-btn" onclick="insertCode()" title="Code">{ }</button>
+        <button class="tb-btn" onclick="insertLink()" title="Link">🔗</button>
+        <button class="tb-btn" onclick="insertImage()" title="Insert image">🖼</button>
+        <button class="tb-btn" onclick="insertHR()" title="Divider">—</button>
+        <span class="tb-sep"></span>
+        <button class="tb-btn" onclick="document.execCommand('undo')" title="Undo">↩</button>
+        <button class="tb-btn" onclick="document.execCommand('redo')" title="Redo">↪</button>
+      </div>
+      <div id="ed-body" contenteditable="true" data-placeholder="Start writing your article..."></div>
+      <div class="word-count" id="word-count">0 words</div>
+    </div>
+    <div class="editor-right">
+      <div class="meta-panel">
+        <!-- Article Meta -->
+        <div class="meta-section">
+          <div class="meta-section-head" onclick="toggleMeta('meta-article')">Article Info <span id="meta-article-chevron">▾</span></div>
+          <div class="meta-section-body" id="meta-article">
+            <div class="meta-field">
+              <label>Slug</label>
+              <input type="text" id="ed-slug" placeholder="url-friendly-slug">
+            </div>
+            <div class="meta-field">
+              <label>Category</label>
+              <select id="ed-category">
+                <option value="">Select category</option>
+                <option>Technology</option><option>Design</option><option>Marketing</option>
+                <option>Business</option><option>Culture</option><option>Opinion</option>
+                <option>Tutorial</option><option>News</option>
+              </select>
+            </div>
+            <div class="meta-field">
+              <label>Tag</label>
+              <input type="text" id="ed-tag" placeholder="comma, separated, tags">
+            </div>
+            <div class="meta-field">
+              <label>Excerpt</label>
+              <textarea id="ed-excerpt" rows="3" placeholder="Short description..."></textarea>
+            </div>
+            <div class="meta-field">
+              <label>Read Time (mins)</label>
+              <input type="number" id="ed-readtime" placeholder="5" min="1">
+            </div>
+          </div>
+        </div>
+        <!-- Cover Image -->
+        <div class="meta-section">
+          <div class="meta-section-head" onclick="toggleMeta('meta-cover')">Cover Image <span id="meta-cover-chevron">▾</span></div>
+          <div class="meta-section-body" id="meta-cover">
+            <div class="cover-preview" id="cover-preview" onclick="triggerCoverUpload()">
+              <span id="cover-preview-placeholder">Click to add cover</span>
+              <img id="cover-preview-img" class="hidden" alt="cover">
+            </div>
+            <input type="file" id="cover-file-input" accept="image/*" class="hidden" onchange="handleCoverFile(this)">
+            <div class="meta-field">
+              <label>Or paste image URL</label>
+              <input type="text" id="ed-cover" placeholder="https://..." oninput="onCoverUrlInput(this.value)">
+            </div>
+          </div>
+        </div>
+        <!-- SEO -->
+        <div class="meta-section">
+          <div class="meta-section-head" onclick="toggleMeta('meta-seo')">SEO <span id="meta-seo-chevron">▾</span></div>
+          <div class="meta-section-body" id="meta-seo">
+            <div class="meta-field"><label>Focus Keyword</label><input type="text" id="ed-seo-kw" placeholder="main keyword"></div>
+            <div class="meta-field"><label>Meta Title</label><input type="text" id="ed-seo-title" placeholder="SEO page title (60 chars)" maxlength="60"></div>
+            <div class="meta-field"><label>Meta Description</label><textarea id="ed-seo-desc" rows="3" placeholder="SEO description (160 chars)" maxlength="160"></textarea></div>
+            <div class="meta-field"><label>OG Image URL</label><input type="text" id="ed-seo-og" placeholder="https://..."></div>
+            <div class="meta-field"><label>Canonical URL</label><input type="text" id="ed-seo-canonical" placeholder="https://..."></div>
+            <div class="meta-field"><label>Secondary Keywords</label><input type="text" id="ed-seo-secondary" placeholder="word1, word2"></div>
+            <div class="meta-field"><label>SEO Tags</label><input type="text" id="ed-seo-tags" placeholder="tag1, tag2"></div>
+          </div>
+        </div>
+        <!-- Rejection Reason (read-only if rejected) -->
+        <div class="meta-section hidden" id="meta-reject-section">
+          <div class="meta-section-head" style="color:var(--danger)">Rejection Reason</div>
+          <div class="meta-section-body">
+            <div style="font-size:12px;color:var(--danger);padding:4px 0" id="meta-reject-reason"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL OVERLAY -->
+<div id="modal-overlay" class="hidden" onclick="closeModal(event)"></div>
+
+<!-- REJECT MODAL -->
+<div id="reject-modal" class="hidden">
+  <div class="modal">
+    <div class="modal-title">Reject Article</div>
+    <div class="modal-sub">Provide a reason so the writer can revise.</div>
+    <div class="modal-field">
+      <label>Rejection Reason</label>
+      <textarea id="reject-reason-input" rows="4" placeholder="Explain what needs to be changed..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger btn-sm" onclick="confirmReject()">Reject Article</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div id="delete-modal" class="hidden">
+  <div class="modal">
+    <div class="modal-title">Delete Article?</div>
+    <div class="modal-sub" id="delete-modal-sub">This action cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger btn-sm" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════
+const $ = {
+  sb: null,            // supabase client
+  user: null,          // current user profile row
+  editId: null,        // article being edited (null = new)
+  editStatus: 'draft', // status of article being edited
+  pendingRejectId: null,
+  pendingDeleteId: null,
+  currentView: 'my-articles',
+  articles: [],
+  reviewCount: 0,
+};
+
+// ══════════════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════════════
+function saveConfig() {
+  const url = document.getElementById('cfg-url').value.trim();
+  const key = document.getElementById('cfg-key').value.trim();
+  if (!url || !key) { toast('Enter both URL and Anon Key', 'error'); return; }
+  if (!url.startsWith('https://')) { toast('URL must start with https://', 'error'); return; }
+  localStorage.setItem('dekho_sb_url', url);
+  localStorage.setItem('dekho_sb_key', key);
+  initSupabase(url, key);
+}
+
+function initSupabase(url, key) {
+  try {
+    $.sb = supabase.createClient(url, key);
+    hide('config-screen');
+    checkSession();
+  } catch(e) {
+    toast('Invalid config: ' + e.message, 'error');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════════════
+async function checkSession() {
+  try {
+    const { data: { session } } = await $.sb.auth.getSession();
+    if (session) {
+      await loadUserProfile(session.user);
+    } else {
+      show('auth-screen');
+    }
+  } catch(e) {
+    show('auth-screen');
+  }
+}
+
+async function loadUserProfile(authUser) {
+  const { data, error } = await $.sb
+    .from('users')
+    .select('*')
+    .eq('id', authUser.id)
+    .single();
+
+  if (error || !data) {
+    // Profile doesn't exist yet — create it
+    const { data: newUser, error: createErr } = await $.sb
+      .from('users')
+      .insert({ id: authUser.id, email: authUser.email, name: authUser.user_metadata?.name || authUser.email.split('@')[0], role: 'writer' })
+      .select()
+      .single();
+    if (createErr) { toast('Profile error: ' + createErr.message, 'error'); return; }
+    $.user = newUser;
+  } else {
+    $.user = data;
+  }
+  hide('auth-screen');
+  setupApp();
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='signup')));
+  toggle('auth-login', tab === 'login');
+  toggle('auth-signup', tab === 'signup');
+  document.getElementById('auth-err').textContent = '';
+}
+
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  const errEl = document.getElementById('auth-err');
+  errEl.textContent = '';
+  if (!email || !pass) { errEl.textContent = 'Fill in all fields'; return; }
+  const { data, error } = await $.sb.auth.signInWithPassword({ email, password: pass });
+  if (error) { errEl.textContent = error.message; return; }
+  await loadUserProfile(data.user);
+}
+
+async function doSignup() {
+  const name = document.getElementById('s-name').value.trim();
+  const email = document.getElementById('s-email').value.trim();
+  const pass = document.getElementById('s-pass').value;
+  const errEl = document.getElementById('auth-err');
+  errEl.textContent = '';
+  if (!name || !email || !pass) { errEl.textContent = 'Fill in all fields'; return; }
+  if (pass.length < 6) { errEl.textContent = 'Password min 6 characters'; return; }
+  const { data, error } = await $.sb.auth.signUp({ email, password: pass, options: { data: { name } } });
+  if (error) { errEl.textContent = error.message; return; }
+  // Insert profile
+  await $.sb.from('users').upsert({ id: data.user.id, email, name, role: 'writer' });
+  toast('Account created! You can now login.', 'success');
+  switchAuthTab('login');
+  document.getElementById('l-email').value = email;
+}
+
+async function doLogout() {
+  await $.sb.auth.signOut();
+  $.user = null;
+  hide('app');
+  show('auth-screen');
+  switchAuthTab('login');
+  document.getElementById('auth-err').textContent = '';
+}
+
+// ══════════════════════════════════════════════════════════════
+// APP SETUP
+// ══════════════════════════════════════════════════════════════
+function setupApp() {
+  const u = $.user;
+  document.getElementById('sb-avatar').textContent = (u.name||u.email)[0].toUpperCase();
+  document.getElementById('sb-name').textContent = u.name || u.email;
+  document.getElementById('sb-role').textContent = u.role;
+  if (u.role === 'admin') {
+    document.getElementById('nav-admin-section').style.display = '';
+  }
+  show('app');
+  showView('my-articles');
+}
+
+// ══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════════
+function showView(view) {
+  $.currentView = view;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + view);
+  if (navEl) navEl.classList.add('active');
+  const titles = { 'my-articles':'My Articles', 'review':'Pending Review', 'all-articles':'All Articles', 'users':'Users' };
+  document.getElementById('topbar-title').textContent = titles[view] || 'Dashboard';
+  document.getElementById('topbar-actions').innerHTML = '';
+  if (view === 'my-articles') {
+    document.getElementById('topbar-actions').innerHTML = `<button class="btn btn-primary btn-sm" onclick="openEditor(null)">+ New Article</button>`;
+  }
+  const ca = document.getElementById('content-area');
+  ca.innerHTML = '<div class="loading-screen"><div class="spinner"></div></div>';
+  loadView(view);
+}
+
+async function loadView(view) {
+  if (view === 'my-articles') await renderMyArticles();
+  else if (view === 'review') await renderReview();
+  else if (view === 'all-articles') await renderAllArticles();
+  else if (view === 'users') await renderUsers();
+}
+
+// ══════════════════════════════════════════════════════════════
+// REVIEW BADGE
+// ══════════════════════════════════════════════════════════════
+async function refreshReviewBadge() {
+  if ($.user?.role !== 'admin') return;
+  const { count } = await $.sb.from('articles').select('*', { count: 'exact', head: true }).eq('status', 'review');
+  const badge = document.getElementById('review-badge');
+  if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); }
+  else { badge.classList.add('hidden'); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// MY ARTICLES VIEW
+// ══════════════════════════════════════════════════════════════
+async function renderMyArticles() {
+  const { data: arts, error } = await $.sb
+    .from('articles')
+    .select('id,title,slug,status,category,created_at,updated_at,cover_image,reject_reason,author_email')
+    .eq('author_email', $.user.email)
+    .order('updated_at', { ascending: false });
+
+  if (error) { renderError(error.message); return; }
+  $.articles = arts || [];
+
+  // Tabs: drafts, review, published, rejected
+  const tabs = [
+    { key: 'draft', label: 'Drafts' },
+    { key: 'review', label: 'In Review' },
+    { key: 'published', label: 'Published' },
+    { key: 'rejected', label: 'Rejected' },
+  ];
+  let activeTab = 'draft';
+  const ca = document.getElementById('content-area');
+
+  function renderTab(tab) {
+    activeTab = tab;
+    const filtered = $.articles.filter(a => a.status === tab);
+    let html = `<div class="tabs">`;
+    tabs.forEach(t => {
+      const cnt = $.articles.filter(a => a.status === t.key).length;
+      html += `<button class="tab ${activeTab===t.key?'active':''}" onclick="renderMyArticlesTab('${t.key}')">${t.label}${cnt>0?`<span class="badge">${cnt}</span>`:''}</button>`;
+    });
+    html += `</div>`;
+    html += `<div class="search-bar"><span>🔍</span><input type="text" placeholder="Search articles..." id="search-input" oninput="filterArticles(this.value,'${tab}')"></div>`;
+    html += `<div class="art-grid" id="art-grid">` + renderArtList(filtered) + `</div>`;
+    ca.innerHTML = html;
+  }
+
+  renderTab(activeTab);
+  window.renderMyArticlesTab = (tab) => renderTab(tab);
+  window.filterArticles = (q, tab) => {
+    const filtered = $.articles.filter(a => a.status === tab && (a.title||'').toLowerCase().includes(q.toLowerCase()));
+    document.getElementById('art-grid').innerHTML = renderArtList(filtered);
+  };
+
+  if ($.user.role === 'admin') refreshReviewBadge();
+}
+
+function renderArtList(arts) {
+  if (!arts.length) return `<div class="empty-state"><div class="empty-state-icon">📄</div><div class="empty-state-title">No articles here</div><div class="empty-state-sub">Your articles will appear here</div></div>`;
+  return arts.map(a => `
+    <div class="art-row">
+      <div class="art-cover">${a.cover_image ? `<img src="${escHtml(a.cover_image)}" alt="">` : '📄'}</div>
+      <div class="art-info">
+        <div class="art-title">${escHtml(a.title||'Untitled')}</div>
+        <div class="art-meta">
+          <span class="pill pill-${a.status}">${a.status}</span>
+          ${a.category ? `<span>${escHtml(a.category)}</span>` : ''}
+          <span>${relTime(a.updated_at)}</span>
+        </div>
+        ${a.status==='rejected'&&a.reject_reason?`<div class="reject-reason">↳ ${escHtml(a.reject_reason)}</div>`:''}
+      </div>
+      <div class="art-actions">
+        ${a.status!=='published'?`<button class="btn btn-secondary btn-xs" onclick="openEditor('${a.id}')">Edit</button>`:''}
+        <button class="btn btn-danger btn-xs" onclick="showDeleteModal('${a.id}','${escHtml(a.title||'Untitled')}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════════════════════════
+// ADMIN - PENDING REVIEW
+// ══════════════════════════════════════════════════════════════
+async function renderReview() {
+  const { data: arts, error } = await $.sb
+    .from('articles')
+    .select('id,title,slug,status,category,created_at,updated_at,cover_image,author_name,author_email')
+    .eq('status', 'review')
+    .order('updated_at', { ascending: false });
+  if (error) { renderError(error.message); return; }
+  const ca = document.getElementById('content-area');
+  if (!arts.length) {
+    ca.innerHTML = `<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-title">Nothing to review</div><div class="empty-state-sub">All caught up!</div></div>`;
+    refreshReviewBadge();
+    return;
+  }
+  let html = `<div class="art-grid">` + arts.map(a => `
+    <div class="art-row">
+      <div class="art-cover">${a.cover_image?`<img src="${escHtml(a.cover_image)}" alt="">`:'📄'}</div>
+      <div class="art-info">
+        <div class="art-title">${escHtml(a.title||'Untitled')}</div>
+        <div class="art-meta">
+          <span class="pill pill-review">In Review</span>
+          ${a.category?`<span>${escHtml(a.category)}</span>`:''}
+          <span>by ${escHtml(a.author_name||a.author_email)}</span>
+          <span>${relTime(a.updated_at)}</span>
+        </div>
+      </div>
+      <div class="art-actions">
+        <button class="btn btn-ghost btn-xs" onclick="openEditor('${a.id}',true)">Preview</button>
+        <button class="btn btn-success btn-xs" onclick="approveArticle('${a.id}')">✓ Approve</button>
+        <button class="btn btn-danger btn-xs" onclick="showRejectModal('${a.id}')">✗ Reject</button>
+      </div>
+    </div>
+  `).join('') + `</div>`;
+  ca.innerHTML = html;
+  refreshReviewBadge();
+}
+
+// ══════════════════════════════════════════════════════════════
+// ADMIN - ALL ARTICLES
+// ══════════════════════════════════════════════════════════════
+async function renderAllArticles() {
+  const { data: arts, error } = await $.sb
+    .from('articles')
+    .select('id,title,status,category,author_name,author_email,updated_at,cover_image')
+    .order('updated_at', { ascending: false });
+  if (error) { renderError(error.message); return; }
+
+  // Stats
+  const byStatus = { draft:0, review:0, published:0, rejected:0 };
+  arts.forEach(a => { if (byStatus[a.status]!==undefined) byStatus[a.status]++; });
+
+  let html = `<div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" style="color:var(--text)">${arts.length}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--success)">${byStatus.published}</div><div class="stat-label">Published</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--warning)">${byStatus.review}</div><div class="stat-label">In Review</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--muted)">${byStatus.draft}</div><div class="stat-label">Drafts</div></div>
+  </div>`;
+  html += `<div class="search-bar"><span>🔍</span><input type="text" placeholder="Search all articles..." id="all-search" oninput="filterAllArts(this.value)"></div>`;
+  html += `<div class="art-grid" id="all-art-grid">` + arts.map(a => `
+    <div class="art-row">
+      <div class="art-cover">${a.cover_image?`<img src="${escHtml(a.cover_image)}" alt="">`:'📄'}</div>
+      <div class="art-info">
+        <div class="art-title">${escHtml(a.title||'Untitled')}</div>
+        <div class="art-meta">
+          <span class="pill pill-${a.status}">${a.status}</span>
+          ${a.category?`<span>${escHtml(a.category)}</span>`:''}
+          <span>by ${escHtml(a.author_name||a.author_email)}</span>
+          <span>${relTime(a.updated_at)}</span>
+        </div>
+      </div>
+      <div class="art-actions">
+        <button class="btn btn-secondary btn-xs" onclick="openEditor('${a.id}',true)">Edit</button>
+        <button class="btn btn-danger btn-xs" onclick="showDeleteModal('${a.id}','${escHtml(a.title||'')}')">Delete</button>
+      </div>
+    </div>
+  `).join('') + `</div>`;
+  document.getElementById('content-area').innerHTML = html;
+
+  // Store for filtering
+  window._allArts = arts;
+  window.filterAllArts = (q) => {
+    const filtered = window._allArts.filter(a => (a.title||'').toLowerCase().includes(q.toLowerCase()) || (a.author_email||'').toLowerCase().includes(q.toLowerCase()));
+    document.getElementById('all-art-grid').innerHTML = filtered.map(a => `
+      <div class="art-row">
+        <div class="art-cover">${a.cover_image?`<img src="${escHtml(a.cover_image)}" alt="">`:'📄'}</div>
+        <div class="art-info">
+          <div class="art-title">${escHtml(a.title||'Untitled')}</div>
+          <div class="art-meta">
+            <span class="pill pill-${a.status}">${a.status}</span>
+            ${a.category?`<span>${escHtml(a.category)}</span>`:''}
+            <span>by ${escHtml(a.author_name||a.author_email)}</span>
+            <span>${relTime(a.updated_at)}</span>
+          </div>
+        </div>
+        <div class="art-actions">
+          <button class="btn btn-secondary btn-xs" onclick="openEditor('${a.id}',true)">Edit</button>
+          <button class="btn btn-danger btn-xs" onclick="showDeleteModal('${a.id}','${escHtml(a.title||'')}')">Delete</button>
+        </div>
+      </div>
+    `).join('') || `<div class="empty-state"><div class="empty-state-title">No results</div></div>`;
+  };
+}
+
+// ══════════════════════════════════════════════════════════════
+// ADMIN - USERS
+// ══════════════════════════════════════════════════════════════
+async function renderUsers() {
+  const { data: users, error } = await $.sb.from('users').select('*').order('created_at', { ascending: false });
+  if (error) { renderError(error.message); return; }
+  let html = `<div class="flex-col gap-2">` + users.map(u => `
+    <div class="user-row">
+      <div class="user-avatar">${(u.name||u.email)[0].toUpperCase()}</div>
+      <div class="user-details">
+        <div class="user-email">${escHtml(u.name||'')} <span class="text-muted">· ${escHtml(u.email)}</span></div>
+        <div class="user-since">Joined ${fmtDate(u.created_at)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="pill ${u.role==='admin'?'pill-published':'pill-draft'}">${u.role}</span>
+        ${u.id !== $.user.id ? `<button class="btn btn-secondary btn-xs" onclick="toggleRole('${u.id}','${u.role}')">${u.role==='admin'?'Make Writer':'Make Admin'}</button>` : ''}
+      </div>
+    </div>
+  `).join('') + `</div>`;
+  document.getElementById('content-area').innerHTML = html;
+}
+
+async function toggleRole(userId, currentRole) {
+  const newRole = currentRole === 'admin' ? 'writer' : 'admin';
+  const { error } = await $.sb.from('users').update({ role: newRole }).eq('id', userId);
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+  toast('Role updated', 'success');
+  renderUsers();
+}
+
+// ══════════════════════════════════════════════════════════════
+// EDITOR
+// ══════════════════════════════════════════════════════════════
+async function openEditor(id, isAdminView = false) {
+  $.editId = id;
+  $.editStatus = 'draft';
+  $.isAdminView = isAdminView;
+
+  // Reset fields
+  document.getElementById('ed-title').value = '';
+  document.getElementById('ed-slug').value = '';
+  document.getElementById('ed-category').value = '';
+  document.getElementById('ed-tag').value = '';
+  document.getElementById('ed-excerpt').value = '';
+  document.getElementById('ed-readtime').value = '';
+  document.getElementById('ed-cover').value = '';
+  document.getElementById('ed-seo-kw').value = '';
+  document.getElementById('ed-seo-title').value = '';
+  document.getElementById('ed-seo-desc').value = '';
+  document.getElementById('ed-seo-og').value = '';
+  document.getElementById('ed-seo-canonical').value = '';
+  document.getElementById('ed-seo-secondary').value = '';
+  document.getElementById('ed-seo-tags').value = '';
+  document.getElementById('ed-body').innerHTML = '';
+  document.getElementById('ed-status-pill').innerHTML = '';
+  document.getElementById('ed-admin-actions').innerHTML = '';
+  document.getElementById('meta-reject-section').classList.add('hidden');
+  document.getElementById('cover-preview-img').classList.add('hidden');
+  document.getElementById('cover-preview-placeholder').classList.remove('hidden');
+
+  if (id) {
+    const { data: art, error } = await $.sb.from('articles').select('*').eq('id', id).single();
+    if (error) { toast('Error loading article', 'error'); return; }
+    $.editStatus = art.status;
+    // Populate
+    document.getElementById('ed-title').value = art.title || '';
+    document.getElementById('ed-slug').value = art.slug || '';
+    document.getElementById('ed-category').value = art.category || '';
+    document.getElementById('ed-tag').value = art.tag || '';
+    document.getElementById('ed-excerpt').value = art.excerpt || '';
+    document.getElementById('ed-readtime').value = art.read_time || '';
+    document.getElementById('ed-cover').value = art.cover_image || '';
+    document.getElementById('ed-seo-kw').value = art.seo_keyword || '';
+    document.getElementById('ed-seo-title').value = art.seo_meta_title || '';
+    document.getElementById('ed-seo-desc').value = art.seo_meta_desc || '';
+    document.getElementById('ed-seo-og').value = art.seo_og_image || '';
+    document.getElementById('ed-seo-canonical').value = art.seo_canonical || '';
+    document.getElementById('ed-seo-secondary').value = art.seo_secondary_keywords || '';
+    document.getElementById('ed-seo-tags').value = art.seo_tags || '';
+    document.getElementById('ed-body').innerHTML = art.content || '';
+    if (art.cover_image) {
+      document.getElementById('cover-preview-img').src = art.cover_image;
+      document.getElementById('cover-preview-img').classList.remove('hidden');
+      document.getElementById('cover-preview-placeholder').classList.add('hidden');
+    }
+    // Status pill
+    document.getElementById('ed-status-pill').innerHTML = `<span class="pill pill-${art.status}">${art.status}</span>`;
+    // Reject reason
+    if (art.status === 'rejected' && art.reject_reason) {
+      document.getElementById('meta-reject-section').classList.remove('hidden');
+      document.getElementById('meta-reject-reason').textContent = art.reject_reason;
+    }
+    // Admin actions on review articles
+    if (isAdminView && art.status === 'review') {
+      document.getElementById('ed-admin-actions').innerHTML = `
+        <button class="btn btn-success btn-sm" onclick="approveArticle('${id}')">✓ Approve</button>
+        <button class="btn btn-danger btn-sm" onclick="showRejectModal('${id}')">✗ Reject</button>
+      `;
+    }
+  }
+
+  // Show/hide submit button
+  const canSubmit = !isAdminView && ($.editStatus === 'draft' || $.editStatus === 'rejected');
+  document.getElementById('btn-submit-review').style.display = canSubmit ? '' : 'none';
+  document.getElementById('btn-save-draft').style.display = (isAdminView && $.editStatus === 'published') ? 'none' : '';
+
+  updateWordCount();
+  document.getElementById('editor-panel').classList.add('open');
+  document.getElementById('ed-body').focus();
+}
+
+function closeEditor() {
+  document.getElementById('editor-panel').classList.remove('open');
+  loadView($.currentView);
+  if ($.user.role === 'admin') refreshReviewBadge();
+}
+
+// Auto-slug from title
+document.getElementById('ed-title').addEventListener('input', function() {
+  if (!$.editId || !document.getElementById('ed-slug').value) {
+    document.getElementById('ed-slug').value = slugify(this.value);
+  }
+});
+
+// Word count
+document.getElementById('ed-body').addEventListener('input', updateWordCount);
+
+function updateWordCount() {
+  const text = document.getElementById('ed-body').innerText || '';
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('word-count').textContent = `${words} word${words !== 1 ? 's' : ''}`;
+  // Auto read time
+  if (!document.getElementById('ed-readtime').value) {
+    const mins = Math.max(1, Math.ceil(words / 200));
+    document.getElementById('ed-readtime').value = mins;
+  }
+}
+
+function buildPayload(status) {
+  return {
+    title: document.getElementById('ed-title').value.trim(),
+    slug: document.getElementById('ed-slug').value.trim() || slugify(document.getElementById('ed-title').value),
+    category: document.getElementById('ed-category').value,
+    tag: document.getElementById('ed-tag').value.trim(),
+    excerpt: document.getElementById('ed-excerpt').value.trim(),
+    read_time: parseInt(document.getElementById('ed-readtime').value) || null,
+    cover_image: document.getElementById('ed-cover').value.trim(),
+    content: document.getElementById('ed-body').innerHTML,
+    status: status,
+    author_email: $.user.email,
+    author_name: $.user.name,
+    seo_keyword: document.getElementById('ed-seo-kw').value.trim(),
+    seo_meta_title: document.getElementById('ed-seo-title').value.trim(),
+    seo_meta_desc: document.getElementById('ed-seo-desc').value.trim(),
+    seo_og_image: document.getElementById('ed-seo-og').value.trim(),
+    seo_canonical: document.getElementById('ed-seo-canonical').value.trim(),
+    seo_secondary_keywords: document.getElementById('ed-seo-secondary').value.trim(),
+    seo_tags: document.getElementById('ed-seo-tags').value.trim(),
+    updated_at: new Date().toISOString(),
+  };
+}
+
+async function saveDraft() {
+  const btn = document.getElementById('btn-save-draft');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  const payload = buildPayload($.editStatus === 'published' ? 'published' : 'draft');
+  const ok = await upsertArticle(payload);
+  btn.disabled = false; btn.textContent = 'Save Draft';
+  if (ok) { toast('Draft saved', 'success'); $.editStatus = payload.status; }
+}
+
+async function submitReview() {
+  if (!document.getElementById('ed-title').value.trim()) { toast('Add a title first', 'warn'); return; }
+  const btn = document.getElementById('btn-submit-review');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  const payload = buildPayload('review');
+  const ok = await upsertArticle(payload);
+  btn.disabled = false; btn.textContent = 'Submit for Review';
+  if (ok) {
+    toast('Submitted for review!', 'success');
+    $.editStatus = 'review';
+    document.getElementById('ed-status-pill').innerHTML = `<span class="pill pill-review">review</span>`;
+    document.getElementById('btn-submit-review').style.display = 'none';
+  }
+}
+
+async function upsertArticle(payload) {
+  let result;
+  if ($.editId) {
+    // Check ownership (writers can only edit own articles; admins can edit any)
+    const { data: existing } = await $.sb.from('articles').select('author_email,status').eq('id', $.editId).single();
+    if (existing && existing.author_email !== $.user.email && $.user.role !== 'admin') {
+      toast('Permission denied', 'error'); return false;
+    }
+    result = await $.sb.from('articles').update(payload).eq('id', $.editId).select().single();
+  } else {
+    result = await $.sb.from('articles').insert({ ...payload, created_at: new Date().toISOString() }).select().single();
+  }
+  if (result.error) { toast('Error: ' + result.error.message, 'error'); return false; }
+  if (!$.editId) { $.editId = result.data.id; }
+  return true;
+}
+
+// ══════════════════════════════════════════════════════════════
+// APPROVE / REJECT
+// ══════════════════════════════════════════════════════════════
+async function approveArticle(id) {
+  const { error } = await $.sb.from('articles').update({
+    status: 'published',
+    published_at: new Date().toISOString(),
+    reject_reason: null,
+    updated_at: new Date().toISOString(),
+  }).eq('id', id);
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+  toast('Article approved & published!', 'success');
+  loadView($.currentView);
+  refreshReviewBadge();
+}
+
+function showRejectModal(id) {
+  $.pendingRejectId = id;
+  document.getElementById('reject-reason-input').value = '';
+  showModal('reject-modal');
+}
+
+async function confirmReject() {
+  const reason = document.getElementById('reject-reason-input').value.trim();
+  if (!reason) { toast('Please provide a rejection reason', 'warn'); return; }
+  const { error } = await $.sb.from('articles').update({
+    status: 'rejected',
+    reject_reason: reason,
+    updated_at: new Date().toISOString(),
+  }).eq('id', $.pendingRejectId);
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+  toast('Article rejected', 'info');
+  closeModal();
+  loadView($.currentView);
+  refreshReviewBadge();
+}
+
+// ══════════════════════════════════════════════════════════════
+// DELETE
+// ══════════════════════════════════════════════════════════════
+function showDeleteModal(id, title) {
+  $.pendingDeleteId = id;
+  document.getElementById('delete-modal-sub').textContent = `Delete "${title}"? This cannot be undone.`;
+  showModal('delete-modal');
+}
+
+async function confirmDelete() {
+  const { error } = await $.sb.from('articles').delete().eq('id', $.pendingDeleteId);
+  if (error) { toast('Error: ' + error.message, 'error'); return; }
+  toast('Article deleted', 'info');
+  closeModal();
+  loadView($.currentView);
+}
+
+// ══════════════════════════════════════════════════════════════
+// TOOLBAR / EDITOR COMMANDS
+// ══════════════════════════════════════════════════════════════
+function fmt(cmd) { document.execCommand(cmd, false, null); document.getElementById('ed-body').focus(); }
+function fmtBlock(tag) { document.execCommand('formatBlock', false, tag); document.getElementById('ed-body').focus(); }
+
+function insertCode() {
+  const sel = window.getSelection();
+  const text = sel.toString();
+  document.execCommand('insertHTML', false, `<code>${text || 'code here'}</code>`);
+  document.getElementById('ed-body').focus();
+}
+
+function insertLink() {
+  const url = prompt('Enter URL:');
+  if (url) document.execCommand('createLink', false, url);
+  document.getElementById('ed-body').focus();
+}
+
+function insertImage() {
+  const url = prompt('Enter image URL:');
+  if (url) document.execCommand('insertHTML', false, `<img src="${url}" alt="" style="max-width:100%">`);
+  document.getElementById('ed-body').focus();
+}
+
+function insertHR() {
+  document.execCommand('insertHTML', false, '<hr>');
+  document.getElementById('ed-body').focus();
+}
+
+// ══════════════════════════════════════════════════════════════
+// COVER IMAGE
+// ══════════════════════════════════════════════════════════════
+function triggerCoverUpload() {
+  document.getElementById('cover-file-input').click();
+}
+
+function handleCoverFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const b64 = e.target.result;
+    document.getElementById('ed-cover').value = b64;
+    document.getElementById('cover-preview-img').src = b64;
+    document.getElementById('cover-preview-img').classList.remove('hidden');
+    document.getElementById('cover-preview-placeholder').classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+function onCoverUrlInput(val) {
+  if (val) {
+    document.getElementById('cover-preview-img').src = val;
+    document.getElementById('cover-preview-img').classList.remove('hidden');
+    document.getElementById('cover-preview-placeholder').classList.add('hidden');
+  } else {
+    document.getElementById('cover-preview-img').classList.add('hidden');
+    document.getElementById('cover-preview-placeholder').classList.remove('hidden');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// META SECTION TOGGLE
+// ══════════════════════════════════════════════════════════════
+function toggleMeta(id) {
+  const el = document.getElementById(id);
+  const chevron = document.getElementById(id + '-chevron');
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : '';
+  if (chevron) chevron.textContent = open ? '▸' : '▾';
+}
+
+// ══════════════════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════════════════
+function showModal(id) {
+  document.getElementById('modal-overlay').classList.remove('hidden');
+  const m = document.getElementById(id);
+  m.classList.remove('hidden');
+  document.getElementById('modal-overlay').appendChild(m.querySelector('.modal'));
+  document.getElementById('modal-overlay')._activeId = id;
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.add('hidden');
+  ['reject-modal','delete-modal'].forEach(id => {
+    const el = document.getElementById(id);
+    const modal = document.getElementById('modal-overlay').querySelector('.modal');
+    if (modal) { el.appendChild(modal); }
+    el.classList.add('hidden');
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+function toggle(id, visible) { document.getElementById(id).classList.toggle('hidden', !visible); }
+
+function renderError(msg) {
+  document.getElementById('content-area').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Error</div><div class="empty-state-sub">${escHtml(msg)}</div></div>`;
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+function slugify(s) {
+  return (s||'').toLowerCase().trim().replace(/[^\w\s-]/g,'').replace(/[\s_-]+/g,'-').replace(/^-+|-+$/g,'');
+}
+
+function relTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso), now = new Date();
+  const diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
+  return fmtDate(iso);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function toast(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${type}`;
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => { el.style.animation = 'toastOut .25s ease forwards'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+// ══════════════════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════════════════
+(function boot() {
+  const url = localStorage.getItem('dekho_sb_url');
+  const key = localStorage.getItem('dekho_sb_key');
+  if (url && key) {
+    document.getElementById('cfg-url').value = url;
+    document.getElementById('cfg-key').value = key;
+    initSupabase(url, key);
+  }
+  // else config screen stays visible
+})();
+</script>
+</body>
+</html>
