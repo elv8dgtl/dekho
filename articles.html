@@ -8,7 +8,6 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="" id="meta-canonical">
 
-  <!-- Open Graph -->
   <meta property="og:type"        content="article">
   <meta property="og:site_name"   content="DEKHO by elv8 dgtl">
   <meta property="og:title"       content="" id="og-title">
@@ -16,17 +15,14 @@
   <meta property="og:image"       content="" id="og-image">
   <meta property="og:url"         content="" id="og-url">
 
-  <!-- Twitter Card -->
   <meta name="twitter:card"        content="summary_large_image">
   <meta name="twitter:site"        content="@elv8dgtl">
   <meta name="twitter:title"       content="" id="tw-title">
   <meta name="twitter:description" content="" id="tw-desc">
   <meta name="twitter:image"       content="" id="tw-image">
 
-  <!-- JSON-LD -->
   <script type="application/ld+json" id="json-ld"></script>
 
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -35,12 +31,10 @@
     gtag('config', 'G-V77HPC9EX8');
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
-  <!-- Lucide Icons -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
   <style>
@@ -133,7 +127,7 @@
     #error-icon { font-size: 3rem; }
 
     /* ── ARTICLE WRAPPER ──────────────────────────────── */
-    #article-wrap { display: none; padding-top: 60px; }
+    #article-wrap { padding-top: 60px; }
 
     /* ── HERO ─────────────────────────────────────────── */
     #hero {
@@ -442,7 +436,6 @@
     #mobile-menu.open { transform: translateX(0); }
 
     /* ── MISC ─────────────────────────────────────────── */
-    .hide-sm { }
     @media (max-width: 640px) { .hide-sm { display: none !important; } }
     .wm-ho { color: var(--accent); }
   </style>
@@ -451,7 +444,6 @@
 
 <div id="read-progress"></div>
 
-<!-- ── NAVBAR ──────────────────────────────────────────────── -->
 <nav id="navbar">
   <div class="nav-inner">
     <a href="https://elv8dgtl.in/" style="display:flex;align-items:center;gap:5px;color:var(--muted);font-size:11px;text-decoration:none;flex-shrink:0;" class="mono">
@@ -478,7 +470,6 @@
   </div>
 </nav>
 
-<!-- ── MOBILE MENU ─────────────────────────────────────────── -->
 <div id="mobile-menu" role="dialog" aria-modal="true">
   <button onclick="toggleMenu()" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;cursor:pointer;" aria-label="Close menu">
     <i data-lucide="x" style="width:24px;height:24px;color:var(--ink);"></i>
@@ -490,7 +481,6 @@
   <a href="https://elv8dgtl.in/contact.html"  onclick="toggleMenu()" style="margin-top:.5rem;background:var(--accent);color:#fff;padding:11px 32px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;">Get a Quote</a>
 </div>
 
-<!-- ── LOADING ─────────────────────────────────────────────── -->
 <div id="loading-state">
   <div style="width:100%;max-width:900px;padding:0 1.25rem;margin:0 auto;">
     <div class="skel-block" style="width:100%;height:380px;border-radius:0;"></div>
@@ -508,7 +498,6 @@
   </div>
 </div>
 
-<!-- ── ERROR ───────────────────────────────────────────────── -->
 <div id="error-state" style="display:none;">
   <div id="error-icon">🔍</div>
   <p class="display" style="font-size:2.5rem;color:var(--border);">NOT FOUND</p>
@@ -518,10 +507,8 @@
   </a>
 </div>
 
-<!-- ── ARTICLE ─────────────────────────────────────────────── -->
-<div id="article-wrap">
+<div id="article-wrap" style="display:none;">
 
-  <!-- Hero Image -->
   <div id="hero">
     <img id="hero-img" src="" alt="" onerror="this.src='https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80'">
     <div id="hero-overlay"></div>
@@ -533,7 +520,6 @@
     </div>
   </div>
 
-  <!-- Breadcrumb -->
   <div style="max-width:900px;margin:0 auto;padding:.75rem 1.25rem;border-bottom:1.5px solid var(--border);">
     <nav aria-label="Breadcrumb" style="display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:11px;color:var(--muted);">
       <a href="https://elv8dgtl.in/" style="color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">elv8 dgtl</a>
@@ -546,10 +532,8 @@
     </nav>
   </div>
 
-  <!-- Content -->
   <div id="content-wrap">
 
-    <!-- Main column -->
     <main>
       <div id="article-header">
         <h1 id="article-title" class="display"></h1>
@@ -563,19 +547,15 @@
         </div>
       </div>
 
-      <!-- Affiliate disclaimer -->
       <div id="aff-note">
         <i data-lucide="info" style="width:14px;height:14px;flex-shrink:0;margin-top:1px;color:var(--accent);"></i>
         <span>This article may contain affiliate links. If you buy through our links, we may earn a small commission — at no extra cost to you.</span>
       </div>
 
-      <!-- Body -->
       <div id="article-body"></div>
 
-      <!-- Tags -->
       <div id="tags-row"></div>
 
-      <!-- Share -->
       <div id="share-bar">
         <span class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-right:4px;">SHARE</span>
         <button class="share-btn accent" onclick="copyLink()">
@@ -592,7 +572,6 @@
         </a>
       </div>
 
-      <!-- Author box -->
       <div id="author-box">
         <div class="author-avatar-lg" id="author-avatar-lg"></div>
         <div>
@@ -603,17 +582,14 @@
 
     </main>
 
-    <!-- Sidebar -->
     <aside id="sidebar">
       <div id="sidebar-sticky">
 
-        <!-- TOC -->
         <div class="sidebar-section" id="toc-section" style="display:none;">
           <p class="sidebar-label">In this article</p>
           <ul id="toc-list"></ul>
         </div>
 
-        <!-- Stats -->
         <div class="sidebar-section">
           <p class="sidebar-label">Article info</p>
           <div class="stat-row">
@@ -636,7 +612,6 @@
           </div>
         </div>
 
-        <!-- Back link -->
         <div class="sidebar-section">
           <a href="https://dekho.elv8dgtl.in/" style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
             <i data-lucide="arrow-left" style="width:13px;height:13px;flex-shrink:0;"></i>
@@ -648,7 +623,6 @@
     </aside>
   </div>
 
-  <!-- Related Articles -->
   <section id="related-section" style="display:none;">
     <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.25rem;">
       <h2 class="display" style="font-size:clamp(1.5rem,3vw,2rem);color:var(--ink);">MORE FROM DEKHO</h2>
@@ -657,10 +631,7 @@
     <div class="related-grid" id="related-grid"></div>
   </section>
 
-</div><!-- /article-wrap -->
-
-<!-- WhatsApp float -->
-<a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+</div><a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
    style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:40;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:transform .2s;"
    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
   <i data-lucide="message-circle" style="width:24px;height:24px;color:#fff;"></i>
@@ -672,7 +643,6 @@
 
 <div id="toast" role="status" aria-live="polite"></div>
 
-<!-- ── SCRIPTS ─────────────────────────────────────────────── -->
 <script>
 (function () {
   'use strict';
@@ -766,9 +736,9 @@
   // ══════════════════════════════════════════════════════
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
-    var icon = $('dark-icon');
-    if (icon) {
-      icon.setAttribute('data-lucide', t === 'dark' ? 'sun' : 'moon');
+    var btn = $('dark-toggle');
+    if (btn) {
+      btn.innerHTML = '<i data-lucide="' + (t === 'dark' ? 'sun' : 'moon') + '" id="dark-icon" style="width:14px;height:14px;"></i>';
       try { if (window.lucide) lucide.createIcons(); } catch(e){}
     }
   }
@@ -800,7 +770,10 @@
     var slug = getParam('slug');
     var id   = getParam('id');
 
+    console.log('🔍 DEBUG: URL Parameters parsed ->', { slug: slug, id: id });
+
     if (!slug && !id) {
+      console.warn('⚠️ DEBUG: No slug or id found in the URL. Aborting fetch. Make sure your URL looks like: ?slug=your-article-slug');
       showError('No article specified.');
       return;
     }
@@ -809,18 +782,37 @@
       ? 'slug=eq.' + encodeURIComponent(slug)
       : 'id=eq.'   + encodeURIComponent(id);
 
+    console.log('📡 DEBUG: Fetching from Supabase with filter ->', filter);
+
     sbFetchOne(filter, '*')
       .then(function (article) {
-        if (!article) { showError('Article not found.'); return; }
+        console.log('✅ DEBUG: Supabase raw response ->', article);
+        
+        if (!article) {
+          console.error('❌ DEBUG: Supabase returned null or empty. This usually means the row doesn\'t exist, or an RLS policy is blocking the read.');
+          showError('Article not found.');
+          return;
+        }
+        
         var status = (article.status || '').toLowerCase().trim();
-        if (status && status !== 'published') { showError('This article is not published yet.'); return; }
+        console.log('📝 DEBUG: Article status found ->', status || 'No status column found');
+        
+        if (status && status !== 'published') {
+          console.warn('⚠️ DEBUG: Article found, but status is not "published". It is currently:', status);
+          showError('This article is not published yet.');
+          return;
+        }
+        
+        console.log('🚀 DEBUG: Validation passed. Rendering article...');
         renderArticle(article);
+        
         // load related in background
         sbFetchMany('status=eq.published', 'id,slug,title,category,cover_image,read_time,excerpt', 20)
           .then(function(all) { renderRelated(article, all); })
-          .catch(function(){});
+          .catch(function(err){ console.warn('⚠️ DEBUG: Failed to load related articles ->', err); });
       })
       .catch(function (e) {
+        console.error('💥 DEBUG: Network or Supabase API Error ->', e);
         showError('Could not load article. ' + (e && e.message ? e.message : 'Check connection.'));
       });
   }
@@ -855,9 +847,12 @@
     setMeta('og:description', metaDesc,  true);
     setMeta('og:image',       ogImg,     true);
     setMeta('og:url',         pageURL,   true);
-    setMeta('twitter:title',       metaTitle, true);
-    setMeta('twitter:description', metaDesc,  true);
-    setMeta('twitter:image',       ogImg,     true);
+    
+    // Fixed: changed true to false for twitter tags so it targets name="..."
+    setMeta('twitter:title',       metaTitle, false);
+    setMeta('twitter:description', metaDesc,  false);
+    setMeta('twitter:image',       ogImg,     false);
+    
     var canonical = a.seo_canonical || pageURL;
     var canEl = $('meta-canonical'); if(canEl) canEl.setAttribute('href', canonical);
 
@@ -939,7 +934,6 @@
     var bodyEl = $('article-body');
     if (bodyEl) {
       if (content) {
-        // If content is HTML, inject directly; if plain text, wrap in paragraphs
         var isHTML = /<[a-z][\s\S]*>/i.test(content);
         bodyEl.innerHTML = isHTML ? content : plainToHTML(content);
       } else {
@@ -952,8 +946,18 @@
     if (tagsEl) {
       var allTags = [];
       if (cat) allTags.push(tagDisplay(cat));
-      if (tag) tag.split(',').forEach(function(t){ var v=t.trim(); if(v) allTags.push(v); });
-      if (a.seo_tags) a.seo_tags.split(',').forEach(function(t){ var v=t.trim(); if(v&&!allTags.includes(v)) allTags.push(v); });
+      
+      // Fixed: safely split tags whether it's an array or a string
+      if (tag && typeof tag === 'string') {
+        tag.split(',').forEach(function(t){ var v=t.trim(); if(v) allTags.push(v); });
+      } else if (Array.isArray(tag)) {
+        tag.forEach(function(t){ var v=String(t).trim(); if(v) allTags.push(v); });
+      }
+      
+      if (a.seo_tags && typeof a.seo_tags === 'string') {
+        a.seo_tags.split(',').forEach(function(t){ var v=t.trim(); if(v&&!allTags.includes(v)) allTags.push(v); });
+      }
+      
       tagsEl.innerHTML = allTags.map(function(t){
         return '<span class="tag ' + tagCls(t.toLowerCase()) + '">' + esc(t) + '</span>';
       }).join('');
