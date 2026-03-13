@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,666 +7,688 @@
   <meta name="description" content="">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="" id="meta-canonical">
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="DEKHO by elv8 dgtl">
-  <meta property="og:title" content="">
-  <meta property="og:description" content="">
-  <meta property="og:image" content="">
-  <meta property="og:url" content="">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@elv8dgtl">
-  <meta name="twitter:title" content="">
-  <meta name="twitter:description" content="">
-  <meta name="twitter:image" content="">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="DEKHO by elv8 dgtl">
+  <meta property="og:title"       content="" id="og-title">
+  <meta property="og:description" content="" id="og-desc">
+  <meta property="og:image"       content="" id="og-image">
+  <meta property="og:url"         content="" id="og-url">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@elv8dgtl">
+  <meta name="twitter:title"       content="" id="tw-title">
+  <meta name="twitter:description" content="" id="tw-desc">
+  <meta name="twitter:image"       content="" id="tw-image">
+
+  <!-- JSON-LD -->
   <script type="application/ld+json" id="json-ld"></script>
+
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-V77HPC9EX8', { page_location: window.location.href, page_title: document.title });
+    gtag('config', 'G-V77HPC9EX8');
   </script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
   <style>
+    /* ── TOKENS ──────────────────────────────────────────── */
     :root {
-      --ink:      #1a1a1a;
-      --accent:   #E84B35;
-      --accent2:  #1a6bff;
-      --lime:     #c8f135;
-      --muted:    #6b6b6b;
-      --muted2:   #999;
-      --border:   #e5e5e5;
-      --surface:  #f8f8f6;
-      --yellow:   #fffbeb;
-      --yborder:  #fde68a;
-      --bg:       #ffffff;
+      --ink:      #0D0D0D;
+      --paper:    #FAFAF8;
+      --surface:  #F2F1EE;
+      --border:   #E2E0DA;
+      --muted:    #8A8880;
+      --accent:   #E8380D;
+      --accent2:  #1A6BFF;
+      --lime:     #CCF381;
+      --card-bg:  #ffffff;
+      --shadow:   rgba(0,0,0,.08);
+      --nav-bg:   rgba(250,250,248,0.96);
+      --body-font:'Instrument Sans', sans-serif;
+      --read-font:'Lora', Georgia, serif;
+      --display:  'Bebas Neue', sans-serif;
+      --mono:     'DM Mono', monospace;
     }
+    [data-theme="dark"] {
+      --ink:      #F0EFEC;
+      --paper:    #111110;
+      --surface:  #1A1918;
+      --border:   #2A2826;
+      --muted:    #6B6A66;
+      --card-bg:  #1A1918;
+      --shadow:   rgba(0,0,0,.5);
+      --nav-bg:   rgba(17,17,16,0.96);
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--paper); color: var(--ink);
+      font-family: var(--body-font);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background .25s, color .25s;
+    }
+    .display { font-family: var(--display); letter-spacing: .02em; line-height: .95; }
+    .mono    { font-family: var(--mono); }
 
-    /* ── Read progress ── */
-    #read-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); width: 0; z-index: 9999; transition: width .1s linear; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--paper); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-    /* ── Navbar ── */
+    /* ── READ PROGRESS ────────────────────────────────── */
+    #read-progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--accent); z-index: 200; width: 0%;
+      transition: width .1s linear;
+    }
+
+    /* ── NAVBAR ───────────────────────────────────────── */
     #navbar {
-      position: sticky; top: 0; z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      transition: box-shadow .2s;
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1.5px solid var(--border);
+      transition: box-shadow .3s, background .25s, border-color .25s;
     }
-    #navbar.scrolled { box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+    #navbar.scrolled { box-shadow: 0 2px 24px var(--shadow); }
     .nav-inner {
-      max-width: 1200px; margin: 0 auto;
-      padding: 0 1.25rem;
+      max-width: 900px; margin: auto; padding: 0 1.25rem;
       display: flex; align-items: center; justify-content: space-between;
-      height: 58px;
+      height: 60px; gap: .75rem;
     }
-    .nav-logo {
-      text-decoration: none;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px; letter-spacing: .06em;
-      color: var(--ink); line-height: 1;
-      display: flex; align-items: baseline; gap: 6px;
+    .nav-wordmark {
+      display: flex; flex-direction: column; align-items: center;
+      text-decoration: none; line-height: 1;
     }
-    .nav-logo-sub { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .2em; color: var(--muted2); text-transform: uppercase; }
-    .nav-right { display: flex; align-items: center; gap: 1rem; }
-    .nav-link {
-      font-size: 13px; font-weight: 500; color: var(--muted);
-      text-decoration: none; padding: 4px 0;
-      border-bottom: 2px solid transparent; transition: all .15s;
-    }
-    .nav-link:hover { color: var(--ink); border-bottom-color: var(--accent); }
-    .btn-back {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
-      color: var(--ink); text-decoration: none;
-      border: 1.5px solid var(--border); border-radius: 4px;
-      padding: 5px 12px; background: var(--surface); transition: all .15s;
-      white-space: nowrap;
-    }
-    .btn-back:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
-    @media (max-width: 640px) { .nav-hide-mobile { display: none; } }
+    .nav-wordmark .wm { font-family: var(--display); font-size: 1.75rem; letter-spacing: .1em; color: var(--ink); }
+    .nav-wordmark .wm .red { color: var(--accent); }
+    .nav-wordmark .sub { font-family: var(--mono); font-size: 7.5px; color: var(--muted); letter-spacing: .2em; margin-top: 1px; }
 
-    /* ── Tag pills ── */
-    .tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 3px; letter-spacing: .05em; text-transform: uppercase; }
-    .tag-review     { background: #fff0ed; color: var(--accent);  border: 1px solid #fccabb; }
-    .tag-comparison { background: #edf3ff; color: var(--accent2); border: 1px solid #bccfff; }
-    .tag-top        { background: #fefce8; color: #92400e;        border: 1px solid #fde68a; }
-    .tag-guide      { background: #f5f0ff; color: #6b3fd4;        border: 1px solid #cdb8ff; }
-    .tag-news       { background: #eff8ff; color: #0369a1;        border: 1px solid #bae6fd; }
-    .tag-opinion    { background: #fff7ed; color: #c2410c;        border: 1px solid #fed7aa; }
-
-    /* ── Page wrapper ── */
-    .page-outer { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
-
-    /* ── Breadcrumb ── */
-    .breadcrumb {
-      padding: .75rem 0;
-      font-size: 12px; color: var(--muted2);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+    #dark-toggle {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1.5px solid var(--border); background: var(--surface);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--muted); transition: all .2s; flex-shrink: 0;
     }
-    .breadcrumb a { color: var(--accent); text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
-    .breadcrumb .sep { color: var(--border); }
-    .breadcrumb .cur { color: var(--muted); }
+    #dark-toggle:hover { border-color: var(--ink); color: var(--ink); }
 
-    /* ── Two-column layout ── */
-    .content-grid {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 2.5rem;
-      padding: 1.5rem 0 4rem;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .content-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-    }
+    /* ── STATES ───────────────────────────────────────── */
+    #loading-state, #error-state { padding-top: 100px; text-align: center; min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .skel-block { border-radius: 8px; background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    #error-icon { font-size: 3rem; }
 
-    /* ══════════════════════════════════════
-       MAIN ARTICLE COLUMN
-    ══════════════════════════════════════ */
-    .article-main {}
+    /* ── ARTICLE WRAPPER ──────────────────────────────── */
+    #article-wrap { display: none; padding-top: 60px; }
 
-    .art-badge-row { display: flex; align-items: center; gap: 10px; margin-bottom: .75rem; }
-
-    .art-title {
-      font-family: 'Merriweather', Georgia, serif;
-      font-size: clamp(22px, 3.5vw, 36px);
-      font-weight: 700; line-height: 1.3;
-      color: var(--ink); margin-bottom: .6rem;
-      letter-spacing: -.01em;
-    }
-
-    .art-excerpt {
-      font-size: 15px; color: var(--muted);
-      line-height: 1.7; margin-bottom: 1rem;
-      font-style: italic;
-    }
-
-    .art-byline {
-      display: flex; align-items: center; gap: 10px;
-      padding: .65rem 0; margin-bottom: 1.25rem;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-    }
-    .byline-avatar {
-      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-      background: var(--ink); color: var(--lime);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: 14px;
-    }
-    .byline-name { font-size: 13px; font-weight: 600; color: var(--ink); }
-    .byline-sub  { font-size: 12px; color: var(--muted2); }
-    .byline-dot  { color: var(--border); font-size: 16px; }
-    .byline-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted2); }
-    .byline-share-btns { margin-left: auto; display: flex; gap: .5rem; }
-    .byline-share-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-family: 'DM Mono', monospace; font-size: 10px;
-      border: 1px solid var(--border); border-radius: 3px;
-      padding: 4px 10px; text-decoration: none; color: var(--muted);
-      background: #fff; cursor: pointer; transition: all .15s;
-    }
-    .byline-share-btn:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
-    @media (max-width: 600px) { .byline-share-btns { display: none; } }
-
-    #rating-wrap { margin-bottom: 1.25rem; }
-    .rating-card {
-      display: inline-flex; align-items: center; gap: 12px;
-      background: var(--ink); color: #fff;
-      padding: .75rem 1.5rem; border-radius: 6px;
-    }
-    .rating-num   { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--lime); line-height: 1; }
-    .rating-denom { font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,.35); align-self: flex-end; padding-bottom: 4px; }
-    .rating-lbl   { font-family: 'DM Mono', monospace; font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: .1em; }
-
-    .art-cover {
-      width: 100%; overflow: hidden;
-      border-radius: 6px; margin-bottom: 1.5rem;
+    /* ── HERO ─────────────────────────────────────────── */
+    #hero {
+      position: relative; width: 100%; max-height: 560px; overflow: hidden;
       background: var(--surface);
     }
-    .art-cover img { width: 100%; display: block; max-height: 440px; object-fit: cover; }
-    .art-cover-caption { font-size: 11px; color: var(--muted2); padding: 5px 8px; background: rgba(0,0,0,.03); font-style: italic; }
-    @media (max-width: 600px) { .art-cover img { max-height: 240px; } }
+    #hero-img {
+      width: 100%; height: 480px; object-fit: cover; display: block;
+      transition: transform .6s ease;
+    }
+    #hero:hover #hero-img { transform: scale(1.02); }
+    #hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.18) 55%, transparent 100%);
+      pointer-events: none;
+    }
+    #hero-meta {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2.5rem 1.5rem 2rem;
+      max-width: 900px; margin: auto;
+    }
+    @media (max-width: 640px) {
+      #hero-img { height: 280px; }
+      #hero-meta { padding: 1.25rem 1rem 1.25rem; }
+    }
 
-    /* ── Mobile inline TOC ── */
-    .mobile-toc {
-      display: none;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 6px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+    /* ── TAG / BADGE ──────────────────────────────────── */
+    .tag {
+      display: inline-block; font-family: var(--mono);
+      font-size: 10px; font-weight: 500; letter-spacing: .12em;
+      text-transform: uppercase; padding: 3px 9px; border-radius: 3px; white-space: nowrap;
     }
-    .mobile-toc-title {
-      font-size: 11px; font-weight: 700; letter-spacing: .06em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: .65rem;
-    }
-    .mobile-toc ul { list-style: none; margin: 0; padding: 0; }
-    .mobile-toc li { border-bottom: 1px solid var(--border); }
-    .mobile-toc li:last-child { border-bottom: none; }
-    .mobile-toc a { display: block; padding: .35rem 0; font-size: 13px; color: var(--muted); text-decoration: none; }
-    .mobile-toc a:hover { color: var(--accent); }
-    @media (max-width: 900px) { .mobile-toc { display: block; } }
+    .tag-review     { background: #FFF0ED; color: var(--accent);  border: 1px solid #FCCABB; }
+    .tag-comparison { background: #EDF3FF; color: var(--accent2); border: 1px solid #BCCFFF; }
+    .tag-top        { background: #F0FDE8; color: #2E7D10;        border: 1px solid #B6EDAA; }
+    .tag-guide      { background: #F5F0FF; color: #6B3FD4;        border: 1px solid #CDB8FF; }
+    .tag-news       { background: #EFF8FF; color: #0369A1;        border: 1px solid #BAE6FD; }
+    .tag-opinion    { background: #FFF7ED; color: #C2410C;        border: 1px solid #FED7AA; }
+    [data-theme="dark"] .tag-review     { background: #2a1008; border-color: #6b2010; color: #ff7a5a; }
+    [data-theme="dark"] .tag-comparison { background: #071320; border-color: #0d2a5a; color: #6ea3ff; }
+    [data-theme="dark"] .tag-top        { background: #0a1e05; border-color: #1a4a0a; color: #6fcc50; }
+    [data-theme="dark"] .tag-guide      { background: #150d28; border-color: #3a1f7a; color: #b48aff; }
+    [data-theme="dark"] .tag-news       { background: #071520; border-color: #0a3050; color: #60b8f0; }
+    [data-theme="dark"] .tag-opinion    { background: #1e0e02; border-color: #6b2a08; color: #f09060; }
 
-    .article-body {
-      font-family: 'Merriweather', Georgia, serif;
-      font-size: 16px; line-height: 1.9; color: #2d2d2d;
-    }
-    .article-body h1,.article-body h2,.article-body h3,
-    .article-body h4,.article-body h5,.article-body h6 {
-      font-family: 'Inter', sans-serif; font-weight: 700;
-      color: var(--ink); line-height: 1.3; margin: 2rem 0 .75rem;
-    }
-    .article-body h2 { font-size: 1.35em; padding-bottom: .4rem; border-bottom: 2px solid var(--border); }
-    .article-body h3 { font-size: 1.15em; }
-    .article-body h4 { font-size: 1.05em; }
-    .article-body p  { margin-bottom: 1.3rem; }
-    .article-body a  { color: var(--accent); text-underline-offset: 3px; }
-    .article-body a:hover { text-decoration: none; }
-    .article-body ul,.article-body ol { margin: .75rem 0 1.3rem 1.5rem; }
-    .article-body li { margin-bottom: .45rem; }
-    .article-body strong { font-weight: 700; color: var(--ink); }
-    .article-body em { font-style: italic; }
-    .article-body blockquote {
-      border-left: 4px solid var(--accent);
-      padding: .75rem 1.25rem; margin: 1.5rem 0;
-      background: var(--surface); border-radius: 0 5px 5px 0;
-      font-style: italic; color: var(--muted); font-size: 15px;
-    }
-    .article-body pre,.article-body code {
-      font-family: 'DM Mono', monospace; font-size: .85em;
-      background: #1e1e1e; color: #d4d4d4; border-radius: 5px;
-    }
-    .article-body pre  { padding: 1rem 1.25rem; overflow-x: auto; margin: 1.25rem 0; }
-    .article-body code { padding: 2px 6px; }
-    .article-body pre code { background: transparent; padding: 0; }
-    .article-body img  { max-width: 100%; border-radius: 6px; display: block; margin: 1.5rem auto; border: 1px solid var(--border); }
-    .article-body hr   { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-    .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 14px; font-family: 'Inter', sans-serif; }
-    .article-body th { background: var(--surface); padding: .55rem .8rem; text-align: left; font-weight: 700; border: 1px solid var(--border); }
-    .article-body td { padding: .5rem .8rem; border: 1px solid var(--border); }
-    .article-body tr:nth-child(even) td { background: var(--surface); }
-    .img-crop-wrap { overflow: hidden; display: block; max-width: 100%; line-height: 0; border-radius: 6px; margin: 1.5rem auto; border: 1px solid var(--border); }
-    .img-crop-wrap img { display: block; width: 100%; }
-    .aff-card { display: flex; align-items: center; gap: 1rem; border: 1.5px solid var(--border); border-radius: 7px; padding: 1rem 1.25rem; background: var(--surface); margin: 1.5rem 0; text-decoration: none; color: var(--ink); transition: border-color .2s; }
-    .aff-card:hover { border-color: var(--accent); }
-    .aff-card-img   { width: 68px; height: 68px; object-fit: contain; border-radius: 5px; flex-shrink: 0; }
-    .aff-card-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; }
-    .aff-card-title { font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; margin: 3px 0; }
-    .aff-card-cta   { font-size: 12px; color: var(--muted); font-family: 'Inter', sans-serif; }
-    .pg-embed { margin: 1.5rem 0; border-radius: 6px; overflow: hidden; }
-    .pg-embed iframe { width: 100%; border: none; display: block; transition: height .3s ease; }
+    /* tag on dark hero overlay uses opaque versions */
+    .tag-hero { opacity: .95; }
 
-    .art-tags { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
-    .art-tags .tags-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-right: 4px; }
+    /* ── RATING STAMP ─────────────────────────────────── */
+    .rating-stamp {
+      display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: var(--ink); color: var(--lime);
+      font-family: var(--display); font-size: 18px; line-height: 1;
+      border: 2.5px solid rgba(255,255,255,.85);
+      box-shadow: 0 3px 12px rgba(0,0,0,.3); flex-shrink: 0;
+    }
+    .rating-stamp span { font-family: var(--mono); font-size: 7px; color: #aaa; }
 
-    .related-bottom { margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--ink); }
-    .related-bottom-title { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--ink); }
-    .related-b-item {
-      display: flex; gap: 12px; align-items: flex-start;
-      padding: .75rem 0; border-bottom: 1px solid var(--border);
-      text-decoration: none; color: var(--ink);
+    /* ── CONTENT LAYOUT ───────────────────────────────── */
+    #content-wrap {
+      max-width: 900px; margin: 0 auto; padding: 0 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 3rem;
+      align-items: start;
     }
-    .related-b-item:last-child { border-bottom: none; }
-    .related-b-item:hover .related-b-title { color: var(--accent); }
-    .related-b-num { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent); flex-shrink: 0; width: 28px; line-height: 1.1; }
-    .related-b-thumb { width: 70px; height: 55px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: var(--border); }
-    .related-b-title { font-size: 14px; font-weight: 600; line-height: 1.45; transition: color .15s; }
-    .related-b-meta  { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); margin-top: 4px; }
+    @media (max-width: 768px) {
+      #content-wrap { grid-template-columns: 1fr; gap: 2rem; }
+      #sidebar { order: 2; }
+    }
 
-    .author-card {
-      margin-top: 2rem;
-      background: #1a1a1a; color: #fff;
-      border-radius: 8px; padding: 1.5rem;
-      display: flex; gap: 1.25rem; align-items: flex-start;
+    /* ── ARTICLE HEADER (below hero) ──────────────────── */
+    #article-header { padding: 2.5rem 0 0; }
+    #article-title {
+      font-family: var(--display);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.0; color: var(--ink);
+      margin-bottom: 1.25rem;
     }
-    .author-card-avatar {
-      width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
-      background: var(--accent); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: 24px;
+    #article-meta {
+      display: flex; flex-wrap: wrap; align-items: center;
+      gap: .6rem .75rem; padding-bottom: 1.5rem;
+      border-bottom: 1.5px solid var(--border);
+      margin-bottom: 2rem;
     }
-    .author-card-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: .2rem; }
-    .author-card-role { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,.45); margin-bottom: .65rem; }
-    .author-card-bio  { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.65; }
-    .author-card-socials { display: flex; gap: .5rem; margin-top: .85rem; }
-    .author-social-btn {
-      display: inline-flex; align-items: center; justify-content: center;
+    .meta-divider { color: var(--border); font-size: 12px; }
+    .author-avatar {
       width: 30px; height: 30px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.6);
-      text-decoration: none; transition: all .15s;
-    }
-    .author-social-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-    /* ══════════════════════════════════════
-       SIDEBAR
-    ══════════════════════════════════════ */
-    .article-sidebar { position: sticky; top: 72px; }
-    @media (max-width: 900px) { .article-sidebar { position: static; } }
-    @media (max-width: 900px) {
-      #toc-card { display: none !important; }
-      #related-card { display: none !important; }
+      background: var(--ink); color: var(--lime);
+      font-family: var(--display); font-size: 14px;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
 
-    .scard { margin-bottom: 1.5rem; }
-    .scard-title {
-      font-family: 'Inter', sans-serif; font-size: 13px;
-      font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
-      color: var(--ink); padding-bottom: .6rem;
-      border-bottom: 2px solid var(--ink); margin-bottom: 1rem;
+    /* ── PROSE (article body) ─────────────────────────── */
+    #article-body {
+      font-family: var(--read-font);
+      font-size: 17px; line-height: 1.85;
+      color: var(--ink);
+    }
+    #article-body h1,
+    #article-body h2 {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--ink); line-height: 1.05;
+      margin: 2.25rem 0 .9rem;
+    }
+    #article-body h3 {
+      font-family: var(--body-font);
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--ink); margin: 2rem 0 .65rem;
+    }
+    #article-body p { margin-bottom: 1.35rem; }
+    #article-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    #article-body a:hover { opacity: .8; }
+    #article-body strong { font-weight: 700; }
+    #article-body em { font-style: italic; }
+    #article-body ul, #article-body ol { padding-left: 1.5rem; margin-bottom: 1.35rem; }
+    #article-body li { margin-bottom: .45rem; }
+    #article-body blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 1.75rem 0; padding: .85rem 1.35rem;
+      background: var(--surface); border-radius: 0 8px 8px 0;
+      font-style: italic; color: var(--muted);
+    }
+    #article-body blockquote p { margin: 0; }
+    #article-body img {
+      width: 100%; border-radius: 10px; margin: 1.75rem 0;
+      border: 1.5px solid var(--border);
+    }
+    #article-body pre {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 1.15rem 1.25rem;
+      overflow-x: auto; margin: 1.5rem 0;
+      font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    }
+    #article-body code {
+      font-family: var(--mono); font-size: .88em;
+      background: var(--surface); padding: 2px 6px;
+      border-radius: 4px; border: 1px solid var(--border);
+    }
+    #article-body pre code { background: none; border: none; padding: 0; font-size: 13px; }
+    #article-body hr {
+      border: none; border-top: 1.5px solid var(--border);
+      margin: 2.5rem 0;
+    }
+    #article-body table {
+      width: 100%; border-collapse: collapse;
+      margin: 1.75rem 0; font-size: 14px;
+    }
+    #article-body th {
+      background: var(--surface); font-family: var(--mono);
+      font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+      padding: 9px 12px; border: 1.5px solid var(--border);
+      text-align: left; color: var(--muted);
+    }
+    #article-body td {
+      padding: 9px 12px; border: 1.5px solid var(--border);
+      vertical-align: top;
+    }
+    #article-body tr:nth-child(even) td { background: var(--surface); }
+
+    /* ── AFFILIATE NOTE ───────────────────────────────── */
+    #aff-note {
+      display: flex; gap: 8px; align-items: flex-start;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: .8rem 1rem;
+      font-family: var(--mono); font-size: 11px; color: var(--muted);
+      margin-bottom: 2rem; line-height: 1.55;
     }
 
+    /* ── TAGS FOOTER ──────────────────────────────────── */
+    #tags-row {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 1.5rem 0; border-top: 1.5px solid var(--border);
+      margin-top: 2.5rem;
+    }
+
+    /* ── SHARE BAR ────────────────────────────────────── */
+    #share-bar {
+      display: flex; gap: 8px; align-items: center;
+      padding: 1.25rem 0; border-top: 1.5px solid var(--border);
+      flex-wrap: wrap;
+    }
     .share-btn {
-      display: flex; align-items: center; gap: 7px;
-      width: 100%; padding: .55rem .8rem; border-radius: 4px;
-      font-family: 'DM Mono', monospace; font-size: 11px;
-      border: 1px solid var(--border); background: #fff;
-      color: var(--ink); cursor: pointer; transition: all .15s;
-      text-decoration: none; margin-bottom: .4rem;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: 999px;
+      border: 1.5px solid var(--border); background: var(--card-bg);
+      font-family: var(--mono); font-size: 11px; color: var(--muted);
+      cursor: pointer; transition: all .2s; text-decoration: none;
+      white-space: nowrap;
     }
-    .share-btn:last-child { margin-bottom: 0; }
-    .share-btn:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
+    .share-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .share-btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .share-btn.accent:hover { opacity: .88; }
 
-    .toc-list { list-style: none; }
-    .toc-list li { border-bottom: 1px solid var(--border); }
-    .toc-list li:last-child { border-bottom: none; }
-    .toc-list a { display: block; padding: .4rem 0; font-size: 13px; color: var(--muted); text-decoration: none; transition: color .15s; line-height: 1.45; }
-    .toc-list a:hover,.toc-list a.active { color: var(--accent); font-weight: 600; }
-    .toc-h3 { padding-left: .9rem !important; font-size: 12px !important; }
-
-    .srel-item {
-      display: flex; gap: 10px; align-items: flex-start;
-      padding: .75rem 0; border-bottom: 1px solid var(--border);
-      text-decoration: none; color: var(--ink);
+    /* ── AUTHOR BOX ───────────────────────────────────── */
+    #author-box {
+      display: flex; gap: 1rem; align-items: flex-start;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 1.25rem 1.5rem;
+      margin-top: 2.5rem;
     }
-    .srel-item:first-child { padding-top: 0; }
-    .srel-item:last-child  { border-bottom: none; }
-    .srel-item:hover .srel-title { color: var(--accent); }
-    .srel-num   { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #ddd; flex-shrink: 0; line-height: 1.1; width: 22px; }
-    .srel-thumb { width: 62px; height: 50px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: var(--border); }
-    .srel-title { font-size: 13px; font-weight: 600; line-height: 1.4; transition: color .15s; }
-    .srel-meta  { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); margin-top: 3px; }
-
-    .scard-promo {
-      background: var(--ink); border-radius: 7px;
-      padding: 1.25rem; text-align: center;
+    .author-avatar-lg {
+      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+      background: var(--ink); color: var(--lime);
+      font-family: var(--display); font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
     }
-    .scard-promo-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.85rem; color: var(--lime); letter-spacing: .06em; }
-    .scard-promo-sub  { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .18em; color: rgba(255,255,255,.35); margin-bottom: .7rem; }
-    .scard-promo-desc { font-size: 12px; color: rgba(255,255,255,.5); line-height: 1.6; margin-bottom: 1rem; }
-    .scard-promo-btn  { display: inline-block; padding: .5rem 1.25rem; background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; text-decoration: none; border-radius: 4px; transition: opacity .15s; }
-    .scard-promo-btn:hover { opacity: .85; }
 
-    /* ── Skeleton ── */
-    .skel { background: linear-gradient(90deg,#efefed 25%,#f7f7f5 50%,#efefed 75%); background-size: 200% 100%; animation: sk 1.4s infinite; border-radius: 4px; }
-    @keyframes sk { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-    #loading-state { max-width: 1200px; margin: 1.5rem auto; padding: 0 1.25rem; display: grid; grid-template-columns: 1fr 300px; gap: 2.5rem; }
-    @media (max-width:900px) { #loading-state { grid-template-columns: 1fr; } }
-    @media (max-width:900px) { #loading-state > div:last-child { display: none; } }
-    .skel-line { height: 14px; margin-bottom: 10px; }
+    /* ── SIDEBAR ──────────────────────────────────────── */
+    #sidebar { padding-top: 2.5rem; }
+    .sidebar-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .sidebar-section:last-child { border-bottom: none; margin-bottom: 0; }
+    .sidebar-label {
+      font-family: var(--mono); font-size: 9px; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: .85rem;
+    }
 
-    /* ── Error ── */
-    #error-state { display:none; text-align:center; padding:5rem 1.25rem; }
-    #error-state h2 { font-family:'Bebas Neue',sans-serif; font-size:2rem; margin:.75rem 0 .5rem; }
-    #error-state p  { color:var(--muted); margin-bottom:1.5rem; font-size:14px; }
+    /* TOC */
+    #toc-list { list-style: none; }
+    #toc-list li { margin-bottom: .35rem; }
+    #toc-list a {
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      transition: color .2s; line-height: 1.4; display: block;
+      padding: 2px 0 2px 10px;
+      border-left: 2px solid transparent;
+    }
+    #toc-list a:hover,
+    #toc-list a.active { color: var(--ink); border-left-color: var(--accent); }
 
-    /* ── Footer ── */
-    footer { background: #1a1a1a; color: #fff; padding: 3rem 1.25rem 1.5rem; }
-    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 1.25rem; }
-    .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.85rem; color: var(--lime); letter-spacing: .06em; }
-    .footer-tagline { font-family: 'DM Mono', monospace; font-size: 9px; color: rgba(255,255,255,.3); letter-spacing: .18em; margin: .2rem 0 .8rem; }
-    .footer-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.65; }
-    .footer-col-ttl { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: .75rem; }
-    .footer-lnk { font-size: 13px; color: rgba(255,255,255,.55); text-decoration: none; display: block; margin-bottom: .4rem; transition: color .15s; }
-    .footer-lnk:hover { color: var(--lime); }
-    .footer-copy { max-width: 1200px; margin: 0 auto; font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,.25); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    /* Sticky sidebar */
+    #sidebar-sticky { position: sticky; top: 80px; }
 
-    /* ── Back to top ── */
-    #back-top { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--lime); border: none; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,.2); transition: transform .2s; }
-    #back-top:hover { transform: translateY(-3px); }
-    #back-top.show  { display: flex; }
+    /* Stats */
+    .stat-row { display: flex; flex-direction: column; gap: .6rem; }
+    .stat-item {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px;
+    }
+    .stat-label { color: var(--muted); font-size: 12px; }
+    .stat-val { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+
+    /* ── RELATED ARTICLES ─────────────────────────────── */
+    #related-section {
+      max-width: 900px; margin: 3rem auto 0;
+      padding: 0 1.25rem 5rem;
+    }
+    .related-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem; margin-top: 1.25rem;
+    }
+    @media (max-width: 640px) { .related-grid { grid-template-columns: 1fr; } }
+    .rel-card {
+      background: var(--card-bg); border: 1.5px solid var(--border);
+      border-radius: 12px; overflow: hidden; text-decoration: none; color: var(--ink);
+      display: flex; flex-direction: column;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .rel-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px var(--shadow); border-color: var(--ink); }
+    .rel-card:hover .rel-title { color: var(--accent); }
+    .rel-img { aspect-ratio: 16/9; overflow: hidden; }
+    .rel-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; display: block; }
+    .rel-card:hover .rel-img img { transform: scale(1.05); }
+    .rel-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: .4rem; }
+    .rel-title { font-family: var(--display); font-size: 18px; line-height: 1.1; transition: color .2s; }
+
+    /* ── TOAST ────────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: 1.5rem; left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--ink); color: #fff;
+      padding: .6rem 1.25rem; border-radius: 999px;
+      font-family: var(--mono); font-size: 12px; letter-spacing: .04em;
+      z-index: 300; opacity: 0; transition: opacity .3s, transform .3s;
+      pointer-events: none; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── BACK TO TOP ──────────────────────────────────── */
+    #back-top {
+      position: fixed; bottom: 5.5rem; right: 1.25rem; z-index: 39;
+      width: 38px; height: 38px; background: var(--ink); color: #fff;
+      border: none; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px var(--shadow);
+      opacity: 0; pointer-events: none; transition: opacity .3s, transform .2s;
+    }
+    #back-top.visible { opacity: 1; pointer-events: auto; }
+    #back-top:hover { transform: scale(1.1); }
+
+    /* ── MOBILE MENU ──────────────────────────────────── */
+    #mobile-menu {
+      position: fixed; inset: 0; background: var(--paper); z-index: 150;
+      transform: translateX(100%);
+      transition: transform .4s cubic-bezier(.4,0,.2,1);
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 1.5rem; padding: 2rem;
+    }
+    #mobile-menu.open { transform: translateX(0); }
+
+    /* ── MISC ─────────────────────────────────────────── */
+    .hide-sm { }
+    @media (max-width: 640px) { .hide-sm { display: none !important; } }
+    .wm-ho { color: var(--accent); }
   </style>
 </head>
 <body>
 
 <div id="read-progress"></div>
 
-<!-- ── Navbar ── -->
-<nav id="navbar" role="navigation" aria-label="Main navigation">
+<!-- ── NAVBAR ──────────────────────────────────────────────── -->
+<nav id="navbar">
   <div class="nav-inner">
-    <a href="https://dekho.elv8dgtl.in/" class="nav-logo">
-      DEKHO
-      <span class="nav-logo-sub">by elv8 dgtl</span>
+    <a href="https://elv8dgtl.in/" style="display:flex;align-items:center;gap:5px;color:var(--muted);font-size:11px;text-decoration:none;flex-shrink:0;" class="mono">
+      <i data-lucide="arrow-left" style="width:13px;height:13px;"></i>
+      <span class="hide-sm">elv8dgtl.in</span>
     </a>
-    <div class="nav-right">
-      <a href="https://dekho.elv8dgtl.in/" class="nav-link nav-hide-mobile">Reviews</a>
-      <a href="https://dekho.elv8dgtl.in/" class="nav-link nav-hide-mobile">Guides</a>
-      <a href="https://elv8dgtl.in" class="nav-link nav-hide-mobile">elv8dgtl.in</a>
-      <a href="https://dekho.elv8dgtl.in/" class="btn-back">
-        <i data-lucide="arrow-left" style="width:12px;height:12px;"></i>
-        All Articles
+
+    <a href="https://dekho.elv8dgtl.in/" class="nav-wordmark">
+      <span class="wm">DEK<span class="red">HO</span></span>
+      <span class="sub">BY ELV8 DGTL</span>
+    </a>
+
+    <div style="display:flex;align-items:center;gap:.5rem;">
+      <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <i data-lucide="moon" id="dark-icon" style="width:14px;height:14px;"></i>
+      </button>
+      <a href="https://elv8dgtl.in/contact.html" class="hide-sm" style="display:flex;align-items:center;gap:5px;background:var(--accent);color:#fff;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
+        Work with us <i data-lucide="arrow-up-right" style="width:11px;height:11px;"></i>
       </a>
+      <button onclick="toggleMenu()" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink);">
+        <i data-lucide="menu" style="width:21px;height:21px;"></i>
+      </button>
     </div>
   </div>
 </nav>
 
-<!-- ── Loading ── -->
+<!-- ── MOBILE MENU ─────────────────────────────────────────── -->
+<div id="mobile-menu" role="dialog" aria-modal="true">
+  <button onclick="toggleMenu()" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;cursor:pointer;" aria-label="Close menu">
+    <i data-lucide="x" style="width:24px;height:24px;color:var(--ink);"></i>
+  </button>
+  <a href="https://elv8dgtl.in/"              onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">HOME</a>
+  <a href="https://dekho.elv8dgtl.in/"        onclick="toggleMenu()" class="display" style="font-size:2.25rem;text-decoration:none;color:var(--ink);">DEK<span class="wm-ho">HO</span></a>
+  <a href="https://elv8dgtl.in/services.html" onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">SERVICES</a>
+  <a href="https://elv8dgtl.in/about.html"    onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">ABOUT</a>
+  <a href="https://elv8dgtl.in/contact.html"  onclick="toggleMenu()" style="margin-top:.5rem;background:var(--accent);color:#fff;padding:11px 32px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;">Get a Quote</a>
+</div>
+
+<!-- ── LOADING ─────────────────────────────────────────────── -->
 <div id="loading-state">
-  <div>
-    <div class="skel skel-line" style="width:40%;margin-bottom:1rem;"></div>
-    <div class="skel skel-line" style="width:95%;height:28px;margin-bottom:.4rem;"></div>
-    <div class="skel skel-line" style="width:70%;height:28px;margin-bottom:1rem;"></div>
-    <div class="skel skel-line" style="width:50%;height:12px;margin-bottom:1.25rem;"></div>
-    <div class="skel" style="width:100%;height:360px;border-radius:6px;margin-bottom:1.5rem;"></div>
-    <div class="skel skel-line"></div>
-    <div class="skel skel-line" style="width:95%;"></div>
-    <div class="skel skel-line" style="width:88%;"></div>
-    <div class="skel skel-line" style="width:92%;"></div>
-    <div class="skel skel-line" style="width:70%;"></div>
-  </div>
-  <div>
-    <div class="skel" style="height:220px;border-radius:6px;margin-bottom:1rem;"></div>
-    <div class="skel skel-line" style="width:80%;margin-bottom:.5rem;"></div>
-    <div class="skel skel-line" style="width:60%;"></div>
+  <div style="width:100%;max-width:900px;padding:0 1.25rem;margin:0 auto;">
+    <div class="skel-block" style="width:100%;height:380px;border-radius:0;"></div>
+    <div style="padding:2.5rem 0;display:flex;flex-direction:column;gap:1rem;">
+      <div class="skel-block" style="width:80px;height:22px;border-radius:4px;"></div>
+      <div class="skel-block" style="width:70%;height:44px;border-radius:6px;"></div>
+      <div class="skel-block" style="width:50%;height:44px;border-radius:6px;"></div>
+      <div class="skel-block" style="width:220px;height:16px;border-radius:4px;margin-top:.5rem;"></div>
+      <div style="height:1.5rem;"></div>
+      <div class="skel-block" style="width:100%;height:14px;border-radius:4px;"></div>
+      <div class="skel-block" style="width:90%;height:14px;border-radius:4px;"></div>
+      <div class="skel-block" style="width:95%;height:14px;border-radius:4px;"></div>
+      <div class="skel-block" style="width:75%;height:14px;border-radius:4px;"></div>
+    </div>
   </div>
 </div>
 
-<!-- ── Error ── -->
-<div id="error-state" role="alert">
-  <div style="font-size:2.5rem;">📭</div>
-  <h2>Article Not Found</h2>
-  <p id="error-msg">This article doesn't exist or may have been removed.</p>
-  <a href="https://dekho.elv8dgtl.in/" class="btn-back" style="display:inline-flex;margin:0 auto;">
-    <i data-lucide="arrow-left" style="width:12px;height:12px;"></i>
-    Back to all articles
+<!-- ── ERROR ───────────────────────────────────────────────── -->
+<div id="error-state" style="display:none;">
+  <div id="error-icon">🔍</div>
+  <p class="display" style="font-size:2.5rem;color:var(--border);">NOT FOUND</p>
+  <p style="color:var(--muted);font-size:14px;" id="error-msg">Could not load this article.</p>
+  <a href="https://dekho.elv8dgtl.in/" style="margin-top:1rem;padding:9px 24px;background:var(--ink);color:#fff;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+    <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back to DEKHO
   </a>
 </div>
 
-<!-- ── Article ── -->
-<div id="article-wrap" style="display:none;">
-  <div class="page-outer">
+<!-- ── ARTICLE ─────────────────────────────────────────────── -->
+<div id="article-wrap">
 
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="https://elv8dgtl.in">Home</a>
-      <span class="sep">›</span>
-      <a href="https://dekho.elv8dgtl.in/">DEKHO</a>
-      <span class="sep">›</span>
-      <a href="https://dekho.elv8dgtl.in/" id="breadcrumb-cat-link">Articles</a>
-      <span class="sep">›</span>
-      <span class="cur" id="breadcrumb-title">Loading…</span>
+  <!-- Hero Image -->
+  <div id="hero">
+    <img id="hero-img" src="" alt="" onerror="this.src='https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80'">
+    <div id="hero-overlay"></div>
+    <div id="hero-meta">
+      <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
+        <span id="hero-tag" class="tag tag-hero"></span>
+        <span id="hero-rating" class="rating-stamp" style="display:none;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div style="max-width:900px;margin:0 auto;padding:.75rem 1.25rem;border-bottom:1.5px solid var(--border);">
+    <nav aria-label="Breadcrumb" style="display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:11px;color:var(--muted);">
+      <a href="https://elv8dgtl.in/" style="color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">elv8 dgtl</a>
+      <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
+      <a href="https://dekho.elv8dgtl.in/" style="color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">DEKHO</a>
+      <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
+      <span id="breadcrumb-cat" style="color:var(--muted);"></span>
+      <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
+      <span id="breadcrumb-title" style="color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;"></span>
     </nav>
+  </div>
 
-    <div class="content-grid">
+  <!-- Content -->
+  <div id="content-wrap">
 
-      <!-- ── MAIN COLUMN ── -->
-      <main class="article-main">
+    <!-- Main column -->
+    <main>
+      <div id="article-header">
+        <h1 id="article-title" class="display"></h1>
+        <div id="article-meta">
+          <div class="author-avatar" id="meta-avatar"></div>
+          <span style="font-size:13px;color:var(--muted);" id="meta-author"></span>
+          <span class="meta-divider">·</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--muted);" id="meta-date"></span>
+          <span class="meta-divider">·</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--muted);" id="meta-read"></span>
+        </div>
+      </div>
 
-        <div class="art-badge-row">
-          <span id="meta-tag" class="tag"></span>
+      <!-- Affiliate disclaimer -->
+      <div id="aff-note">
+        <i data-lucide="info" style="width:14px;height:14px;flex-shrink:0;margin-top:1px;color:var(--accent);"></i>
+        <span>This article may contain affiliate links. If you buy through our links, we may earn a small commission — at no extra cost to you.</span>
+      </div>
+
+      <!-- Body -->
+      <div id="article-body"></div>
+
+      <!-- Tags -->
+      <div id="tags-row"></div>
+
+      <!-- Share -->
+      <div id="share-bar">
+        <span class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-right:4px;">SHARE</span>
+        <button class="share-btn accent" onclick="copyLink()">
+          <i data-lucide="link" style="width:12px;height:12px;"></i> Copy link
+        </button>
+        <a id="share-wa" href="#" target="_blank" class="share-btn" style="color:#25D366;border-color:#25D366;">
+          <i data-lucide="message-circle" style="width:12px;height:12px;"></i> WhatsApp
+        </a>
+        <a id="share-tw" href="#" target="_blank" class="share-btn">
+          <i data-lucide="twitter" style="width:12px;height:12px;"></i> X/Twitter
+        </a>
+        <a id="share-li" href="#" target="_blank" class="share-btn">
+          <i data-lucide="linkedin" style="width:12px;height:12px;"></i> LinkedIn
+        </a>
+      </div>
+
+      <!-- Author box -->
+      <div id="author-box">
+        <div class="author-avatar-lg" id="author-avatar-lg"></div>
+        <div>
+          <p style="font-weight:700;font-size:15px;" id="author-name-box"></p>
+          <p style="font-size:13px;color:var(--muted);margin-top:3px;">Writer at DEKHO by elv8 dgtl</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div id="sidebar-sticky">
+
+        <!-- TOC -->
+        <div class="sidebar-section" id="toc-section" style="display:none;">
+          <p class="sidebar-label">In this article</p>
+          <ul id="toc-list"></ul>
         </div>
 
-        <h1 class="art-title" id="art-title"></h1>
-        <p class="art-excerpt" id="art-excerpt"></p>
-
-        <div class="art-byline">
-          <div class="byline-avatar" id="author-avatar"></div>
-          <div>
-            <div class="byline-name" id="author-name"></div>
-            <div class="byline-sub" id="author-date"></div>
-          </div>
-          <span class="byline-dot">·</span>
-          <span class="byline-meta" id="meta-readtime"></span>
-          <span class="byline-dot">·</span>
-          <span class="byline-meta" id="meta-date"></span>
-          <div class="byline-share-btns">
-            <a id="byline-twitter" class="byline-share-btn" target="_blank" rel="noopener noreferrer">
-              <i data-lucide="twitter" style="width:11px;height:11px;"></i> X
-            </a>
-            <a id="byline-whatsapp" class="byline-share-btn" target="_blank" rel="noopener noreferrer">
-              <i data-lucide="message-circle" style="width:11px;height:11px;"></i> WhatsApp
-            </a>
-            <button class="byline-share-btn" data-copy-link>
-              <i data-lucide="link" style="width:11px;height:11px;"></i>
-              <span id="copy-label">Copy link</span>
-            </button>
-          </div>
-        </div>
-
-        <div id="rating-wrap" style="display:none;">
-          <div class="rating-card">
-            <div class="rating-num" id="rating-num"></div>
-            <div class="rating-denom">/ 10</div>
-            <div>
-              <div class="rating-lbl">DEKHO</div>
-              <div class="rating-lbl">RATING</div>
+        <!-- Stats -->
+        <div class="sidebar-section">
+          <p class="sidebar-label">Article info</p>
+          <div class="stat-row">
+            <div class="stat-item">
+              <span class="stat-label">Category</span>
+              <span class="stat-val" id="stat-cat">—</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Read time</span>
+              <span class="stat-val" id="stat-read">—</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Published</span>
+              <span class="stat-val" id="stat-date">—</span>
+            </div>
+            <div class="stat-item" id="stat-rating-row">
+              <span class="stat-label">Rating</span>
+              <span class="stat-val" id="stat-rating">—</span>
             </div>
           </div>
         </div>
 
-        <div class="art-cover">
-          <img id="hero-img" src="" alt="" loading="eager">
-          <div class="art-cover-caption">Image Credit: DEKHO by elv8 dgtl</div>
-        </div>
-
-        <div class="mobile-toc" id="mobile-toc" style="display:none;">
-          <div class="mobile-toc-title">In This Article</div>
-          <ul id="mobile-toc-list"></ul>
-        </div>
-
-        <article class="article-body" id="article-body" itemprop="articleBody"></article>
-
-        <div class="art-tags">
-          <span class="tags-label">Tags:</span>
-          <span id="bottom-tag" class="tag"></span>
-          <span id="bottom-category" class="tag" style="background:var(--surface);color:var(--ink);border:1px solid var(--border);"></span>
-        </div>
-
-        <div class="related-bottom" id="related-bottom" style="display:none;">
-          <div class="related-bottom-title">Related Articles</div>
-          <div class="related-bottom-list" id="related-list"></div>
-        </div>
-
-        <div class="author-card">
-          <div class="author-card-avatar" id="author-card-avatar"></div>
-          <div>
-            <div class="author-card-name" id="author-card-name"></div>
-            <div class="author-card-role" id="author-card-meta"></div>
-            <div class="author-card-bio">Writer at DEKHO by elv8 dgtl — covering tech, gadgets and digital trends for Indian consumers. Real reviews, honest picks.</div>
-            <div class="author-card-socials">
-              <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="author-social-btn" title="Instagram">
-                <i data-lucide="instagram" style="width:14px;height:14px;"></i>
-              </a>
-              <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="author-social-btn" title="LinkedIn">
-                <i data-lucide="linkedin" style="width:14px;height:14px;"></i>
-              </a>
-              <a href="https://twitter.com/elv8dgtl" target="_blank" class="author-social-btn" title="X/Twitter">
-                <i data-lucide="twitter" style="width:14px;height:14px;"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-
-      </main>
-
-      <!-- ── SIDEBAR ── -->
-      <aside class="article-sidebar" aria-label="Article sidebar">
-
-        <div class="scard">
-          <div class="scard-title">Share this article</div>
-          <a id="share-twitter" class="share-btn" target="_blank" rel="noopener noreferrer">
-            <i data-lucide="twitter" style="width:13px;height:13px;flex-shrink:0;"></i>
-            Share on X / Twitter
+        <!-- Back link -->
+        <div class="sidebar-section">
+          <a href="https://dekho.elv8dgtl.in/" style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+            <i data-lucide="arrow-left" style="width:13px;height:13px;flex-shrink:0;"></i>
+            All articles
           </a>
-          <a id="share-whatsapp" class="share-btn" target="_blank" rel="noopener noreferrer">
-            <i data-lucide="message-circle" style="width:13px;height:13px;flex-shrink:0;"></i>
-            Share on WhatsApp
-          </a>
-          <button class="share-btn" data-copy-link>
-            <i data-lucide="link" style="width:13px;height:13px;flex-shrink:0;"></i>
-            <span id="copy-label2">Copy link</span>
-          </button>
         </div>
 
-        <div class="scard" id="toc-card" style="display:none;">
-          <div class="scard-title">In this article</div>
-          <ul class="toc-list" id="toc-list"></ul>
-        </div>
-
-        <div class="scard" id="related-card" style="display:none;">
-          <div class="scard-title">Trending on DEKHO</div>
-          <div id="related-sidebar-list"></div>
-        </div>
-
-        <div class="scard-promo">
-          <div class="scard-promo-logo">DEKHO</div>
-          <div class="scard-promo-sub">BY ELV8 DGTL</div>
-          <p class="scard-promo-desc">India's honest tech review platform. Real reviews, curated picks for Indian buyers.</p>
-          <a href="https://elv8dgtl.in" target="_blank" class="scard-promo-btn">Visit elv8dgtl.in →</a>
-        </div>
-
-      </aside>
-    </div>
+      </div>
+    </aside>
   </div>
-</div>
 
-<!-- ── Footer ── -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-brand">DEKHO</div>
-      <div class="footer-tagline">BY ELV8 DGTL</div>
-      <p class="footer-desc">India's honest tech review platform. Real comparisons, curated picks for Indian buyers.</p>
+  <!-- Related Articles -->
+  <section id="related-section" style="display:none;">
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.25rem;">
+      <h2 class="display" style="font-size:clamp(1.5rem,3vw,2rem);color:var(--ink);">MORE FROM DEKHO</h2>
     </div>
-    <div>
-      <div class="footer-col-ttl">DEKHO</div>
-      <a href="https://dekho.elv8dgtl.in/" class="footer-lnk">All Articles</a>
-      <a href="https://dekho.elv8dgtl.in/" class="footer-lnk">Reviews</a>
-      <a href="https://dekho.elv8dgtl.in/" class="footer-lnk">Comparisons</a>
-      <a href="https://dekho.elv8dgtl.in/" class="footer-lnk">Guides</a>
-    </div>
-    <div>
-      <div class="footer-col-ttl">ELV8 DGTL</div>
-      <a href="https://elv8dgtl.in" class="footer-lnk">Home</a>
-      <a href="https://elv8dgtl.in/services.html" class="footer-lnk">Services</a>
-      <a href="https://elv8dgtl.in/about.html" class="footer-lnk">About</a>
-      <a href="https://elv8dgtl.in/contact.html" class="footer-lnk">Contact</a>
-    </div>
-    <div>
-      <div class="footer-col-ttl">CONTACT</div>
-      <a href="/cdn-cgi/l/email-protection#7c14191010133c19100a44181b0810521512" class="footer-lnk"><span class="__cf_email__" data-cfemail="89e1ece5e5e6c9ece5ffb1edeefde5a7e0e7">[email&#160;protected]</span></a>
-      <a href="https://wa.me/918052743378" target="_blank" class="footer-lnk">WhatsApp</a>
-      <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="footer-lnk">Instagram</a>
-      <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="footer-lnk">LinkedIn</a>
-    </div>
-  </div>
-  <div class="footer-copy">
-    <span>© <span id="footer-year"></span> elv8 dgtl. All rights reserved.</span>
-    <span>DEKHO — Real Reviews. Honest Picks.</span>
-  </div>
-</footer>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;">You might also like these</p>
+    <div class="related-grid" id="related-grid"></div>
+  </section>
 
-<button id="back-top" aria-label="Back to top">
-  <i data-lucide="chevron-up" style="width:18px;height:18px;"></i>
+</div><!-- /article-wrap -->
+
+<!-- WhatsApp float -->
+<a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+   style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:40;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:transform .2s;"
+   onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <i data-lucide="message-circle" style="width:24px;height:24px;color:#fff;"></i>
+</a>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+  <i data-lucide="arrow-up" style="width:16px;height:16px;"></i>
 </button>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ── SCRIPTS ─────────────────────────────────────────────── -->
+<script>
 (function () {
   'use strict';
 
-  // ════════════════════════════════════════════════════════════
-  //  SUPABASE CONFIG
-  // ════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════
+  //  CONFIG  ← replace these three values
+  // ══════════════════════════════════════════════════════
   var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
   var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
-  var TABLE         = 'articles';
+  var TABLE         = 'articles';            // your exact table name
   var SITE          = 'https://dekho.elv8dgtl.in';
-  var FALLBACK_IMG  = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80';
-  var FALLBACK_THUMB= 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=200&q=60';
+  var FALLBACK_IMG  = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80';
 
-  // ════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════
   //  SUPABASE REST HELPERS
-  // ════════════════════════════════════════════════════════════
-
-  /**
-   * Build a Supabase REST URL with query params.
-   * @param {string} filter  e.g. 'slug=eq.my-slug&status=eq.published'
-   * @param {string} select  columns to return (default: *)
-   * @param {number} limit
-   */
-  function sbURL(filter, select, limit) {
-    var base = SUPABASE_URL + '/rest/v1/' + TABLE + '?';
-    var parts = [];
-    if (select) parts.push('select=' + encodeURIComponent(select));
-    if (filter) parts.push(filter);
-    if (limit)  parts.push('limit=' + limit);
-    return base + parts.join('&');
-  }
-
+  // ══════════════════════════════════════════════════════
   function sbHeaders() {
     return {
       'apikey':        SUPABASE_ANON,
@@ -675,491 +697,457 @@
     };
   }
 
-  // ── Debug panel (remove before go-live) ──────────────────────
-  function dbg(label, val) {
-    console.log('[DEKHO]', label, val);
-    var panel = document.getElementById('_dbg');
-    if (!panel) {
-      panel = document.createElement('div');
-      panel.id = '_dbg';
-      panel.style.cssText = 'position:fixed;bottom:0;left:0;right:0;max-height:220px;overflow-y:auto;background:#0d0d0d;color:#c8f135;font:12px/1.6 monospace;padding:10px 14px;z-index:99999;border-top:2px solid #E84B35;';
-      panel.innerHTML = '<b style="color:#E84B35">DEKHO DEBUG</b> <small style="color:#666;margin-left:8px">remove before go-live</small><hr style="border-color:#333;margin:4px 0">';
-      document.body.appendChild(panel);
-    }
-    var line = document.createElement('div');
-    line.innerHTML = '<span style="color:#E84B35">[' + label + ']</span> ' + String(val).replace(/</g,'&lt;');
-    panel.appendChild(line);
-    panel.scrollTop = panel.scrollHeight;
-  }
-
-  /**
-   * Fetch a single row. Returns the first element of the array or null.
-   */
   function sbFetchOne(filter, select) {
-    var url = sbURL(filter, select, 1);
-    dbg('FETCH', url);
+    var parts = ['select=' + encodeURIComponent(select || '*')];
+    if (filter) parts.push(filter);
+    parts.push('limit=1');
+    var url = SUPABASE_URL + '/rest/v1/' + TABLE + '?' + parts.join('&');
     return fetch(url, { headers: sbHeaders() })
-      .then(function(r) {
-        dbg('STATUS', r.status + ' ' + r.statusText);
-        if (!r.ok) {
-          return r.text().then(function(t) {
-            dbg('ERROR BODY', t);
-            throw new Error('Supabase ' + r.status + ': ' + t);
-          });
-        }
+      .then(function (r) {
+        if (!r.ok) return r.text().then(function (t) { throw new Error(t); });
         return r.json();
       })
-      .then(function(rows) {
-        dbg('ROWS RETURNED', JSON.stringify(rows));
-        return (rows && rows.length) ? rows[0] : null;
-      });
+      .then(function (rows) { return (rows && rows.length) ? rows[0] : null; });
   }
 
-  /**
-   * Fetch multiple rows.
-   */
   function sbFetchMany(filter, select, limit) {
-    return fetch(sbURL(filter, select, limit || 20), { headers: sbHeaders() })
-      .then(function(r) {
+    var parts = ['select=' + encodeURIComponent(select || '*')];
+    if (filter) parts.push(filter);
+    parts.push('limit=' + (limit || 20));
+    var url = SUPABASE_URL + '/rest/v1/' + TABLE + '?' + parts.join('&');
+    return fetch(url, { headers: sbHeaders() })
+      .then(function (r) {
         if (!r.ok) throw new Error('Supabase error ' + r.status);
         return r.json();
       })
-      .then(function(rows) { return rows || []; });
+      .then(function (rows) { return rows || []; });
   }
 
-  // ════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════
   //  UTILS
-  // ════════════════════════════════════════════════════════════
-  function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function fmtDate(iso) { if (!iso) return ''; try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return ''; } }
-  function tagCls(cat) { var m={review:'tag-review',comparison:'tag-comparison',top:'tag-top',guide:'tag-guide',news:'tag-news',opinion:'tag-opinion'}; return m[(cat||'').toLowerCase()]||'tag-review'; }
-  function tagDisplay(cat) { var m={review:'Review',comparison:'Comparison',top:'Top List',guide:'Guide',news:'News',opinion:'Opinion'}; var k=(cat||'').toLowerCase(); return m[k]||(cat?cat.charAt(0).toUpperCase()+cat.slice(1):'Article'); }
+  // ══════════════════════════════════════════════════════
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function fmtDate(iso) {
+    if (!iso) return '';
+    try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); }
+    catch(e) { return ''; }
+  }
+  function tagCls(cat) {
+    var m = { review:'tag-review', comparison:'tag-comparison', top:'tag-top', guide:'tag-guide', news:'tag-news', opinion:'tag-opinion' };
+    return m[(cat||'').toLowerCase()] || 'tag-review';
+  }
+  function tagDisplay(cat) {
+    var m = { review:'Review', comparison:'Comparison', top:'Top List', guide:'Guide', news:'News', opinion:'Opinion' };
+    var k = (cat||'').toLowerCase();
+    return m[k] || (cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'Article');
+  }
   function getParam(key) { return new URLSearchParams(window.location.search).get(key); }
-  function show(id) { var el=document.getElementById(id); if(el) el.style.display=''; }
-  function hide(id) { var el=document.getElementById(id); if(el) el.style.display='none'; }
+  function $(id) { return document.getElementById(id); }
+  function setText(id, val) { var el=$(id); if(el) el.textContent = val||''; }
+  function setAttr(id, attr, val) { var el=$(id); if(el) el.setAttribute(attr, val||''); }
+  function showEl(id) { var el=$(id); if(el) el.style.display=''; }
+  function hideEl(id) { var el=$(id); if(el) el.style.display='none'; }
+
+  function showToast(msg) {
+    var t = $('toast'); if(!t) return;
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 3000);
+  }
 
   function articleURL(a) {
     return SITE + '/dekho-article.html?' + (a.slug ? 'slug=' + encodeURIComponent(a.slug) : 'id=' + encodeURIComponent(a.id));
   }
 
-  // ════════════════════════════════════════════════════════════
-  //  PLAYGROUND (inline code embeds — kept from original)
-  // ════════════════════════════════════════════════════════════
-  // Registered inside DOMContentLoaded below — see INIT section
-
-  function restorePlaygrounds(content, playgrounds) {
-    if (!content) return content || '';
-    if (!playgrounds || !Object.keys(playgrounds).length) return content;
-    return content.replace(/(?:<span[^>]*data-pg-token="([^"]+)"[^>]*>[\s\S]*?<\/span>|\[\[PG:([^\]]+)\]\])/g, function(match, uid1, uid2) {
-      var uid = uid1 || uid2; if (!uid) return '';
-      var pg  = playgrounds[uid]; if (!pg) return '';
-      var isAuto = pg.autoheight !== '0';
-      var height = isAuto ? '200px' : (pg.height || '400px');
-      var border = pg.border === '1' ? 'border:1.5px solid #E2E0DA;border-radius:8px;' : '';
-      var scroll = pg.scroll === '1' ? 'auto' : 'hidden';
-      var autoScript = isAuto ? '<scr'+'ipt>(function(){function r(){var h=document.documentElement.scrollHeight||document.body.scrollHeight;parent.postMessage({type:"pg-resize",h:h},"*");}window.addEventListener("load",r);window.addEventListener("resize",r);setTimeout(r,200);setTimeout(r,800);})();<\/scr'+'ipt>' : '';
-      var doc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;}</style>'+(pg.css?'<style>'+pg.css+'</style>':'')+autoScript+'</head><body>'+(pg.html||'')+(pg.js?'<scr'+'ipt>'+pg.js+'<\/scr'+'ipt>':'')+'</body></html>';
-      var safeDoc = doc.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-      return '<div class="pg-embed" style="'+border+'"><iframe data-srcdoc="'+safeDoc+'" style="width:100%;height:'+height+';border:none;display:block;overflow:'+scroll+';transition:height .3s ease;" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>';
-    });
-  }
-
-  function initPlaygrounds(container) {
-    (container || document).querySelectorAll('iframe[data-srcdoc]').forEach(function(iframe) {
-      var enc = iframe.getAttribute('data-srcdoc'); if (!enc) return;
-      var doc = enc.replace(/&quot;/g,'"').replace(/&amp;/g,'&');
-      iframe.removeAttribute('data-srcdoc');
-      try { iframe.srcdoc = doc; } catch(e) { iframe.src = URL.createObjectURL(new Blob([doc],{type:'text/html'})); }
-    });
-  }
-
-  // ════════════════════════════════════════════════════════════
-  //  SEO
-  // ════════════════════════════════════════════════════════════
-  function injectSEO(article) {
-    var title     = article.seoMetaTitle || article.title + ' — DEKHO by elv8';
-    var desc      = article.seoMetaDesc  || article.excerpt || '';
-    var ogImg     = article.seoOgImage   || article.coverImage || article.cover_image || '';
-    var canonical = article.seoCanonical || articleURL(article);
-
-    document.title = title;
-    setMeta('name','description',desc);
-    setMeta('name','robots','index, follow');
-    setMeta('name','author', article.authorName || article.author_name || 'DEKHO');
-    if (article.seoKeyword || article.seo_keyword) setMeta('name','keywords', article.seoKeyword || article.seo_keyword);
-
-    var canonEl = document.getElementById('meta-canonical');
-    if (canonEl) canonEl.setAttribute('href', canonical);
-
-    setMeta('property','og:title',title);
-    setMeta('property','og:description',desc);
-    setMeta('property','og:image',ogImg);
-    setMeta('property','og:url',canonical);
-    setMeta('property','og:type','article');
-    setMeta('property','og:site_name','DEKHO by elv8 dgtl');
-
-    var pubDate = article.publishedAt || article.published_at;
-    if (pubDate) setMeta('property','article:published_time', pubDate);
-    setMeta('property','article:author', article.authorName || article.author_name || 'DEKHO');
-    setMeta('property','article:section', tagDisplay(article.category));
-
-    setMeta('name','twitter:title',title);
-    setMeta('name','twitter:description',desc);
-    setMeta('name','twitter:image',ogImg);
-    setMeta('name','twitter:card','summary_large_image');
-    setMeta('name','twitter:site','@elv8dgtl');
-
-    var ld = {
-      '@context': 'https://schema.org',
-      '@type': article.category === 'review' ? 'Review' : 'Article',
-      headline: article.title,
-      description: desc,
-      image: ogImg,
-      url: canonical,
-      datePublished: pubDate,
-      dateModified: article.updatedAt || article.updated_at || pubDate,
-      author: { '@type': 'Person', name: article.authorName || article.author_name || 'DEKHO' },
-      publisher: { '@type': 'Organization', name: 'elv8 dgtl', logo: { '@type': 'ImageObject', url: SITE + '/logo.png' } },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical }
-    };
-    var rating = article.rating;
-    if (rating && parseFloat(rating) > 0 && article.category === 'review') {
-      ld.reviewRating = { '@type': 'Rating', ratingValue: parseFloat(rating).toFixed(1), bestRating: '10', worstRating: '0' };
-    }
-    var ldEl = document.getElementById('json-ld');
-    if (ldEl) ldEl.textContent = JSON.stringify(ld);
-
-    if (window.gtag) gtag('event','page_view',{ page_title: title, page_location: window.location.href });
-  }
-
-  function setMeta(attr, name, content) {
-    if (!content) return;
-    var el = document.querySelector('meta['+attr+'="'+name+'"]');
-    if (el) { el.setAttribute('content', content); }
-    else { var m = document.createElement('meta'); m.setAttribute(attr,name); m.setAttribute('content',content); document.head.appendChild(m); }
-  }
-
-  // ════════════════════════════════════════════════════════════
-  //  TOC
-  // ════════════════════════════════════════════════════════════
-  function buildTOC() {
-    var body     = document.getElementById('article-body');
-    var tocList  = document.getElementById('toc-list');
-    var tocCard  = document.getElementById('toc-card');
-    var mobToc   = document.getElementById('mobile-toc');
-    var mobList  = document.getElementById('mobile-toc-list');
-    var headings = body.querySelectorAll('h2, h3');
-    if (headings.length < 3) return;
-
-    tocList.innerHTML = '';
-    if (mobList) mobList.innerHTML = '';
-
-    headings.forEach(function(h, i) {
-      var id = 'section-' + i;
-      h.id = id;
-
-      var li = document.createElement('li');
-      var a  = document.createElement('a');
-      a.href = '#' + id; a.textContent = h.textContent;
-      if (h.tagName === 'H3') a.classList.add('toc-h3');
-      li.appendChild(a); tocList.appendChild(li);
-
-      if (mobList) {
-        var mLi = document.createElement('li');
-        var mA  = document.createElement('a');
-        mA.href = '#' + id; mA.textContent = h.textContent;
-        mLi.appendChild(mA); mobList.appendChild(mLi);
-      }
-    });
-
-    tocCard.style.display = '';
-    if (mobToc) mobToc.style.display = '';
-
-    if ('IntersectionObserver' in window) {
-      var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          var link = tocList.querySelector('a[href="#' + e.target.id + '"]');
-          if (!link) return;
-          if (e.isIntersecting) {
-            tocList.querySelectorAll('a').forEach(function(a){ a.classList.remove('active'); });
-            link.classList.add('active');
-          }
-        });
-      }, { rootMargin: '0px 0px -60% 0px' });
-      headings.forEach(function(h){ obs.observe(h); });
+  // ══════════════════════════════════════════════════════
+  //  DARK MODE
+  // ══════════════════════════════════════════════════════
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var icon = $('dark-icon');
+    if (icon) {
+      icon.setAttribute('data-lucide', t === 'dark' ? 'sun' : 'moon');
+      try { if (window.lucide) lucide.createIcons(); } catch(e){}
     }
   }
+  window.toggleDark = function() {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('dekho_theme', next); } catch(x){}
+  };
+  (function initTheme() {
+    var saved = ''; try { saved = localStorage.getItem('dekho_theme')||''; } catch(x){}
+    var pref = saved || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    if (pref === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  })();
 
-  // ════════════════════════════════════════════════════════════
-  //  RELATED ARTICLES
-  // ════════════════════════════════════════════════════════════
-  function renderRelated(currentArticle, allArticles) {
-    var related = allArticles.filter(function(a) {
-      return a.id !== currentArticle.id &&
-        (a.category === currentArticle.category || a.tag === currentArticle.tag);
-    }).slice(0, 4);
+  // ══════════════════════════════════════════════════════
+  //  MOBILE MENU
+  // ══════════════════════════════════════════════════════
+  window.toggleMenu = function() {
+    var m = $('mobile-menu');
+    m.classList.toggle('open');
+    document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
+  };
 
-    if (!related.length) {
-      related = allArticles.filter(function(a){ return a.id !== currentArticle.id; }).slice(0, 4);
-    }
-    if (!related.length) return;
+  // ══════════════════════════════════════════════════════
+  //  FETCH ARTICLE
+  //  dekho.html links use ?slug= when slug exists, else ?id=
+  // ══════════════════════════════════════════════════════
+  function fetchArticle() {
+    var slug = getParam('slug');
+    var id   = getParam('id');
 
-    // Bottom numbered list
-    var relatedBottom = document.getElementById('related-bottom');
-    var relatedList   = document.getElementById('related-list');
-    relatedList.innerHTML = related.map(function(a, i) {
-      var cover = a.coverImage || a.cover_image || FALLBACK_THUMB;
-      var href  = articleURL(a);
-      return '<a href="'+href+'" class="related-b-item">' +
-        '<span class="related-b-num">0'+(i+1)+'</span>' +
-        '<img class="related-b-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+FALLBACK_THUMB+'\'">' +
-        '<div><div class="related-b-title">'+esc(a.title)+'</div>' +
-        '<div class="related-b-meta">'+tagDisplay(a.category)+' · '+(a.readTime||a.read_time||'5')+' min read</div></div></a>';
-    }).join('');
-    relatedBottom.style.display = '';
-
-    // Sidebar list
-    var relatedCard   = document.getElementById('related-card');
-    var sidebarList   = document.getElementById('related-sidebar-list');
-    sidebarList.innerHTML = related.map(function(a, i) {
-      var cover = a.coverImage || a.cover_image || FALLBACK_THUMB;
-      var href  = articleURL(a);
-      return '<a href="'+href+'" class="srel-item">' +
-        '<span class="srel-num">0'+(i+1)+'</span>' +
-        '<img class="srel-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+FALLBACK_THUMB+'\'">' +
-        '<div><div class="srel-title">'+esc(a.title)+'</div>' +
-        '<div class="srel-meta">'+tagDisplay(a.category)+'</div></div></a>';
-    }).join('');
-    relatedCard.style.display = '';
-  }
-
-  // ════════════════════════════════════════════════════════════
-  //  SHARE
-  // ════════════════════════════════════════════════════════════
-  function setupShare(title, url) {
-    var tweetURL = 'https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url)+'&via=elv8dgtl';
-    var waURL    = 'https://wa.me/?text='+encodeURIComponent(title+' — '+url);
-
-    var tw  = document.getElementById('share-twitter');
-    var wa  = document.getElementById('share-whatsapp');
-    var btw = document.getElementById('byline-twitter');
-    var bwa = document.getElementById('byline-whatsapp');
-
-    if (tw)  tw.href  = tweetURL;
-    if (wa)  wa.href  = waURL;
-    if (btw) btw.href = tweetURL;
-    if (bwa) bwa.href = waURL;
-  }
-
-  function copyLink() {
-    var label  = document.getElementById('copy-label');
-    var label2 = document.getElementById('copy-label2');
-    var done = function() {
-      if (label)  label.textContent  = 'Copied! ✓';
-      if (label2) label2.textContent = 'Copied! ✓';
-      setTimeout(function(){
-        if (label)  label.textContent  = 'Copy link';
-        if (label2) label2.textContent = 'Copy link';
-      }, 2000);
-    };
-    navigator.clipboard.writeText(window.location.href).then(done).catch(function() {
-      var ta = document.createElement('textarea');
-      ta.value = window.location.href; document.body.appendChild(ta);
-      ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      done();
-    });
-  }
-
-  // ════════════════════════════════════════════════════════════
-  //  RENDER
-  // ════════════════════════════════════════════════════════════
-  function renderArticle(article) {
-    // Normalise camelCase / snake_case field names gracefully
-    var cover      = article.coverImage  || article.cover_image  || FALLBACK_IMG;
-    var pubDate    = article.publishedAt || article.published_at || '';
-    var authorName = article.authorName  || article.author_name  || 'DEKHO';
-    var readTime   = article.readTime    || article.read_time    || '5';
-    var rating     = article.rating;
-    var excerpt    = article.excerpt     || '';
-    var content    = article.content     || '';
-    var playgrounds= article.playgrounds || {};
-    var tag        = article.tag         || '';
-
-    // Hero image
-    var heroImg = document.getElementById('hero-img');
-    heroImg.src = cover; heroImg.alt = article.title || '';
-    heroImg.onerror = function(){ this.src = FALLBACK_IMG; };
-
-    // Tag + breadcrumb
-    var tagEl = document.getElementById('meta-tag');
-    tagEl.className = 'tag ' + tagCls(article.category);
-    tagEl.textContent = tagDisplay(article.category);
-
-    var bcCat   = document.getElementById('breadcrumb-cat-link');
-    var bcTitle = document.getElementById('breadcrumb-title');
-    if (bcCat)   bcCat.textContent   = tagDisplay(article.category);
-    if (bcTitle) bcTitle.textContent = (article.title || '').substring(0, 60) + ((article.title||'').length > 60 ? '…' : '');
-
-    // Meta row
-    document.getElementById('meta-readtime').textContent = readTime + ' min read';
-    document.getElementById('meta-date').textContent     = fmtDate(pubDate);
-    document.getElementById('art-title').textContent     = article.title || '';
-    document.getElementById('art-excerpt').textContent   = excerpt;
-
-    // Rating (reviews only)
-    if (rating && parseFloat(rating) > 0) {
-      document.getElementById('rating-num').textContent = parseFloat(rating).toFixed(1);
-      document.getElementById('rating-wrap').style.display = '';
+    if (!slug && !id) {
+      showError('No article specified.');
+      return;
     }
 
-    // Author
-    var ini = (authorName).charAt(0).toUpperCase();
-    document.getElementById('author-avatar').textContent     = ini;
-    document.getElementById('author-name').textContent       = authorName;
-    document.getElementById('author-date').textContent       = 'Published ' + fmtDate(pubDate);
-    document.getElementById('author-card-avatar').textContent= ini;
-    document.getElementById('author-card-name').textContent  = authorName;
-    document.getElementById('author-card-meta').textContent  = 'Writer · DEKHO by elv8 dgtl';
-
-    // Body
-    var rendered = restorePlaygrounds(content, playgrounds);
-    var bodyEl   = document.getElementById('article-body');
-    bodyEl.innerHTML = rendered;
-    initPlaygrounds(bodyEl);
-
-    // Bottom tags
-    var btTag = document.getElementById('bottom-tag');
-    btTag.className   = 'tag ' + tagCls(article.category);
-    btTag.textContent = tagDisplay(article.category);
-
-    var btCat = document.getElementById('bottom-category');
-    if (tag) { btCat.textContent = '#' + tag; btCat.style.display = ''; }
-    else      { btCat.style.display = 'none'; }
-
-    setupShare(article.title, window.location.href);
-    injectSEO(article);
-    buildTOC();
-
-    var fy = document.getElementById('footer-year');
-    if (fy) fy.textContent = new Date().getFullYear();
-
-    hide('loading-state');
-    show('article-wrap');
-
-    if (window.gtag) gtag('event','article_view',{
-      article_id:       article.id,
-      article_title:    article.title,
-      article_category: article.category,
-      article_author:   authorName
-    });
-  }
-
-  // ════════════════════════════════════════════════════════════
-  //  FETCH ARTICLE — slug first (matches dekho.html artUrl),
-  //                  id as fallback for direct links
-  // ════════════════════════════════════════════════════════════
-  function fetchArticle(id, slug) {
-    // dekho.html passes ?slug= when the article has one, ?id= otherwise
     var filter = slug
       ? 'slug=eq.' + encodeURIComponent(slug)
       : 'id=eq.'   + encodeURIComponent(id);
 
-    if (!id && !slug) { showError('No article specified.'); return; }
-
     sbFetchOne(filter, '*')
-      .then(function(article) {
-        if (!article) {
-          showError('Article not found. (' + (slug ? 'slug: ' + slug : 'id: ' + id) + ')');
-          return;
-        }
-
-        // Guard: only show published articles
+      .then(function (article) {
+        if (!article) { showError('Article not found.'); return; }
         var status = (article.status || '').toLowerCase().trim();
-        if (status && status !== 'published') {
-          showError('This article is not published yet.');
-          return;
-        }
-
+        if (status && status !== 'published') { showError('This article is not published yet.'); return; }
         renderArticle(article);
-
-        // Load related articles in the background
-        sbFetchMany('status=eq.published', 'id,slug,title,category,tag,coverImage,cover_image,readTime,read_time', 20)
-          .then(function(articles) { renderRelated(article, articles); })
-          .catch(function() {});
+        // load related in background
+        sbFetchMany('status=eq.published', 'id,slug,title,category,cover_image,read_time,excerpt', 20)
+          .then(function(all) { renderRelated(article, all); })
+          .catch(function(){});
       })
-      .catch(function(e) {
-        showError('Could not load article. ' + (e && e.message ? e.message : 'Check your connection.'));
+      .catch(function (e) {
+        showError('Could not load article. ' + (e && e.message ? e.message : 'Check connection.'));
       });
   }
 
-  function showError(msg) {
-    hide('loading-state'); hide('article-wrap');
-    var msgEl = document.getElementById('error-msg');
-    if (msgEl && msg) msgEl.textContent = msg;
-    show('error-state');
-    document.title = 'Article Not Found — DEKHO by elv8';
-  }
+  // ══════════════════════════════════════════════════════
+  //  RENDER ARTICLE
+  // ══════════════════════════════════════════════════════
+  function renderArticle(a) {
+    hideEl('loading-state');
+    showEl('article-wrap');
 
-  // ════════════════════════════════════════════════════════════
-  //  INIT
-  // ════════════════════════════════════════════════════════════
-  function init() {
-    // Playground iframe resize messages
-    window.addEventListener('message', function (e) {
-      if (!e.data || e.data.type !== 'pg-resize') return;
-      var h = parseInt(e.data.h);
-      if (!h || h < 50) return;
-      document.querySelectorAll('.pg-embed iframe').forEach(function (f) {
-        try { if (f.contentWindow === e.source) f.style.height = (h + 24) + 'px'; } catch (x) {}
-      });
-    });
+    var title    = a.title || 'Untitled';
+    var slug     = a.slug || '';
+    var cat      = a.category || '';
+    var tag      = a.tag || '';
+    var cover    = a.cover_image || FALLBACK_IMG;
+    var author   = a.author_name || 'DEKHO';
+    var date     = fmtDate(a.published_at || a.created_at);
+    var readTime = a.read_time ? a.read_time + ' min read' : '';
+    var rating   = a.rating ? parseFloat(a.rating).toFixed(1) : '';
+    var excerpt  = a.excerpt || '';
+    var content  = a.content || '';
+    var pageURL  = articleURL(a);
 
-    // Lucide icons
-    if (window.lucide) lucide.createIcons();
+    // ── SEO / meta ──
+    var metaTitle = a.seo_meta_title || title;
+    var metaDesc  = a.seo_meta_desc  || excerpt;
+    var ogImg     = a.seo_og_image   || cover;
+    document.title = metaTitle + ' — DEKHO by elv8 dgtl';
+    setMeta('description', metaDesc);
+    setMeta('og:title',       metaTitle, true);
+    setMeta('og:description', metaDesc,  true);
+    setMeta('og:image',       ogImg,     true);
+    setMeta('og:url',         pageURL,   true);
+    setMeta('twitter:title',       metaTitle, true);
+    setMeta('twitter:description', metaDesc,  true);
+    setMeta('twitter:image',       ogImg,     true);
+    var canonical = a.seo_canonical || pageURL;
+    var canEl = $('meta-canonical'); if(canEl) canEl.setAttribute('href', canonical);
 
-    // Footer year
-    var fy = document.getElementById('footer-year');
-    if (fy) fy.textContent = new Date().getFullYear();
+    // JSON-LD
+    var ld = {
+      '@context':   'https://schema.org',
+      '@type':      'Article',
+      headline:     title,
+      description:  excerpt,
+      image:        cover,
+      datePublished: a.published_at || a.created_at,
+      dateModified:  a.updated_at   || a.published_at || a.created_at,
+      author: { '@type': 'Person', name: author },
+      publisher: {
+        '@type': 'Organization',
+        name: 'DEKHO by elv8 dgtl',
+        url:  'https://dekho.elv8dgtl.in'
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': pageURL }
+    };
+    var ldEl = $('json-ld'); if(ldEl) ldEl.textContent = JSON.stringify(ld);
 
-    // Back-to-top button (wired via JS, not inline onclick)
-    var backTopBtn = document.getElementById('back-top');
-    if (backTopBtn) {
-      backTopBtn.addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+    // ── Hero ──
+    var heroImg = $('hero-img');
+    if (heroImg) { heroImg.src = cover; heroImg.alt = title; }
+
+    var heroTag = $('hero-tag');
+    if (heroTag && cat) {
+      heroTag.textContent = tagDisplay(cat);
+      heroTag.className = 'tag tag-hero ' + tagCls(cat);
     }
 
-    // Copy-link buttons (wired via JS instead of inline onclick)
-    document.querySelectorAll('[data-copy-link]').forEach(function (btn) {
-      btn.addEventListener('click', copyLink);
+    var heroRating = $('hero-rating');
+    if (heroRating && rating) {
+      heroRating.style.display = '';
+      heroRating.innerHTML = rating + '<span>/ 10</span>';
+    }
+
+    // ── Breadcrumb ──
+    setText('breadcrumb-cat',   tagDisplay(cat));
+    setText('breadcrumb-title', title);
+
+    // ── Title ──
+    setText('article-title', title);
+
+    // ── Meta row ──
+    var avatarEl = $('meta-avatar');
+    if (avatarEl) avatarEl.textContent = author.charAt(0).toUpperCase();
+    setText('meta-author', author);
+    setText('meta-date',   date);
+    setText('meta-read',   readTime);
+
+    // ── Sidebar stats ──
+    setText('stat-cat',  tagDisplay(cat));
+    setText('stat-read', readTime || '—');
+    setText('stat-date', date || '—');
+    if (rating) {
+      setText('stat-rating', rating + ' / 10');
+    } else {
+      hideEl('stat-rating-row');
+    }
+
+    // ── Author box ──
+    var avgLg = $('author-avatar-lg');
+    if (avgLg) avgLg.textContent = author.charAt(0).toUpperCase();
+    setText('author-name-box', author);
+
+    // ── Share links ──
+    var encoded = encodeURIComponent(pageURL);
+    var encTitle = encodeURIComponent(title);
+    var waEl = $('share-wa');
+    var twEl = $('share-tw');
+    var liEl = $('share-li');
+    if (waEl) waEl.href = 'https://wa.me/?text=' + encodeURIComponent(title + ' ' + pageURL);
+    if (twEl) twEl.href = 'https://twitter.com/intent/tweet?url=' + encoded + '&text=' + encTitle;
+    if (liEl) liEl.href = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encoded + '&title=' + encTitle;
+
+    // ── Body ──
+    var bodyEl = $('article-body');
+    if (bodyEl) {
+      if (content) {
+        // If content is HTML, inject directly; if plain text, wrap in paragraphs
+        var isHTML = /<[a-z][\s\S]*>/i.test(content);
+        bodyEl.innerHTML = isHTML ? content : plainToHTML(content);
+      } else {
+        bodyEl.innerHTML = '<p style="color:var(--muted);font-style:italic;">No content available.</p>';
+      }
+    }
+
+    // ── Tags row ──
+    var tagsEl = $('tags-row');
+    if (tagsEl) {
+      var allTags = [];
+      if (cat) allTags.push(tagDisplay(cat));
+      if (tag) tag.split(',').forEach(function(t){ var v=t.trim(); if(v) allTags.push(v); });
+      if (a.seo_tags) a.seo_tags.split(',').forEach(function(t){ var v=t.trim(); if(v&&!allTags.includes(v)) allTags.push(v); });
+      tagsEl.innerHTML = allTags.map(function(t){
+        return '<span class="tag ' + tagCls(t.toLowerCase()) + '">' + esc(t) + '</span>';
+      }).join('');
+    }
+
+    // ── TOC ──
+    buildTOC();
+
+    // Icons re-init after DOM update
+    try { if(window.lucide) lucide.createIcons(); } catch(e){}
+    applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  PLAIN TEXT → HTML
+  // ══════════════════════════════════════════════════════
+  function plainToHTML(text) {
+    return text.split(/\n\n+/).map(function(para) {
+      var p = para.trim();
+      if (!p) return '';
+      if (p.startsWith('# '))  return '<h2>' + esc(p.slice(2)) + '</h2>';
+      if (p.startsWith('## ')) return '<h3>' + esc(p.slice(3)) + '</h3>';
+      if (p.startsWith('> '))  return '<blockquote><p>' + esc(p.slice(2)) + '</p></blockquote>';
+      return '<p>' + esc(p).replace(/\n/g,'<br>') + '</p>';
+    }).join('\n');
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  TABLE OF CONTENTS
+  // ══════════════════════════════════════════════════════
+  function buildTOC() {
+    var body = $('article-body');
+    if (!body) return;
+    var headings = body.querySelectorAll('h2, h3');
+    if (headings.length < 3) return;
+
+    var tocSection = $('toc-section');
+    var tocList    = $('toc-list');
+    if (!tocSection || !tocList) return;
+
+    tocList.innerHTML = '';
+    headings.forEach(function(h, i) {
+      var id = 'heading-' + i;
+      h.id = id;
+      var li = document.createElement('li');
+      var a  = document.createElement('a');
+      a.href = '#' + id;
+      a.textContent = h.textContent;
+      if (h.tagName === 'H3') a.style.paddingLeft = '20px';
+      li.appendChild(a);
+      tocList.appendChild(li);
     });
 
-    // Scroll: progress bar + navbar shadow + back-to-top visibility
-    var navbar  = document.getElementById('navbar');
-    var backTop = document.getElementById('back-top');
-    var prog    = document.getElementById('read-progress');
+    tocSection.style.display = '';
 
-    window.addEventListener('scroll', function () {
+    // Highlight active heading on scroll
+    var tocLinks = tocList.querySelectorAll('a');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(function(l){ l.classList.remove('active'); });
+          var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-60px 0px -70% 0px' });
+
+    headings.forEach(function(h){ observer.observe(h); });
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  RELATED ARTICLES
+  // ══════════════════════════════════════════════════════
+  function renderRelated(current, all) {
+    var others = all.filter(function(a) {
+      return a.id !== current.id;
+    });
+    // prioritise same category
+    var sameCat = others.filter(function(a){ return a.category === current.category; });
+    var rest    = others.filter(function(a){ return a.category !== current.category; });
+    var picks   = sameCat.concat(rest).slice(0, 3);
+
+    if (!picks.length) return;
+
+    var grid = $('related-grid');
+    if (!grid) return;
+
+    grid.innerHTML = picks.map(function(a) {
+      var cover = a.cover_image || FALLBACK_IMG;
+      var url   = articleURL(a);
+      return '<a href="' + url + '" class="rel-card">' +
+        '<div class="rel-img"><img src="' + esc(cover) + '" alt="' + esc(a.title) + '" loading="lazy" onerror="this.src=\'' + FALLBACK_IMG + '\'"></div>' +
+        '<div class="rel-body">' +
+          '<span class="tag ' + tagCls(a.category) + '" style="align-self:flex-start;">' + tagDisplay(a.category) + '</span>' +
+          '<p class="rel-title">' + esc(a.title) + '</p>' +
+          '<p style="font-size:12px;color:var(--muted);font-family:var(--mono);">' + (a.read_time ? a.read_time + ' min' : '') + '</p>' +
+        '</div>' +
+      '</a>';
+    }).join('');
+
+    var section = $('related-section');
+    if (section) section.style.display = '';
+
+    try { if(window.lucide) lucide.createIcons(); } catch(e){}
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  SHARE
+  // ══════════════════════════════════════════════════════
+  window.copyLink = function() {
+    var url = window.location.href;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function(){ showToast('Link copied! 📋'); }).catch(function(){ fallbackCopy(url); });
+    } else {
+      fallbackCopy(url);
+    }
+  };
+  function fallbackCopy(text) {
+    var t = document.createElement('textarea');
+    t.value = text; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t);
+    showToast('Link copied! 📋');
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  ERROR
+  // ══════════════════════════════════════════════════════
+  function showError(msg) {
+    hideEl('loading-state');
+    hideEl('article-wrap');
+    showEl('error-state');
+    setText('error-msg', msg || 'Could not load article.');
+    try { if(window.lucide) lucide.createIcons(); } catch(e){}
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  META HELPER
+  // ══════════════════════════════════════════════════════
+  function setMeta(name, content, isOG) {
+    if (!content) return;
+    var sel = isOG
+      ? 'meta[property="' + name + '"]'
+      : 'meta[name="' + name + '"]';
+    var el = document.querySelector(sel);
+    if (el) el.setAttribute('content', content);
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  INIT
+  // ══════════════════════════════════════════════════════
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // Icons
+    try {
+      if (window.lucide) {
+        lucide.createIcons();
+        applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+      } else {
+        var retry = setInterval(function(){
+          if (window.lucide) {
+            clearInterval(retry);
+            lucide.createIcons();
+            applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+          }
+        }, 100);
+        setTimeout(function(){ clearInterval(retry); }, 5000);
+      }
+    } catch(e){}
+
+    // Scroll: progress bar + navbar shadow + back-to-top
+    var navbar  = $('navbar');
+    var backTop = $('back-top');
+    var prog    = $('read-progress');
+    window.addEventListener('scroll', function() {
       var sy   = window.scrollY;
       var docH = document.documentElement.scrollHeight - window.innerHeight;
       if (prog && docH > 0) prog.style.width = Math.min(100, sy / docH * 100) + '%';
       if (navbar)  navbar.classList.toggle('scrolled', sy > 40);
-      if (backTop) backTop.classList.toggle('show', sy > 400);
+      if (backTop) backTop.classList.toggle('visible', sy > 500);
     }, { passive: true });
 
-    // Read ?slug= (primary, used by dekho.html) or ?id= (fallback)
-    var slug = getParam('slug');
-    var id   = getParam('id');
+    // Keyboard: Escape closes mobile menu
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') {
+        var m = $('mobile-menu');
+        if (m && m.classList.contains('open')) toggleMenu();
+      }
+    });
 
-    dbg('URL PARAM slug', slug || '(none)');
-    dbg('URL PARAM id',   id   || '(none)');
+    // Fetch article
+    fetchArticle();
+  });
 
-    if (!slug && !id) {
-      showError('No article specified. Use ?slug=... or ?id=... in the URL.');
-      return;
-    }
-
-    fetchArticle(id, slug);
-  }
-
-  // Guard: run after DOM is ready regardless of when the script ex
+})();
+</script>
+</body>
+</html>
