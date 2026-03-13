@@ -618,7 +618,7 @@
     </div>
     <div>
       <div class="footer-col-ttl">CONTACT</div>
-      <a href="mailto:hello@elv8dgtl.in" class="footer-lnk">hello@elv8dgtl.in</a>
+      <a href="/cdn-cgi/l/email-protection#7c14191010133c19100a44181b0810521512" class="footer-lnk"><span class="__cf_email__" data-cfemail="89e1ece5e5e6c9ece5ffb1edeefde5a7e0e7">[email&#160;protected]</span></a>
       <a href="https://wa.me/918052743378" target="_blank" class="footer-lnk">WhatsApp</a>
       <a href="https://instagram.com/elv8dgtl.in" target="_blank" class="footer-lnk">Instagram</a>
       <a href="https://linkedin.com/company/elv8dgtl" target="_blank" class="footer-lnk">LinkedIn</a>
@@ -634,7 +634,7 @@
   <i data-lucide="chevron-up" style="width:18px;height:18px;"></i>
 </button>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function () {
   'use strict';
 
@@ -675,16 +675,42 @@
     };
   }
 
+  // ── Debug panel (remove before go-live) ──────────────────────
+  function dbg(label, val) {
+    console.log('[DEKHO]', label, val);
+    var panel = document.getElementById('_dbg');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.id = '_dbg';
+      panel.style.cssText = 'position:fixed;bottom:0;left:0;right:0;max-height:220px;overflow-y:auto;background:#0d0d0d;color:#c8f135;font:12px/1.6 monospace;padding:10px 14px;z-index:99999;border-top:2px solid #E84B35;';
+      panel.innerHTML = '<b style="color:#E84B35">DEKHO DEBUG</b> <small style="color:#666;margin-left:8px">remove before go-live</small><hr style="border-color:#333;margin:4px 0">';
+      document.body.appendChild(panel);
+    }
+    var line = document.createElement('div');
+    line.innerHTML = '<span style="color:#E84B35">[' + label + ']</span> ' + String(val).replace(/</g,'&lt;');
+    panel.appendChild(line);
+    panel.scrollTop = panel.scrollHeight;
+  }
+
   /**
    * Fetch a single row. Returns the first element of the array or null.
    */
   function sbFetchOne(filter, select) {
-    return fetch(sbURL(filter, select, 1), { headers: sbHeaders() })
+    var url = sbURL(filter, select, 1);
+    dbg('FETCH', url);
+    return fetch(url, { headers: sbHeaders() })
       .then(function(r) {
-        if (!r.ok) throw new Error('Supabase error ' + r.status);
+        dbg('STATUS', r.status + ' ' + r.statusText);
+        if (!r.ok) {
+          return r.text().then(function(t) {
+            dbg('ERROR BODY', t);
+            throw new Error('Supabase ' + r.status + ': ' + t);
+          });
+        }
         return r.json();
       })
       .then(function(rows) {
+        dbg('ROWS RETURNED', JSON.stringify(rows));
         return (rows && rows.length) ? rows[0] : null;
       });
   }
@@ -1125,17 +1151,8 @@
       return;
     }
 
+    dbg('URL PARAM id', id);
     fetchArticle(id);
   }
 
-  // Guard: run after DOM is ready regardless of when the script executes
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init(); // DOM already ready (script is deferred or at end of body)
-  }
-
-}()); // end IIFE
-</script>
-</body>
-</html>
+  // Guard: run after DOM is ready regardless of when the script ex
