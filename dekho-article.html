@@ -1029,33 +1029,33 @@
   }
 
   // ════════════════════════════════════════════════════════════
-  //  FETCH ARTICLE — slug → id fallback
+  //  FETCH ARTICLE — by id only (no slug filter)
   // ════════════════════════════════════════════════════════════
-  function fetchArticle(id, slug) {
-    // Build the correct filter: prefer slug, fall back to id
-    var filter = slug
-      ? 'slug=eq.' + encodeURIComponent(slug) + '&status=eq.published'
-      : 'id=eq.'   + encodeURIComponent(id)   + '&status=eq.published';
+  function fetchArticle(id) {
+    if (!id) { showError('No article ID provided.'); return; }
 
-    sbFetchOne(filter, '*')
+    // Fetch by id only — no status filter so we can catch the row even if
+    // the status value doesn't exactly match and show a clearer error.
+    sbFetchOne('id=eq.' + encodeURIComponent(id), '*')
       .then(function(article) {
-        if (!article) { showError('Article not found.'); return; }
+        if (!article) {
+          showError('Article not found. (ID: ' + id + ')');
+          return;
+        }
 
-        // Rewrite URL to slug-based if we loaded by id and a slug exists
-        if (article.slug) {
-          var currentSlug = getParam('slug');
-          if (currentSlug !== article.slug) {
-            var cleanURL = window.location.pathname + '?slug=' + encodeURIComponent(article.slug);
-            try { window.history.replaceState({ slug: article.slug }, '', cleanURL); } catch(e) {}
-          }
+        // Guard: only show published articles on the public page
+        var status = (article.status || '').toLowerCase().trim();
+        if (status && status !== 'published') {
+          showError('This article is not published yet.');
+          return;
         }
 
         renderArticle(article);
 
-        // Load related articles in the background (same category, published)
+        // Load related articles in the background
         sbFetchMany('status=eq.published', 'id,slug,title,category,tag,coverImage,cover_image,readTime,read_time', 20)
           .then(function(articles) { renderRelated(article, articles); })
-          .catch(function() {}); // silently skip if related fails
+          .catch(function() {});
       })
       .catch(function(e) {
         showError('Could not load article. ' + (e && e.message ? e.message : 'Check your connection.'));
@@ -1117,16 +1117,15 @@
       if (backTop) backTop.classList.toggle('show', sy > 400);
     }, { passive: true });
 
-    // URL resolution: ?slug= first (canonical), ?id= as fallback
-    var slug = getParam('slug');
-    var id   = getParam('id');
+    // Fetch by ?id= only
+    var id = getParam('id');
 
-    if (!slug && !id) {
-      showError('No article specified. Use ?slug=your-slug or ?id=... in the URL.');
+    if (!id) {
+      showError('No article ID specified. Add ?id=... to the URL.');
       return;
     }
 
-    fetchArticle(id, slug);
+    fetchArticle(id);
   }
 
   // Guard: run after DOM is ready regardless of when the script executes
