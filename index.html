@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +13,6 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- ── Google Analytics ──────────────────────────────────────── -->
-    <!-- REPLACE G-V77HPC9EX8 with your GA4 Measurement ID -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -28,20 +26,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* ── VARIABLES (light) ───────────────────────── */
         :root {
-            --ink:     #0D0D0D;
-            --paper:   #FAFAF8;
-            --surface: #F2F1EE;
-            --border:  #E2E0DA;
-            --muted:   #8A8880;
-            --accent:  #E8380D;
-            --accent2: #1A6BFF;
-            --lime:    #CCF381;
+            --ink:      #0D0D0D;
+            --paper:    #FAFAF8;
+            --surface:  #F2F1EE;
+            --border:   #E2E0DA;
+            --muted:    #8A8880;
+            --accent:   #E8380D;
+            --accent2:  #1A6BFF;
+            --lime:     #CCF381;
+            --card-bg:  #ffffff;
+            --shadow:   rgba(0,0,0,.08);
+            --nav-bg:   rgba(250,250,248,0.95);
         }
+        /* ── VARIABLES (dark) ────────────────────────── */
+        [data-theme="dark"] {
+            --ink:      #F0EFEC;
+            --paper:    #111110;
+            --surface:  #1A1918;
+            --border:   #2A2826;
+            --muted:    #6B6A66;
+            --card-bg:  #1A1918;
+            --shadow:   rgba(0,0,0,.45);
+            --nav-bg:   rgba(17,17,16,0.95);
+        }
+
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 16px; scroll-behavior: smooth; }
-        body { background: var(--paper); color: var(--ink); font-family: 'Instrument Sans', sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-
+        body {
+            background: var(--paper); color: var(--ink);
+            font-family: 'Instrument Sans', sans-serif;
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+            transition: background .25s, color .25s;
+        }
         .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; line-height: 0.95; }
         .mono    { font-family: 'DM Mono', monospace; }
         .aff-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
@@ -50,32 +68,44 @@
         ::-webkit-scrollbar-track { background: var(--paper); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-        /* ── READ PROGRESS ──────────────────────────────── */
+        /* ── WORDMARK: DEK=black, HO=red ─────────────── */
+        .wm-ho { color: var(--accent); }
+
+        /* ── READ PROGRESS ───────────────────────────── */
         #read-progress {
             position: fixed; top: 0; left: 0; height: 3px;
-            background: var(--accent); z-index: 100; width: 0%;
+            background: var(--accent); z-index: 200; width: 0%;
             transition: width .1s linear;
         }
 
-        /* ── NAVBAR ─────────────────────────────────────── */
+        /* ── NAVBAR ──────────────────────────────────── */
         #navbar {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
-            background: rgba(250,250,248,0.95);
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: var(--nav-bg);
             backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
             border-bottom: 1.5px solid var(--border);
-            transition: box-shadow .3s;
+            transition: box-shadow .3s, background .25s, border-color .25s;
         }
-        #navbar.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+        #navbar.scrolled { box-shadow: 0 2px 24px var(--shadow); }
         .nav-inner {
             max-width: 1280px; margin: auto; padding: 0 1.25rem;
             display: flex; align-items: center; justify-content: space-between;
             height: 60px; gap: .75rem;
         }
 
-        /* ── SEARCH BOX ─────────────────────────────────── */
+        /* ── DARK TOGGLE ─────────────────────────────── */
+        #dark-toggle {
+            width: 32px; height: 32px; border-radius: 8px;
+            border: 1.5px solid var(--border); background: var(--surface);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--muted); transition: all .2s; flex-shrink: 0;
+        }
+        #dark-toggle:hover { border-color: var(--ink); color: var(--ink); }
+
+        /* ── SEARCH ──────────────────────────────────── */
         #search-wrap {
             display: none; align-items: center; gap: 8px;
-            background: #fff; border: 1.5px solid var(--border);
+            background: var(--card-bg); border: 1.5px solid var(--border);
             border-radius: 999px; padding: 7px 14px;
             transition: border-color .2s, box-shadow .2s;
         }
@@ -88,9 +118,9 @@
         }
         #search-input::placeholder { color: var(--muted); }
         #search-results {
-            display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 49;
-            background: #fff; border-bottom: 1.5px solid var(--border);
-            box-shadow: 0 8px 24px rgba(0,0,0,.08);
+            display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
+            background: var(--card-bg); border-bottom: 1.5px solid var(--border);
+            box-shadow: 0 8px 24px var(--shadow);
             max-height: 65vh; overflow-y: auto; padding: .75rem 1.25rem;
         }
         #search-results-inner { max-width: 1280px; margin: auto; }
@@ -102,7 +132,7 @@
         .search-result-item:last-child { border-bottom: none; }
         .search-result-item:hover { color: var(--accent); }
 
-        /* ── TAGS ───────────────────────────────────────── */
+        /* ── TAGS ────────────────────────────────────── */
         .tag {
             display: inline-block; font-family: 'DM Mono', monospace;
             font-size: 10px; font-weight: 500; letter-spacing: .12em;
@@ -114,15 +144,32 @@
         .tag-guide      { background: #F5F0FF; color: #6B3FD4;        border: 1px solid #CDB8FF; }
         .tag-news       { background: #EFF8FF; color: #0369A1;        border: 1px solid #BAE6FD; }
         .tag-opinion    { background: #FFF7ED; color: #C2410C;        border: 1px solid #FED7AA; }
+        [data-theme="dark"] .tag-review     { background: #2a1008; border-color: #6b2010; color: #ff7a5a; }
+        [data-theme="dark"] .tag-comparison { background: #071320; border-color: #0d2a5a; color: #6ea3ff; }
+        [data-theme="dark"] .tag-top        { background: #0a1e05; border-color: #1a4a0a; color: #6fcc50; }
+        [data-theme="dark"] .tag-guide      { background: #150d28; border-color: #3a1f7a; color: #b48aff; }
+        [data-theme="dark"] .tag-news       { background: #071520; border-color: #0a3050; color: #60b8f0; }
+        [data-theme="dark"] .tag-opinion    { background: #1e0e02; border-color: #6b2a08; color: #f09060; }
 
-        /* ── CARDS ──────────────────────────────────────── */
+        /* ── NEW BADGE ───────────────────────────────── */
+        .badge-new {
+            display: inline-block; font-family: 'DM Mono', monospace;
+            font-size: 9px; font-weight: 500; letter-spacing: .1em;
+            padding: 2px 7px; border-radius: 3px;
+            background: var(--lime); color: #111;
+            text-transform: uppercase;
+            animation: pulse-new 2.2s ease-in-out infinite;
+        }
+        @keyframes pulse-new { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+        /* ── CARDS ───────────────────────────────────── */
         .card {
-            background: #fff; border: 1.5px solid var(--border);
+            background: var(--card-bg); border: 1.5px solid var(--border);
             border-radius: 14px; overflow: hidden;
             transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
             display: flex; flex-direction: column; height: 100%;
         }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,.10); border-color: var(--ink); }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px var(--shadow); border-color: var(--ink); }
         .card:hover .card-img img { transform: scale(1.05); }
         .card:hover .card-title   { color: var(--accent); }
         .card-img { overflow: hidden; flex-shrink: 0; }
@@ -130,7 +177,21 @@
         .card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
         .card-title { transition: color .2s; }
 
-        /* ── LIST VIEW CARD ─────────────────────────────── */
+        /* ── SHARE BUTTON (on card) ──────────────────── */
+        .card-share {
+            position: absolute; top: 8px; left: 8px; z-index: 2;
+            width: 28px; height: 28px; border-radius: 50%;
+            background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.1);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all .2s; color: var(--ink);
+            opacity: 0; pointer-events: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,.12);
+        }
+        .card:hover .card-share { opacity: 1; pointer-events: auto; }
+        .card-share:hover { background: var(--ink); color: #fff; transform: scale(1.1); }
+        [data-theme="dark"] .card-share { background: rgba(26,25,24,.9); }
+
+        /* ── LIST VIEW CARD ──────────────────────────── */
         .card.list-mode { flex-direction: row; }
         .card.list-mode .card-img { width: 160px; flex-shrink: 0; aspect-ratio: 4/3; }
         .card.list-mode .card-img img { height: 100%; }
@@ -139,7 +200,7 @@
             .card.list-mode .card-img { width: 100%; aspect-ratio: 16/9; }
         }
 
-        /* ── RATING STAMP ───────────────────────────────── */
+        /* ── RATING STAMP ────────────────────────────── */
         .rating-stamp {
             position: absolute; top: 10px; right: 10px;
             width: 42px; height: 42px; background: var(--ink); color: var(--lime);
@@ -150,18 +211,16 @@
         }
         .rating-stamp span { font-family: 'DM Mono', monospace; font-size: 7px; color: #aaa; line-height: 1; }
 
-        /* ── HERO CARD ──────────────────────────────────── */
+        /* ── HERO CARD ───────────────────────────────── */
         .hero-card {
-            background: #fff; border: 1.5px solid var(--border);
+            background: var(--card-bg); border: 1.5px solid var(--border);
             border-radius: 18px; overflow: hidden;
             transition: box-shadow .3s, border-color .3s;
         }
-        .hero-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,.10); border-color: var(--ink); }
+        .hero-card:hover { box-shadow: 0 20px 60px var(--shadow); border-color: var(--ink); }
         .hero-card:hover .hero-img img { transform: scale(1.04); }
         .hero-img { overflow: hidden; }
         .hero-img img { transition: transform .6s ease; }
-
-        /* Desktop: side by side | Mobile: stacked */
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 340px; }
         @media (max-width: 700px) {
             .hero-grid { grid-template-columns: 1fr; }
@@ -170,21 +229,51 @@
             .hero-content { padding: 1.25rem !important; }
         }
 
-        /* ── TICKER ─────────────────────────────────────── */
+        /* ── TICKER ──────────────────────────────────── */
         @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        .ticker-inner { display: flex; white-space: nowrap; animation: ticker 22s linear infinite; }
+        .ticker-inner {
+            display: flex; white-space: nowrap;
+            animation: ticker 22s linear infinite;
+        }
+        .ticker-inner:hover { animation-play-state: paused; }
 
-        /* ── CATEGORY FILTER PILLS ──────────────────────── */
+        /* ── FILTER BAR (sticky) ─────────────────────── */
+        #filter-bar {
+            background: var(--paper);
+            border-bottom: 1.5px solid var(--border);
+            transition: background .25s, border-color .25s, box-shadow .3s;
+        }
+        #filter-bar.is-sticky {
+            position: fixed; top: 60px; left: 0; right: 0; z-index: 90;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+        #filter-bar-spacer { display: none; }
+        #filter-bar-spacer.active { display: block; }
+        #filter-bar-inner {
+            max-width: 1280px; margin: auto; padding: .8rem 1.25rem;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: .6rem; flex-wrap: wrap;
+        }
+
+        /* ── CAT FILTER PILLS ────────────────────────── */
         .cat-btn {
-            padding: 6px 16px; border-radius: 999px;
+            padding: 5px 13px; border-radius: 999px;
             border: 1.5px solid var(--border);
             font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
-            color: var(--muted); background: #fff;
+            color: var(--muted); background: var(--card-bg);
             cursor: pointer; transition: all .2s; white-space: nowrap; flex-shrink: 0;
+            display: inline-flex; align-items: center; gap: 5px;
         }
         .cat-btn:hover { border-color: var(--ink); color: var(--ink); }
         .cat-btn.active { background: var(--ink); color: var(--lime); border-color: var(--ink); }
-        /* Horizontal scroll on mobile, no scroll bar showing */
+        .cat-count {
+            font-size: 9px; opacity: .7;
+            background: rgba(0,0,0,.07); border-radius: 999px;
+            padding: 1px 5px; min-width: 16px; text-align: center;
+            transition: background .2s, opacity .2s;
+        }
+        .cat-btn.active .cat-count { background: rgba(204,243,129,.2); opacity: 1; }
+        [data-theme="dark"] .cat-count { background: rgba(255,255,255,.1); }
         .filter-row {
             display: flex; gap: 6px; overflow-x: auto;
             scrollbar-width: none; -ms-overflow-style: none;
@@ -192,7 +281,7 @@
         }
         .filter-row::-webkit-scrollbar { display: none; }
 
-        /* ── ARTICLE GRID ───────────────────────────────── */
+        /* ── ARTICLE GRID ────────────────────────────── */
         #article-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -201,20 +290,31 @@
         #article-grid.list-view { grid-template-columns: 1fr; }
         @media (max-width: 640px) { #article-grid { grid-template-columns: 1fr; } }
 
-        /* ── VIEW TOGGLE BUTTONS ────────────────────────── */
+        /* ── TOOLBAR BUTTONS ─────────────────────────── */
         .view-btn {
             width: 30px; height: 30px; border-radius: 6px; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: all .2s; border: 1.5px solid var(--border);
-            background: #fff; color: var(--muted); flex-shrink: 0;
+            background: var(--card-bg); color: var(--muted); flex-shrink: 0;
         }
         .view-btn.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+        .view-btn:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
 
-        /* ── REVEAL ANIMATION ───────────────────────────── */
+        /* ── RANDOM BTN ──────────────────────────────── */
+        #random-btn {
+            padding: 5px 11px; border-radius: 6px; cursor: pointer;
+            border: 1.5px solid var(--border); background: var(--card-bg);
+            font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
+            display: inline-flex; align-items: center; gap: 4px;
+            transition: all .2s; white-space: nowrap; flex-shrink: 0;
+        }
+        #random-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── REVEAL ──────────────────────────────────── */
         .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* ── HINDI WATERMARK ────────────────────────────── */
+        /* ── HINDI WATERMARK ─────────────────────────── */
         .hindi-bg {
             position: absolute; right: -40px; top: 50%; transform: translateY(-50%) rotate(-8deg);
             font-family: 'Bebas Neue', sans-serif;
@@ -223,17 +323,19 @@
             pointer-events: none; user-select: none;
             white-space: nowrap; z-index: 0;
         }
+        [data-theme="dark"] .hindi-bg { color: rgba(255,255,255,.03); }
 
-        /* ── NEWSLETTER ─────────────────────────────────── */
+        /* ── NEWSLETTER ──────────────────────────────── */
         .nl-input {
             flex: 1; border: none; outline: none; background: transparent;
             font-family: 'Instrument Sans', sans-serif; font-size: 14px; color: #fff; min-width: 0;
         }
         .nl-input::placeholder { color: #555; }
+        .nl-input:disabled { opacity: .5; }
 
-        /* ── MOBILE MENU ────────────────────────────────── */
+        /* ── MOBILE MENU ─────────────────────────────── */
         #mobile-menu {
-            position: fixed; inset: 0; background: var(--paper); z-index: 60;
+            position: fixed; inset: 0; background: var(--paper); z-index: 150;
             transform: translateX(100%);
             transition: transform .4s cubic-bezier(.4,0,.2,1);
             display: flex; flex-direction: column; align-items: center;
@@ -241,60 +343,58 @@
         }
         #mobile-menu.open { transform: translateX(0); }
 
-        /* ── FOOTER ─────────────────────────────────────── */
+        /* ── FOOTER LINKS ────────────────────────────── */
         .footer-link {
-            position: relative; color: #666; transition: color .2s;
+            position: relative; color: var(--muted); transition: color .2s;
             text-decoration: none; font-size: 14px;
         }
         .footer-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--ink); transition: width .3s; }
         .footer-link:hover { color: var(--ink); }
         .footer-link:hover::after { width: 100%; }
+        /* Dashboard link — accent coloured */
+        .footer-link-dash { color: var(--accent) !important; }
+        .footer-link-dash::after { background: var(--accent) !important; }
 
-        /* ── BACK TO TOP ────────────────────────────────── */
+        /* ── BACK TO TOP ─────────────────────────────── */
         #back-top {
             position: fixed; bottom: 5.5rem; right: 1.25rem; z-index: 39;
             width: 38px; height: 38px; background: var(--ink); color: #fff;
             border: none; border-radius: 50%; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 14px rgba(0,0,0,.2);
+            box-shadow: 0 4px 14px var(--shadow);
             opacity: 0; pointer-events: none;
             transition: opacity .3s, transform .2s;
         }
         #back-top.visible { opacity: 1; pointer-events: auto; }
         #back-top:hover { transform: scale(1.1); }
 
-        /* ── TOAST ──────────────────────────────────────── */
+        /* ── TOAST ───────────────────────────────────── */
         #toast {
             position: fixed; bottom: 1.5rem; left: 50%;
             transform: translateX(-50%) translateY(12px);
             background: var(--ink); color: #fff;
             padding: .6rem 1.25rem; border-radius: 999px;
             font-family: 'DM Mono', monospace; font-size: 12px;
-            letter-spacing: .04em; z-index: 200;
+            letter-spacing: .04em; z-index: 300;
             opacity: 0; transition: opacity .3s, transform .3s;
             pointer-events: none; white-space: nowrap;
         }
         #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* ── SKELETON LOADERS ───────────────────────────── */
+        /* ── SKELETONS ───────────────────────────────── */
         @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-        .skel-card { background: #fff; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
-        .skel-img  { aspect-ratio: 16/9; background: linear-gradient(90deg, #f0f0ee 25%, #e6e6e4 50%, #f0f0ee 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+        .skel-card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+        .skel-img  { aspect-ratio: 16/9; background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
         .skel-body { padding: 1.25rem; }
-        .skel-line { height: 11px; border-radius: 6px; margin-bottom: 10px; background: linear-gradient(90deg, #f0f0ee 25%, #e6e6e4 50%, #f0f0ee 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+        .skel-line { height: 11px; border-radius: 6px; margin-bottom: 10px; background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
         .skel-line.w60 { width: 60%; }
         .skel-line.w40 { width: 40%; }
 
-        /* ── PLAYGROUND EMBED ───────────────────────────── */
+        /* ── PLAYGROUND EMBED ────────────────────────── */
         .pg-embed { margin: 1.25rem 0; border-radius: 10px; overflow: hidden; }
         .pg-embed iframe { width: 100%; border: none; display: block; transition: height .3s ease; }
-        .img-crop-wrap { overflow: hidden; display: block; max-width: 100%; line-height: 0; }
-        .img-crop-wrap img { display: block; width: 100%; }
 
-        /* ── MISC UTILS ─────────────────────────────────── */
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── MOBILE-SPECIFIC TWEAKS ─────────────────────── */
+        /* ── MOBILE TWEAKS ───────────────────────────── */
         @media (max-width: 640px) {
             .hide-sm { display: none !important; }
             main { padding: 1.5rem 1rem 4rem !important; }
@@ -307,33 +407,34 @@
 
 <div id="read-progress"></div>
 
-<!-- ── NAVBAR ──────────────────────────────────────────────────────── -->
+<!-- ─────────────────── NAVBAR ─────────────────────────────────── -->
 <nav id="navbar">
     <div class="nav-inner">
-        <!-- Back link -->
         <a href="https://elv8dgtl.in/" style="display:flex;align-items:center;gap:5px;color:var(--muted);font-size:11px;text-decoration:none;flex-shrink:0;" class="mono">
             <i data-lucide="arrow-left" style="width:13px;height:13px;"></i>
             <span class="hide-sm">elv8dgtl.in</span>
         </a>
 
-        <!-- Wordmark -->
+        <!-- Wordmark: DEK black, HO red -->
         <a href="https://dekho.elv8dgtl.in/" style="display:flex;flex-direction:column;align-items:center;text-decoration:none;line-height:1;">
-            <span class="display" style="font-size:1.85rem;color:var(--ink);letter-spacing:.1em;">DEKHO</span>
+            <span class="display" style="font-size:1.85rem;letter-spacing:.1em;color:var(--ink);">DEK<span class="wm-ho">HO</span></span>
             <span class="mono" style="font-size:8px;color:var(--muted);letter-spacing:.2em;margin-top:1px;">BY ELV8 DGTL</span>
         </a>
 
-        <!-- Right controls -->
-        <div style="display:flex;align-items:center;gap:.5rem;">
-            <!-- Expandable search box -->
+        <div style="display:flex;align-items:center;gap:.45rem;">
             <div id="search-wrap">
                 <i data-lucide="search" style="width:13px;height:13px;color:var(--muted);flex-shrink:0;"></i>
                 <input type="text" id="search-input" placeholder="Search…" autocomplete="off" aria-label="Search articles">
-                <button onclick="closeSearch()" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--muted);line-height:0;" title="Close search">
+                <button onclick="closeSearch()" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--muted);line-height:0;" title="Close">
                     <i data-lucide="x" style="width:13px;height:13px;"></i>
                 </button>
             </div>
             <button onclick="openSearch()" id="search-btn" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink);" title="Search (/)">
                 <i data-lucide="search" style="width:18px;height:18px;"></i>
+            </button>
+            <!-- Dark mode toggle -->
+            <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">
+                <i data-lucide="moon" id="dark-icon" style="width:14px;height:14px;"></i>
             </button>
             <a href="https://elv8dgtl.in/contact.html" class="hide-sm" style="display:flex;align-items:center;gap:5px;background:var(--accent);color:#fff;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">
                 Work with us <i data-lucide="arrow-up-right" style="width:11px;height:11px;"></i>
@@ -345,36 +446,34 @@
     </div>
 </nav>
 
-<!-- Search results dropdown -->
-<div id="search-results">
-    <div id="search-results-inner"></div>
-</div>
+<div id="search-results"><div id="search-results-inner"></div></div>
 
-<!-- ── MOBILE MENU ──────────────────────────────────────────────────── -->
+<!-- ─────────────────── MOBILE MENU ────────────────────────────── -->
 <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <button onclick="toggleMobileMenu()" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;cursor:pointer;" aria-label="Close menu">
         <i data-lucide="x" style="width:24px;height:24px;color:var(--ink);"></i>
     </button>
-    <a href="https://elv8dgtl.in/"    onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">HOME</a>
-    <a href="https://dekho.elv8dgtl.in/"    onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--accent);text-decoration:none;">DEKHO</a>
+    <a href="https://elv8dgtl.in/" onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">HOME</a>
+    <!-- Wordmark: DEK black, HO red in mobile menu -->
+    <a href="https://dekho.elv8dgtl.in/" onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;text-decoration:none;color:var(--ink);">DEK<span class="wm-ho">HO</span></a>
     <a href="https://elv8dgtl.in/services.html" onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">SERVICES</a>
     <a href="https://elv8dgtl.in/about.html"    onclick="toggleMobileMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">ABOUT</a>
     <a href="https://elv8dgtl.in/contact.html"  onclick="toggleMobileMenu()" style="margin-top:.5rem;background:var(--accent);color:#fff;padding:11px 32px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;">Get a Quote</a>
     <div style="display:flex;gap:10px;margin-top:.25rem;">
-        <a href="https://instagram.com/elv8dgtl.in" target="_blank" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);" aria-label="Instagram"><i data-lucide="instagram" style="width:15px;height:15px;"></i></a>
-        <a href="https://linkedin.com/company/elv8dgtl" target="_blank" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);" aria-label="LinkedIn"><i data-lucide="linkedin" style="width:15px;height:15px;"></i></a>
-        <a href="https://x.com/elv8dgtl?s=21" target="_blank" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);" aria-label="Twitter/X"><i data-lucide="twitter" style="width:15px;height:15px;"></i></a>
-        <a href="https://wa.me/918052743378" target="_blank" style="width:34px;height:34px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;color:#fff;" aria-label="WhatsApp"><i data-lucide="message-circle" style="width:15px;height:15px;"></i></a>
+        <a href="https://instagram.com/elv8dgtl.in"       target="_blank" aria-label="Instagram" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);"><i data-lucide="instagram"     style="width:15px;height:15px;"></i></a>
+        <a href="https://linkedin.com/company/elv8dgtl"   target="_blank" aria-label="LinkedIn"  style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);"><i data-lucide="linkedin"      style="width:15px;height:15px;"></i></a>
+        <a href="https://x.com/elv8dgtl?s=21"             target="_blank" aria-label="Twitter/X" style="width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--ink);"><i data-lucide="twitter"       style="width:15px;height:15px;"></i></a>
+        <a href="https://wa.me/918052743378"               target="_blank" aria-label="WhatsApp"  style="width:34px;height:34px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;color:#fff;">              <i data-lucide="message-circle" style="width:15px;height:15px;"></i></a>
     </div>
 </div>
 
-<!-- ── HEADER ───────────────────────────────────────────────────────── -->
-<header style="padding-top:60px;border-bottom:1.5px solid var(--border);background:var(--paper);">
+<!-- ─────────────────── HEADER ──────────────────────────────────── -->
+<header style="padding-top:60px;border-bottom:1.5px solid var(--border);background:var(--paper);transition:background .25s,border-color .25s;">
     <div style="max-width:1280px;margin:auto;padding:1.75rem 1.25rem 0;">
 
-        <!-- Ticker -->
-        <div style="overflow:hidden;background:var(--ink);border-radius:8px;padding:9px 0;margin-bottom:1.75rem;">
-            <div class="ticker-inner">
+        <!-- Ticker (static labels; updated with real titles once articles load) -->
+        <div id="ticker-wrap" style="overflow:hidden;background:var(--ink);border-radius:8px;padding:9px 0;margin-bottom:1.75rem;" title="Hover to pause">
+            <div class="ticker-inner" id="ticker-inner">
                 <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">TECH REVIEWS</span>
                 <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
                 <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">COMPARISONS</span>
@@ -385,6 +484,7 @@
                 <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
                 <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">HONEST OPINIONS</span>
                 <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
+                <!-- duplicate for loop -->
                 <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">TECH REVIEWS</span>
                 <span class="mono" style="font-size:10px;color:var(--muted);padding:0 16px;">•</span>
                 <span class="mono" style="font-size:10px;color:var(--lime);padding:0 22px;letter-spacing:.12em;">COMPARISONS</span>
@@ -404,62 +504,73 @@
             <div style="position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;">
                 <div>
                     <p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.2em;margin-bottom:.35rem;">// VOL.01 &middot; ISSUE 001 &middot; 2026</p>
-                    <h1 class="display" style="font-size:clamp(52px,12vw,150px);color:var(--ink);line-height:.9;">DEKHO</h1>
+                    <!-- Big wordmark: DEK black, HO red -->
+                    <h1 class="display" style="font-size:clamp(52px,12vw,150px);line-height:.9;color:var(--ink);">DEK<span class="wm-ho">HO</span></h1>
                     <p style="font-size:clamp(13px,1.8vw,16px);color:var(--muted);margin-top:.55rem;max-width:460px;line-height:1.65;">
                         Real reviews. Honest comparisons. Curated picks &mdash; for Indian buyers who actually care what they spend on.
                     </p>
                 </div>
-                <!-- Live stats -->
+                <!-- Stats: only articles count (categories removed) -->
                 <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
                     <div style="border-left:2px solid var(--border);padding-left:1rem;">
                         <div class="display" id="hero-article-count" style="font-size:2rem;color:var(--accent);">&#8212;</div>
                         <div class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;">ARTICLES</div>
                     </div>
-                    <div id="stats-cats" style="border-left:2px solid var(--border);padding-left:1rem;display:none;">
-                        <div class="display" id="hero-cat-count" style="font-size:2rem;color:var(--ink);">&#8212;</div>
-                        <div class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;">CATEGORIES</div>
+                    <div style="border-left:2px solid var(--border);padding-left:1rem;">
+                        <div class="display" id="hero-sub-count" style="font-size:2rem;color:var(--ink);">&#8212;</div>
+                        <div class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;">SUBSCRIBERS</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Filter + sort bar -->
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.8rem 0;border-top:1.5px solid var(--border);flex-wrap:wrap;">
-            <div class="filter-row">
-                <button class="cat-btn active" onclick="filterCat('all')"        data-cat="all">All</button>
-                <button class="cat-btn"        onclick="filterCat('review')"     data-cat="review">Reviews</button>
-                <button class="cat-btn"        onclick="filterCat('comparison')" data-cat="comparison">Comparisons</button>
-                <button class="cat-btn"        onclick="filterCat('top')"        data-cat="top">Top Lists</button>
-                <button class="cat-btn"        onclick="filterCat('guide')"      data-cat="guide">Guides</button>
-                <button class="cat-btn"        onclick="filterCat('news')"       data-cat="news">News</button>
-                <button class="cat-btn"        onclick="filterCat('opinion')"    data-cat="opinion">Opinion</button>
-            </div>
-            <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;">
-                <span class="mono hide-sm" style="font-size:10px;color:var(--muted);">Sort:</span>
-                <select id="sort-select" onchange="sortArticles()" style="border:1.5px solid var(--border);background:#fff;border-radius:8px;padding:5px 9px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);cursor:pointer;outline:none;">
-                    <option value="newest">Newest</option>
-                    <option value="rating">Top Rated</option>
-                    <option value="readtime">Quick Reads</option>
-                </select>
-                <!-- Grid view -->
-                <button id="vbtn-grid" class="view-btn active" onclick="setView('grid')" title="Grid view">
-                    <i data-lucide="layout-grid" style="width:13px;height:13px;pointer-events:none;"></i>
-                </button>
-                <!-- List view -->
-                <button id="vbtn-list" class="view-btn" onclick="setView('list')" title="List view">
-                    <i data-lucide="list" style="width:13px;height:13px;pointer-events:none;"></i>
-                </button>
-            </div>
-        </div>
+        <!-- Sentinel: IntersectionObserver watches this to know when filter bar should stick -->
+        <div id="filter-sentinel" style="height:1px;"></div>
     </div>
 </header>
 
-<!-- ── MAIN ─────────────────────────────────────────────────────────── -->
+<!-- ─────────────────── STICKY FILTER BAR ───────────────────────── -->
+<div id="filter-bar">
+    <div id="filter-bar-inner">
+        <!-- Filter pills with live counts -->
+        <div class="filter-row" id="cat-row">
+            <button class="cat-btn active" onclick="filterCat('all')"        data-cat="all">All        <span class="cat-count" id="cnt-all">—</span></button>
+            <button class="cat-btn"        onclick="filterCat('review')"     data-cat="review">Reviews    <span class="cat-count" id="cnt-review">0</span></button>
+            <button class="cat-btn"        onclick="filterCat('comparison')" data-cat="comparison">Comparisons<span class="cat-count" id="cnt-comparison">0</span></button>
+            <button class="cat-btn"        onclick="filterCat('top')"        data-cat="top">Top Lists   <span class="cat-count" id="cnt-top">0</span></button>
+            <button class="cat-btn"        onclick="filterCat('guide')"      data-cat="guide">Guides     <span class="cat-count" id="cnt-guide">0</span></button>
+            <button class="cat-btn"        onclick="filterCat('news')"       data-cat="news">News       <span class="cat-count" id="cnt-news">0</span></button>
+            <button class="cat-btn"        onclick="filterCat('opinion')"    data-cat="opinion">Opinion    <span class="cat-count" id="cnt-opinion">0</span></button>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;flex-shrink:0;">
+            <span class="mono hide-sm" style="font-size:10px;color:var(--muted);">Sort:</span>
+            <select id="sort-select" onchange="sortArticles()" style="border:1.5px solid var(--border);background:var(--card-bg);color:var(--ink);border-radius:8px;padding:5px 9px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;outline:none;transition:background .25s,color .25s,border-color .25s;">
+                <option value="newest">Newest</option>
+                <option value="rating">Top Rated</option>
+                <option value="readtime">Quick Reads</option>
+            </select>
+            <!-- 🎲 Random article -->
+            <button id="random-btn" onclick="goRandom()" title="Surprise me!">
+                🎲 <span class="hide-sm">Random</span>
+            </button>
+            <button id="vbtn-grid" class="view-btn active" onclick="setView('grid')" title="Grid view">
+                <i data-lucide="layout-grid" style="width:13px;height:13px;pointer-events:none;"></i>
+            </button>
+            <button id="vbtn-list" class="view-btn" onclick="setView('list')" title="List view">
+                <i data-lucide="list" style="width:13px;height:13px;pointer-events:none;"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Ghost spacer keeps page height stable when filter bar goes fixed -->
+<div id="filter-bar-spacer"></div>
+
+<!-- ─────────────────── MAIN ─────────────────────────────────────── -->
 <main style="max-width:1280px;margin:auto;padding:2rem 1.25rem 5rem;">
 
-    <!-- Skeleton loaders -->
+    <!-- Skeleton -->
     <div id="loading-state">
-        <div id="skel-hero" style="background:#fff;border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:2rem;display:grid;grid-template-columns:1fr 1fr;min-height:300px;">
+        <div style="background:var(--card-bg);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:2rem;display:grid;grid-template-columns:1fr 1fr;min-height:300px;">
             <div class="skel-img" style="aspect-ratio:auto;min-height:220px;"></div>
             <div style="padding:2rem;display:flex;flex-direction:column;gap:.75rem;justify-content:center;">
                 <div class="skel-line w40"></div>
@@ -468,7 +579,7 @@
                 <div class="skel-line w60"></div>
             </div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;" id="skel-grid">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">
             <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line"></div><div class="skel-line w60"></div></div></div>
             <div class="skel-card"><div class="skel-img"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line"></div><div class="skel-line w60"></div></div></div>
             <div class="skel-card hide-sm"><div class="skel-img"></div><div class="skel-body"><div class="skel-line w40"></div><div class="skel-line"></div><div class="skel-line w60"></div></div></div>
@@ -491,10 +602,8 @@
     <!-- Articles -->
     <div id="articles-loaded" style="display:none;">
 
-        <!-- Featured hero -->
         <div id="featured-wrap" style="margin-bottom:1.75rem;"></div>
 
-        <!-- Toolbar row -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
             <p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.12em;">
                 <span id="article-count">0</span> ARTICLES PUBLISHED
@@ -502,52 +611,51 @@
             <p class="mono" style="font-size:10px;color:var(--accent);" id="active-filter-label"></p>
         </div>
 
-        <!-- Grid -->
         <div id="article-grid"></div>
 
-        <!-- No results -->
         <div id="no-results" style="display:none;text-align:center;padding:3.5rem 0;">
             <p class="display" style="font-size:2.5rem;color:var(--border);">NO RESULTS</p>
             <p style="color:var(--muted);margin-top:.5rem;font-size:14px;">Try a different category or search term.</p>
             <button onclick="filterCat('all')" style="margin-top:1.25rem;padding:8px 22px;background:var(--ink);color:#fff;border:none;border-radius:999px;font-size:12px;font-family:'DM Mono',monospace;cursor:pointer;letter-spacing:.05em;">Clear filter</button>
         </div>
 
-        <!-- Load more -->
         <div id="load-more-wrap" style="display:none;text-align:center;margin-top:2.5rem;">
-            <button id="load-more-btn" onclick="loadMore()" style="padding:11px 32px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.05em;">
+            <button id="load-more-btn" onclick="loadMore()" style="padding:11px 32px;border:1.5px solid var(--ink);background:var(--card-bg);color:var(--ink);border-radius:999px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.05em;">
                 Load more articles
             </button>
         </div>
     </div>
 
-    <!-- Newsletter -->
+    <!-- ── Newsletter — connected to Google Sheets via Apps Script ── -->
     <div class="nl-box" style="margin-top:3.5rem;background:var(--ink);border-radius:18px;padding:2.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem;position:relative;overflow:hidden;">
         <div class="hindi-bg" style="right:-20px;color:rgba(255,255,255,.03);">&#2342;&#2375;&#2326;&#2379;</div>
         <div style="position:relative;z-index:1;">
             <p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.2em;margin-bottom:.35rem;">// STAY IN THE LOOP</p>
-            <h3 class="display" style="font-size:clamp(1.5rem,4vw,2.25rem);color:#fff;line-height:1.1;">GET DEKHO IN YOUR INBOX</h3>
+            <!-- Wordmark in newsletter: DEK white, HO red -->
+            <h3 class="display" style="font-size:clamp(1.5rem,4vw,2.25rem);color:#fff;line-height:1.1;">GET DEK<span class="wm-ho">HO</span> IN YOUR INBOX</h3>
             <p style="color:#555;margin-top:.35rem;font-size:13px;">New reviews every week. No spam. Unsubscribe anytime.</p>
+            <p class="mono" id="nl-sub-line" style="font-size:10px;color:#444;margin-top:.4rem;"></p>
         </div>
-        <form onsubmit="handleNewsletter(event)" style="position:relative;z-index:1;display:flex;gap:0;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:999px;padding:5px 5px 5px 18px;width:min(100%,400px);">
-            <input type="email" class="nl-input" placeholder="your@email.com" required>
-            <button type="submit" style="background:var(--accent);color:#fff;border:none;padding:9px 20px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .2s;">Subscribe</button>
+        <form id="nl-form" onsubmit="handleNewsletter(event)" style="position:relative;z-index:1;display:flex;gap:0;background:#1a1a1a;border:1.5px solid #2a2a2a;border-radius:999px;padding:5px 5px 5px 18px;width:min(100%,400px);" class="nl-form">
+            <input type="email" class="nl-input" id="nl-email" placeholder="your@email.com" required>
+            <button type="submit" id="nl-btn" style="background:var(--accent);color:#fff;border:none;padding:9px 20px;border-radius:999px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .2s,background .2s;">Subscribe</button>
         </form>
     </div>
 
 </main>
 
-<!-- ── FOOTER ───────────────────────────────────────────────────────── -->
-<footer style="background:var(--surface);border-top:1.5px solid var(--border);padding:3rem 1.25rem 1.75rem;">
+<!-- ─────────────────── FOOTER ───────────────────────────────────── -->
+<footer style="background:var(--surface);border-top:1.5px solid var(--border);padding:3rem 1.25rem 1.75rem;transition:background .25s,border-color .25s;">
     <div style="max-width:1280px;margin:auto;">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:2rem;padding-bottom:2rem;border-bottom:1.5px solid var(--border);margin-bottom:1.25rem;">
 
             <!-- Brand -->
             <div>
-                <h4 class="display" style="font-size:1.85rem;color:var(--ink);margin-bottom:.25rem;">DEKHO</h4>
+                <!-- Footer brand: DEK black, HO red -->
+                <h4 class="display" style="font-size:1.85rem;margin-bottom:.25rem;color:var(--ink);">DEK<span class="wm-ho">HO</span></h4>
                 <p class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:.85rem;">BY ELV8 DGTL</p>
                 <p style="font-size:13px;color:var(--muted);line-height:1.7;max-width:210px;">Real tech reviews for Indian buyers. Honest picks, no sponsored fluff.</p>
                 <p class="aff-note" style="margin-top:.75rem;">This site contains Amazon affiliate links.</p>
-                <!-- Live IST clock -->
                 <p class="mono" style="font-size:10px;color:var(--muted);margin-top:.5rem;display:flex;align-items:center;gap:5px;">
                     <i data-lucide="clock" style="width:11px;height:11px;"></i>
                     <span id="ist-clock">--:-- IST</span>
@@ -567,50 +675,41 @@
                 </div>
             </div>
 
-            <!-- Site links -->
+            <!-- ELV8 DGTL links + CMS Dashboard -->
             <div>
                 <p class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:.9rem;">ELV8 DGTL</p>
                 <div style="display:flex;flex-direction:column;gap:.5rem;">
-                    <a href="https://elv8dgtl.in/"    class="footer-link">Home</a>
-                    <a href="https://elv8dgtl.in/services.html" class="footer-link">Services</a>
-                    <a href="https://elv8dgtl.in/about.html"    class="footer-link">About</a>
-                    <a href="https://elv8dgtl.in/contact.html"  class="footer-link">Contact</a>
-                    <a href="https://elv8dgtl.in/work.html"  class="footer-link">Contact</a>
+                    <a href="https://elv8dgtl.in/"                  class="footer-link">Home</a>
+                    <a href="https://elv8dgtl.in/services.html"     class="footer-link">Services</a>
+                    <a href="https://elv8dgtl.in/about.html"        class="footer-link">About</a>
+                    <a href="https://elv8dgtl.in/contact.html"      class="footer-link">Contact</a>
+                    <a href="https://elv8dgtl.in/work.html"         class="footer-link">Work</a>
+                    <a href="https://dekho.elv8dgtl.in/dashboard" class="footer-link" style="color:var(--accent);">CMS Dashboard &rarr;</a>
                 </div>
             </div>
 
-            <!-- Reach us — PLAIN EMAIL, NO OBFUSCATION -->
+            <!-- Reach us -->
             <div>
                 <p class="mono" style="font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:.9rem;">REACH US</p>
                 <div style="display:flex;flex-direction:column;gap:.65rem;">
-                    <a href="mailto:hello@elv8dgtl.in" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
-                        <i data-lucide="mail" style="width:14px;height:14px;flex-shrink:0;"></i><span>hello@elv8dgtl.in</span>
+                    <a href="/cdn-cgi/l/email-protection#acc4c9c0c0c3ecc9c0da94c8cbd8c082c5c2" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+                        <i data-lucide="mail" style="width:14px;height:14px;flex-shrink:0;"></i><span class="__cf_email__" data-cfemail="1179747d7d7e51747d67297576657d3f787f">[email&#160;protected]</span>
                     </a>
                     <a href="https://wa.me/918052743378" target="_blank" style="font-size:13px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--muted)'">
                         <i data-lucide="message-circle" style="width:14px;height:14px;flex-shrink:0;"></i>+91 80527 43378
                     </a>
-                    <!-- Social icons -->
                     <div style="display:flex;gap:8px;margin-top:4px;">
-                        <a href="https://instagram.com/elv8dgtl.in" target="_blank" aria-label="Instagram" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#E1306C';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
-                            <i data-lucide="instagram" style="width:14px;height:14px;"></i>
-                        </a>
-                        <a href="https://linkedin.com/company/elv8dgtl" target="_blank" aria-label="LinkedIn" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#0077B5';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
-                            <i data-lucide="linkedin" style="width:14px;height:14px;"></i>
-                        </a>
-                        <a href="https://x.com/elv8dgtl?s=21" target="_blank" aria-label="X / Twitter" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='var(--ink)';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
-                            <i data-lucide="twitter" style="width:14px;height:14px;"></i>
-                        </a>
-                        <a href="https://wa.me/918052743378" target="_blank" aria-label="WhatsApp" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#25D366';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'">
-                            <i data-lucide="message-circle" style="width:14px;height:14px;"></i>
-                        </a>
+                        <a href="https://instagram.com/elv8dgtl.in"     target="_blank" aria-label="Instagram" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#E1306C';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'"><i data-lucide="instagram"     style="width:14px;height:14px;"></i></a>
+                        <a href="https://linkedin.com/company/elv8dgtl" target="_blank" aria-label="LinkedIn"  style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#0077B5';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'"><i data-lucide="linkedin"      style="width:14px;height:14px;"></i></a>
+                        <a href="https://x.com/elv8dgtl?s=21"           target="_blank" aria-label="X"        style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='var(--ink)';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'"><i data-lucide="twitter"       style="width:14px;height:14px;"></i></a>
+                        <a href="https://wa.me/918052743378"             target="_blank" aria-label="WhatsApp" style="width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--ink);transition:all .2s;" onmouseover="this.style.background='#25D366';this.style.color='#fff'" onmouseout="this.style.background='var(--border)';this.style.color='var(--ink)'"><i data-lucide="message-circle" style="width:14px;height:14px;"></i></a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Bottom bar -->
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;">
             <p class="mono" style="font-size:10px;color:var(--muted);">&copy; 2026 DEKHO by elv8 dgtl. All rights reserved.</p>
+            <p class="mono" style="font-size:10px;color:var(--muted);">Created &amp; managed by <a href="https://elv8dgtl.in" target="_blank" style="color:var(--ink);text-decoration:none;border-bottom:1px solid var(--border);">elv8 dgtl</a> &mdash; <a href="https://elv8dgtl.in/contact.html" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;">Create your own! &rarr;</a></p>
             <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
                 Back to top <i data-lucide="arrow-up" style="width:13px;height:13px;"></i>
             </button>
@@ -625,494 +724,508 @@
     <i data-lucide="message-circle" style="width:24px;height:24px;color:#fff;"></i>
 </a>
 
-<!-- Back to top -->
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
     <i data-lucide="arrow-up" style="width:16px;height:16px;"></i>
 </button>
 
-<!-- Toast -->
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script>
-// ── CONFIG ───────────────────────────────────────────────────────
-var API = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvHjqt2hYisva_Ghn3rDGszn-t6F-qCEHiFcM5L-Z/exec';
+<!-- ─────────────────── SCRIPTS ──────────────────────────────────── -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── CONFIG ────────────────────────────────────────────────────────
+var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
+var API_BASE      = SUPABASE_URL + '/functions/v1';
+
+// ── SUPABASE FETCH HELPER ────────────────────────────────────────
+function apiFetch(payload, isNewsletter) {
+    var fn = isNewsletter ? 'newsletter' : 'articles';
+    return fetch(API_BASE + '/' + fn, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON,
+            'Authorization': 'Bearer ' + SUPABASE_ANON
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(function(r) { if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+}
 
 // ── STATE ─────────────────────────────────────────────────────────
-var allArticles   = [];
+var allArticles    = [];
 var sortedArticles = [];
-var activeFilter  = 'all';
-var activeSearch  = '';
-var currentView   = 'grid';
-var PAGE_SIZE     = 9;
-var currentPage   = 0;   // pages already rendered (0 = none yet)
+var activeFilter   = 'all';
+var activeSearch   = '';
+var currentView    = 'grid';
+var PAGE_SIZE      = 9;
+var currentPage    = 0;
+var _filterSticky  = false;
 
-// ── LOCAL CACHE (5 min TTL) ──────────────────────────────────────
+// ── LOCAL CACHE (5 min TTL) ───────────────────────────────────────
 var CACHE_KEY = 'dekho_articles';
 var CACHE_TTL = 5 * 60 * 1000;
 function getCached() {
-    try {
-        var r = localStorage.getItem(CACHE_KEY);
-        if (!r) return null;
-        var e = JSON.parse(r);
-        if (!e || !e.ts || !e.data) return null;
-        if (Date.now() - e.ts > CACHE_TTL) return null;
-        return e.data;
-    } catch(x) { return null; }
+    try { var r=JSON.parse(localStorage.getItem(CACHE_KEY)||'null'); return r&&r.ts&&(Date.now()-r.ts<CACHE_TTL)?r.data:null; } catch(x){ return null; }
 }
-function setCache(data) {
-    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: data })); } catch(x) {}
-}
+function setCache(d) { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ts:Date.now(),data:d})); } catch(x){} }
 
-// ── PLAYGROUND: auto-height messaging ────────────────────────────
-window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'pg-resize') return;
-    var h = parseInt(e.data.h);
-    if (!h || h < 50) return;
-    document.querySelectorAll('.pg-embed iframe').forEach(function(f) {
-        try { if (f.contentWindow === e.source) f.style.height = (h + 24) + 'px'; } catch(x) {}
-    });
-});
-
-function restorePlaygrounds(content, playgrounds) {
-    if (!content) return content || '';
-    if (!playgrounds || !Object.keys(playgrounds).length) return content;
-    return content.replace(/(?:<span[^>]*data-pg-token="([^"]+)"[^>]*>[\s\S]*?<\/span>|\[\[PG:([^\]]+)\]\])/g, function(match, uid1, uid2) {
-        var uid = uid1 || uid2; if (!uid) return '';
-        var pg  = playgrounds[uid]; if (!pg) return '';
-        var isAuto = pg.autoheight !== '0';
-        var height = isAuto ? '200px' : (pg.height || '400px');
-        var border = pg.border === '1' ? 'border:1.5px solid #E2E0DA;' : '';
-        var scroll = pg.scroll === '1' ? 'auto' : 'hidden';
-        var autoScript = isAuto ? '<scr'+'ipt>(function(){function r(){var h=document.documentElement.scrollHeight||document.body.scrollHeight;parent.postMessage({type:"pg-resize",h:h},"*");}window.addEventListener("load",r);window.addEventListener("resize",r);setTimeout(r,200);setTimeout(r,800);})();<\/scr'+'ipt>' : '';
-        var doc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;}</style>'+(pg.css?'<style>'+pg.css+'</style>':'')+autoScript+'</head><body>'+(pg.html||'')+(pg.js?'<scr'+'ipt>'+pg.js+'<\/scr'+'ipt>':'')+'</body></html>';
-        var safeDoc = doc.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-        return '<div class="pg-embed" style="'+border+'"><iframe data-srcdoc="'+safeDoc+'" style="width:100%;height:'+height+';border:none;display:block;overflow:'+scroll+';transition:height .3s ease;" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>';
-    });
+// ── DARK MODE ─────────────────────────────────────────────────────
+function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    var icon = document.getElementById('dark-icon');
+    if (icon) icon.setAttribute('data-lucide', t==='dark'?'sun':'moon');
+    lucide.createIcons();
 }
-function initPlaygrounds(container) {
-    (container || document).querySelectorAll('iframe[data-srcdoc]').forEach(function(iframe) {
-        var enc = iframe.getAttribute('data-srcdoc'); if (!enc) return;
-        var doc = enc.replace(/&quot;/g,'"').replace(/&amp;/g,'&');
-        iframe.removeAttribute('data-srcdoc');
-        try { iframe.srcdoc = doc; } catch(e) { iframe.src = URL.createObjectURL(new Blob([doc],{type:'text/html'})); }
-    });
+function toggleDark() {
+    var next = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    applyTheme(next);
+    try { localStorage.setItem('dekho_theme', next); } catch(x) {}
+}
+(function initTheme(){
+    var saved=''; try{saved=localStorage.getItem('dekho_theme')||'';}catch(x){}
+    var pref = saved || (window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+    if (pref==='dark') document.documentElement.setAttribute('data-theme','dark');
+})();
+
+// ── STICKY FILTER BAR ─────────────────────────────────────────────
+function initStickyFilter() {
+    var sentinel = document.getElementById('filter-sentinel');
+    var bar      = document.getElementById('filter-bar');
+    var spacer   = document.getElementById('filter-bar-spacer');
+    if (!sentinel||!bar||!('IntersectionObserver' in window)) return;
+    var obs = new IntersectionObserver(function(entries){
+        var out = !entries[0].isIntersecting;
+        if (out===_filterSticky) return;
+        _filterSticky = out;
+        bar.classList.toggle('is-sticky', out);
+        if (out) { spacer.style.height=bar.offsetHeight+'px'; spacer.classList.add('active'); }
+        else     { spacer.classList.remove('active'); }
+    }, { rootMargin:'-60px 0px 0px 0px' });
+    obs.observe(sentinel);
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
     lucide.createIcons();
+    // apply saved theme icon after icons are created
+    applyTheme(document.documentElement.getAttribute('data-theme')||'light');
 
-    // Scroll: progress bar + navbar shadow + back-to-top
-    var navbar = document.getElementById('navbar');
+    var navbar  = document.getElementById('navbar');
     var backTop = document.getElementById('back-top');
-    var prog = document.getElementById('read-progress');
+    var prog    = document.getElementById('read-progress');
     window.addEventListener('scroll', function() {
         var sy   = window.scrollY;
         var docH = document.documentElement.scrollHeight - window.innerHeight;
-        if (prog && docH > 0) prog.style.width = Math.min(100, sy / docH * 100) + '%';
-        navbar.classList.toggle('scrolled', sy > 40);
-        backTop.classList.toggle('visible', sy > 500);
-    }, { passive: true });
+        if (prog&&docH>0) prog.style.width=Math.min(100,sy/docH*100)+'%';
+        navbar.classList.toggle('scrolled', sy>40);
+        backTop.classList.toggle('visible', sy>500);
+    }, {passive:true});
 
-    // Footer live IST clock
+    // IST clock
     var clockEl = document.getElementById('ist-clock');
-    function tickClock() {
-        if (clockEl) clockEl.textContent = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', timeZone:'Asia/Kolkata' }) + ' IST';
-    }
-    tickClock(); setInterval(tickClock, 30000);
+    function tick(){ if(clockEl) clockEl.textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kolkata'})+' IST'; }
+    tick(); setInterval(tick, 30000);
 
-    // Mobile menu
     window.toggleMobileMenu = function() {
-        var m = document.getElementById('mobile-menu');
+        var m=document.getElementById('mobile-menu');
         m.classList.toggle('open');
-        document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
+        document.body.style.overflow=m.classList.contains('open')?'hidden':'';
     };
 
-    // Search input live
-    document.getElementById('search-input').addEventListener('input', function() {
-        activeSearch = this.value.toLowerCase().trim();
+    document.getElementById('search-input').addEventListener('input', function(){
+        activeSearch=this.value.toLowerCase().trim();
         renderSearchOverlay(activeSearch);
         applyFilterAndSearch();
     });
-
-    // Close search / overlay on outside click
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('#search-wrap') && !e.target.closest('#search-results') && !e.target.closest('#search-btn')) {
-            document.getElementById('search-results').style.display = 'none';
-        }
+    document.addEventListener('click', function(e){
+        if(!e.target.closest('#search-wrap')&&!e.target.closest('#search-results')&&!e.target.closest('#search-btn'))
+            document.getElementById('search-results').style.display='none';
+    });
+    document.addEventListener('keydown', function(e){
+        if(e.key==='/'&&e.target.tagName!=='INPUT'&&e.target.tagName!=='TEXTAREA'){e.preventDefault();openSearch();}
+        if(e.key==='Escape'){closeSearch();var m=document.getElementById('mobile-menu');if(m.classList.contains('open'))toggleMobileMenu();}
     });
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        if (e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-            e.preventDefault(); openSearch();
-        }
-        if (e.key === 'Escape') {
-            closeSearch();
-            var m = document.getElementById('mobile-menu');
-            if (m.classList.contains('open')) toggleMobileMenu();
-        }
-    });
+    try { if(localStorage.getItem('dekho_view')==='list') setView('list'); } catch(x){}
 
-    // Restore saved view preference
-    try {
-        var sv = localStorage.getItem('dekho_view');
-        if (sv === 'list') setView('list');
-    } catch(x) {}
-
+    initStickyFilter();
     loadArticles();
 });
 
-// ── SEARCH OPEN / CLOSE ───────────────────────────────────────────
+// ── SEARCH ────────────────────────────────────────────────────────
 function openSearch() {
     document.getElementById('search-wrap').classList.add('open');
-    document.getElementById('search-btn').style.display = 'none';
-    setTimeout(function() { document.getElementById('search-input').focus(); }, 50);
+    document.getElementById('search-btn').style.display='none';
+    setTimeout(function(){document.getElementById('search-input').focus();},50);
 }
 function closeSearch() {
     document.getElementById('search-wrap').classList.remove('open');
-    document.getElementById('search-btn').style.display = '';
-    document.getElementById('search-input').value = '';
-    document.getElementById('search-results').style.display = 'none';
-    activeSearch = '';
-    applyFilterAndSearch();
+    document.getElementById('search-btn').style.display='';
+    document.getElementById('search-input').value='';
+    document.getElementById('search-results').style.display='none';
+    activeSearch=''; applyFilterAndSearch();
 }
-window.toggleSearch = function() {
-    document.getElementById('search-wrap').classList.contains('open') ? closeSearch() : openSearch();
-};
+window.toggleSearch = function(){ document.getElementById('search-wrap').classList.contains('open')?closeSearch():openSearch(); };
 
 // ── LOAD ARTICLES ─────────────────────────────────────────────────
 function loadArticles() {
     show('loading-state'); hide('error-state'); hide('empty-state'); hide('articles-loaded');
-    var cached = getCached();
+    var cached=getCached();
     if (cached) {
-        hide('loading-state');
-        allArticles = cached;
-        onLoaded(allArticles);
-        // Background revalidate (stale-while-revalidate)
-        fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({action:'listPublished'}) })
-        .then(function(r){ return r.json(); })
-        .then(function(d){ if(d.ok && d.articles){ setCache(d.articles); if(d.articles.length !== allArticles.length){ allArticles=d.articles; onLoaded(allArticles); } } })
+        hide('loading-state'); allArticles=cached; onLoaded(allArticles);
+        apiFetch({action:'listPublished'})
+        .then(function(d){if(d.ok&&d.articles){setCache(d.articles);if(d.articles.length!==allArticles.length){allArticles=d.articles;onLoaded(allArticles);}}})
         .catch(function(){});
         return;
     }
-    fetch(API, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({action:'listPublished'}) })
-    .then(function(r) { if (!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-    .then(function(d) {
+    apiFetch({action:'listPublished'})
+    .then(function(d){
         hide('loading-state');
-        if (!d.ok) { showError(d.error || 'Failed to load.'); return; }
-        allArticles = d.articles || [];
-        setCache(allArticles);
-        onLoaded(allArticles);
+        if(!d.ok){showError(d.error||'Failed to load.');return;}
+        allArticles=d.articles||[]; setCache(allArticles); onLoaded(allArticles);
     })
-    .catch(function(err) { hide('loading-state'); showError('Could not reach the server. Check your connection.'); console.error(err); });
+    .catch(function(err){hide('loading-state');showError('Could not reach the server. Check your connection.');console.error(err);});
 }
 
 function onLoaded(arts) {
-    if (!arts.length) { show('empty-state'); return; }
-    var count = arts.length;
-    document.getElementById('article-count').textContent = count;
-    var hc = document.getElementById('hero-article-count');
-    if (hc) hc.textContent = count;
-    // Category count stat
-    var cats = new Set(arts.map(function(a){ return a.category; }).filter(Boolean));
-    var sw = document.getElementById('stats-cats'), cc = document.getElementById('hero-cat-count');
-    if (sw && cc) { cc.textContent = cats.size; sw.style.display = ''; }
+    if (!arts.length){show('empty-state');return;}
+    var count=arts.length;
+    document.getElementById('article-count').textContent=count;
+    var hc=document.getElementById('hero-article-count'); if(hc)hc.textContent=count;
 
-    sortedArticles = arts.slice();
+    // ── Live counts on filter pills ──
+    var cats={review:0,comparison:0,top:0,guide:0,news:0,opinion:0};
+    arts.forEach(function(a){if(cats[a.category]!==undefined)cats[a.category]++;});
+    var cntAll=document.getElementById('cnt-all'); if(cntAll)cntAll.textContent=count;
+    Object.keys(cats).forEach(function(k){var el=document.getElementById('cnt-'+k);if(el)el.textContent=cats[k];});
+
+    // ── Update ticker with real article titles ──
+    updateTicker(arts);
+
+    // ── Fetch subscriber count (non-blocking) ──
+    fetchSubCount();
+
+    sortedArticles=arts.slice();
     renderAll();
     show('articles-loaded');
     initReveal();
 }
 
-// ── RENDER ALL ────────────────────────────────────────────────────
-function renderAll() {
-    renderFeatured();
-    renderGrid();
+// ── LIVE TICKER with real titles ──────────────────────────────────
+function updateTicker(arts) {
+    var ticker=document.getElementById('ticker-inner'); if(!ticker||!arts.length)return;
+    var titles=arts.slice(0,8).map(function(a){return a.title;});
+    var doubled=titles.concat(titles);
+    ticker.innerHTML=doubled.map(function(t,i){
+        var a=arts[i%titles.length];
+        var url=a.slug?'dekho-article.html?slug='+encodeURIComponent(a.slug):'dekho-article.html?id='+encodeURIComponent(a.id);
+        return '<a href="'+url+'" class="mono" style="font-size:10px;color:'+(i%2===0?'var(--lime)':'#8A8880')+';padding:0 22px;letter-spacing:.09em;text-decoration:none;white-space:nowrap;">'+esc(t)+'</a>'+
+               '<span class="mono" style="font-size:10px;color:#3a3a38;padding:0 12px;">•</span>';
+    }).join('');
+    // Speed based on content length
+    var speed=Math.max(20,Math.min(55,titles.join('').length*0.18));
+    ticker.style.animationDuration=speed+'s';
 }
 
-// ── FEATURED CARD ─────────────────────────────────────────────────
+// ── SUBSCRIBER COUNT ──────────────────────────────────────────────
+function fetchSubCount() {
+    apiFetch({action:'getSubCount'})
+    .then(function(r){return r.json();})
+    .then(function(d){
+        if(d.ok&&d.count!==undefined){
+            var hsc=document.getElementById('hero-sub-count'); if(hsc)hsc.textContent=d.count;
+            var nl=document.getElementById('nl-sub-line'); if(nl&&d.count>0)nl.textContent='Join '+d.count+' readers already subscribed.';
+        }
+    })
+    .catch(function(){});
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function renderAll(){ renderFeatured(); renderGrid(); }
+
 function renderFeatured() {
-    var a    = sortedArticles[0];
-    var wrap = document.getElementById('featured-wrap');
-    if (!a) { wrap.innerHTML = ''; return; }
-    var tc   = tagCls(a.category);
-    var tl   = tagDisplay(a.category);
-    var dt   = fmtDate(a.publishedAt);
-    var cov  = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80';
-    var rat  = a.rating ? parseFloat(a.rating).toFixed(1) : '';
-    var ini  = (a.authorName || 'D').charAt(0).toUpperCase();
-    var url  = 'dekho-article.html?id=' + encodeURIComponent(a.id);
-    wrap.innerHTML =
-        '<div class="article-item reveal" data-cat="'+esc(a.category)+'" data-rating="'+(a.rating||0)+'" data-date="'+dateSortKey(a.publishedAt)+'">' +
-        '<a href="'+url+'" style="text-decoration:none;">' +
-        '<div class="hero-card">' +
-        '<div class="hero-grid">' +
-        '<div class="hero-img" style="position:relative;">' +
-        '<img src="'+esc(cov)+'" alt="'+esc(a.title)+'" style="width:100%;height:100%;min-height:200px;object-fit:cover;display:block;" onerror="this.src=\'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80\'">' +
-        '<div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,rgba(255,255,255,.15));pointer-events:none;"></div>' +
-        '<div style="position:absolute;top:12px;left:12px;"><span class="tag '+tc+'">'+tl+'</span></div>' +
-        (rat ? '<div class="rating-stamp">'+rat+'<span>/ 10</span></div>' : '') +
-        '</div>' +
-        '<div class="hero-content" style="padding:2rem;display:flex;flex-direction:column;justify-content:center;background:#fff;">' +
-        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:.8rem;">' +
-        '<span class="tag '+tc+'">'+tl+'</span>' +
-        '<span class="mono" style="font-size:10px;color:var(--muted);">'+(a.readTime||5)+' min read &middot; '+dt+'</span>' +
-        '</div>' +
-        '<h2 class="display card-title" style="font-size:clamp(20px,2.4vw,34px);color:var(--ink);line-height:1.05;margin-bottom:.8rem;">'+esc(a.title)+'</h2>' +
-        '<p style="color:var(--muted);line-height:1.7;margin-bottom:1.25rem;font-size:14px;">'+esc(a.excerpt||'')+'</p>' +
-        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">' +
-        '<div style="display:flex;align-items:center;gap:8px;">' +
-        '<div style="width:28px;height:28px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;color:var(--lime);font-family:\'Bebas Neue\',sans-serif;font-size:13px;flex-shrink:0;">'+ini+'</div>' +
-        '<span style="font-size:13px;color:var(--muted);">'+esc(a.authorName||'')+'</span>' +
-        '</div>' +
-        '<span style="color:var(--accent);font-size:13px;font-weight:600;">'+readCTA(a.category)+'</span>' +
+    var a=sortedArticles[0], wrap=document.getElementById('featured-wrap');
+    if(!a){wrap.innerHTML='';return;}
+    var tc=tagCls(a.category), tl=tagDisplay(a.category), dt=fmtDate(a.publishedAt);
+    var cov=a.coverImage||'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80';
+    var rat=a.rating?parseFloat(a.rating).toFixed(1):'';
+    var ini=(a.authorName||'D').charAt(0).toUpperCase();
+    var url=artUrl(a);
+    var isNew=freshArticle(a.publishedAt);
+    wrap.innerHTML=
+        '<div class="article-item reveal" data-cat="'+esc(a.category)+'" data-rating="'+(a.rating||0)+'" data-date="'+dateSortKey(a.publishedAt)+'">'+
+        '<a href="'+url+'" style="text-decoration:none;">'+
+        '<div class="hero-card">'+
+        '<div class="hero-grid">'+
+        '<div class="hero-img" style="position:relative;">'+
+        '<img src="'+esc(cov)+'" alt="'+esc(a.title)+'" style="width:100%;height:100%;min-height:200px;object-fit:cover;display:block;" onerror="this.src=\'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80\'">'+
+        '<div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 55%,rgba(255,255,255,.15));pointer-events:none;"></div>'+
+        '<div style="position:absolute;top:12px;left:12px;display:flex;align-items:center;gap:6px;">'+
+        '<span class="tag '+tc+'">'+tl+'</span>'+(isNew?'<span class="badge-new">New</span>':'')+
+        '</div>'+
+        (rat?'<div class="rating-stamp">'+rat+'<span>/ 10</span></div>':'')+
+        '</div>'+
+        '<div class="hero-content" style="padding:2rem;display:flex;flex-direction:column;justify-content:center;background:var(--card-bg);">'+
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:.8rem;">'+
+        '<span class="tag '+tc+'">'+tl+'</span>'+
+        '<span class="mono" style="font-size:10px;color:var(--muted);">'+(a.readTime||5)+' min read &middot; '+dt+'</span>'+
+        '</div>'+
+        '<h2 class="display card-title" style="font-size:clamp(20px,2.4vw,34px);color:var(--ink);line-height:1.05;margin-bottom:.8rem;">'+esc(a.title)+'</h2>'+
+        '<p style="color:var(--muted);line-height:1.7;margin-bottom:1.25rem;font-size:14px;">'+esc(a.excerpt||'')+'</p>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">'+
+        '<div style="display:flex;align-items:center;gap:8px;">'+
+        '<div style="width:28px;height:28px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;color:var(--lime);font-family:\'Bebas Neue\',sans-serif;font-size:13px;flex-shrink:0;">'+ini+'</div>'+
+        '<span style="font-size:13px;color:var(--muted);">'+esc(a.authorName||'')+'</span>'+
+        '</div>'+
+        '<span style="color:var(--accent);font-size:13px;font-weight:600;">'+readCTA(a.category)+'</span>'+
         '</div></div></div></div></a></div>';
 }
 
-// ── GRID RENDER + PAGINATION ──────────────────────────────────────
 function renderGrid() {
-    var grid = document.getElementById('article-grid');
-    var rest = sortedArticles.slice(1);
-    currentPage = 0;
-    grid.innerHTML = '';
-    if (!rest.length) { updateLoadMore(0,0); return; }
-    appendCards(rest, 0, PAGE_SIZE);
-    currentPage = 1;
-    updateLoadMore(rest.length, PAGE_SIZE);
-    if (currentView === 'list') applyListCards();
+    var grid=document.getElementById('article-grid'), rest=sortedArticles.slice(1);
+    currentPage=0; grid.innerHTML='';
+    if(!rest.length){updateLoadMore(0,0);return;}
+    appendCards(rest,0,PAGE_SIZE); currentPage=1;
+    updateLoadMore(rest.length,PAGE_SIZE);
+    if(currentView==='list')applyListCards();
     initReveal();
 }
-
 function loadMore() {
-    var rest  = sortedArticles.slice(1);
-    var start = currentPage * PAGE_SIZE;
-    appendCards(rest, start, start + PAGE_SIZE);
-    currentPage++;
-    updateLoadMore(rest.length, currentPage * PAGE_SIZE);
-    if (currentView === 'list') applyListCards();
+    var rest=sortedArticles.slice(1), start=currentPage*PAGE_SIZE;
+    appendCards(rest,start,start+PAGE_SIZE); currentPage++;
+    updateLoadMore(rest.length,currentPage*PAGE_SIZE);
+    if(currentView==='list')applyListCards();
     initReveal();
 }
-
-function appendCards(arr, start, end) {
-    var grid  = document.getElementById('article-grid');
-    var chunk = arr.slice(start, end);
-    chunk.forEach(function(a, i) {
-        var el = document.createElement('div');
-        el.innerHTML = cardHTML(a, start + i);
-        grid.appendChild(el.firstChild);
+function appendCards(arr,start,end) {
+    var grid=document.getElementById('article-grid');
+    arr.slice(start,end).forEach(function(a,i){
+        var el=document.createElement('div'); el.innerHTML=cardHTML(a,start+i); grid.appendChild(el.firstChild);
     });
 }
-
-function updateLoadMore(total, shown) {
-    var w = document.getElementById('load-more-wrap');
-    if (w) w.style.display = shown < total ? 'block' : 'none';
-}
+function updateLoadMore(total,shown){ var w=document.getElementById('load-more-wrap'); if(w)w.style.display=shown<total?'block':'none'; }
 
 function cardHTML(a, i) {
-    var tc   = tagCls(a.category);
-    var tl   = tagDisplay(a.category);
-    var cov  = a.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80';
-    var rat  = a.rating ? parseFloat(a.rating).toFixed(1) : '';
-    var url  = 'dekho-article.html?id=' + encodeURIComponent(a.id);
-    var del  = (i % 3) * 0.07;
-    return '<div class="article-item reveal" data-cat="'+esc(a.category)+'" data-rating="'+(a.rating||0)+'" data-date="'+dateSortKey(a.publishedAt)+'" style="transition-delay:'+del+'s;">' +
-        '<a href="'+url+'" style="text-decoration:none;">' +
-        '<div class="card">' +
-        '<div class="card-img" style="aspect-ratio:16/9;position:relative;">' +
-        '<img src="'+esc(cov)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80\'">' +
-        (rat ? '<div class="rating-stamp">'+rat+'<span>/ 10</span></div>' : '') +
-        '</div>' +
-        '<div class="card-body">' +
-        '<div style="display:flex;align-items:center;gap:7px;margin-bottom:.6rem;">' +
-        '<span class="tag '+tc+'">'+tl+'</span>' +
-        '<span class="mono" style="font-size:10px;color:var(--muted);">'+(a.readTime||5)+' min</span>' +
-        '</div>' +
-        '<h3 class="card-title display" style="font-size:21px;color:var(--ink);line-height:1.15;margin-bottom:.6rem;">'+esc(a.title)+'</h3>' +
-        '<p style="color:var(--muted);font-size:13px;line-height:1.65;flex:1;margin-bottom:.85rem;">'+esc(a.excerpt||'')+'</p>' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-        '<div><span class="aff-note">By '+esc(a.authorName||'DEKHO')+'</span>' +
-        '<div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px;">'+fmtDate(a.publishedAt)+'</div></div>' +
-        '<span style="color:var(--accent);font-size:12px;font-weight:600;">'+readCTA(a.category)+'</span>' +
+    var tc=tagCls(a.category), tl=tagDisplay(a.category);
+    var cov=a.coverImage||'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80';
+    var rat=a.rating?parseFloat(a.rating).toFixed(1):'';
+    var url=artUrl(a);
+    var del=(i%3)*0.07;
+    var isNew=freshArticle(a.publishedAt);
+    return '<div class="article-item reveal" data-cat="'+esc(a.category)+'" data-rating="'+(a.rating||0)+'" data-date="'+dateSortKey(a.publishedAt)+'" style="transition-delay:'+del+'s;">'+
+        '<a href="'+url+'" style="text-decoration:none;">'+
+        '<div class="card">'+
+        '<div class="card-img" style="aspect-ratio:16/9;position:relative;">'+
+        // Share button — appears on card hover
+        '<button class="card-share" onclick="shareCard(event,\''+esc(url)+'\',\''+esc(a.title)+'\')" title="Share" aria-label="Share this article">'+
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>'+
+        '</button>'+
+        '<img src="'+esc(cov)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80\'">'+
+        (rat?'<div class="rating-stamp">'+rat+'<span>/ 10</span></div>':'')+
+        (isNew?'<div style="position:absolute;bottom:8px;left:8px;"><span class="badge-new">New</span></div>':'')+
+        '</div>'+
+        '<div class="card-body">'+
+        '<div style="display:flex;align-items:center;gap:7px;margin-bottom:.6rem;">'+
+        '<span class="tag '+tc+'">'+tl+'</span>'+
+        '<span class="mono" style="font-size:10px;color:var(--muted);">'+(a.readTime||5)+' min</span>'+
+        '</div>'+
+        '<h3 class="card-title display" style="font-size:21px;color:var(--ink);line-height:1.15;margin-bottom:.6rem;">'+esc(a.title)+'</h3>'+
+        '<p style="color:var(--muted);font-size:13px;line-height:1.65;flex:1;margin-bottom:.85rem;">'+esc(a.excerpt||'')+'</p>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;">'+
+        '<div><span class="aff-note">By '+esc(a.authorName||'DEKHO')+'</span>'+
+        '<div class="mono" style="font-size:10px;color:var(--muted);margin-top:2px;">'+fmtDate(a.publishedAt)+'</div></div>'+
+        '<span style="color:var(--accent);font-size:12px;font-weight:600;">'+readCTA(a.category)+'</span>'+
         '</div></div></div></a></div>';
 }
 
-// ── VIEW TOGGLE (grid / list) ─────────────────────────────────────
-window.setView = function(v) {
-    currentView = v;
-    var gb = document.getElementById('vbtn-grid');
-    var lb = document.getElementById('vbtn-list');
-    var grid = document.getElementById('article-grid');
-    if (v === 'list') {
-        gb.classList.remove('active'); lb.classList.add('active');
-        grid.classList.add('list-view');
-        applyListCards();
-    } else {
-        lb.classList.remove('active'); gb.classList.add('active');
-        grid.classList.remove('list-view');
-        grid.querySelectorAll('.card').forEach(function(c) {
-            c.classList.remove('list-mode');
-            var img = c.querySelector('.card-img');
-            if (img) { img.style.width=''; img.style.flexShrink=''; }
-        });
+// ── SHARE CARD ────────────────────────────────────────────────────
+function shareCard(e, relUrl, title) {
+    e.preventDefault(); e.stopPropagation();
+    var full='https://dekho.elv8dgtl.in/'+relUrl;
+    if(navigator.share){navigator.share({title:title,url:full}).catch(function(){});}
+    else {
+        navigator.clipboard ? navigator.clipboard.writeText(full).then(function(){showToast('Link copied! 📋');}).catch(function(){fallbackCopy(full);})
+                            : fallbackCopy(full);
     }
-    try { localStorage.setItem('dekho_view', v); } catch(x) {}
-};
-function applyListCards() {
-    document.getElementById('article-grid').querySelectorAll('.card').forEach(function(c) {
-        c.classList.add('list-mode');
-        var img = c.querySelector('.card-img');
-        if (img) { img.style.width='160px'; img.style.flexShrink='0'; }
-    });
+}
+function fallbackCopy(text){var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);showToast('Link copied! 📋');}
+
+// ── RANDOM ARTICLE ────────────────────────────────────────────────
+function goRandom(){
+    if(!allArticles.length)return;
+    var a=allArticles[Math.floor(Math.random()*allArticles.length)];
+    showToast('🎲 Taking you somewhere interesting…');
+    setTimeout(function(){window.location.href=artUrl(a);},700);
 }
 
+// ── VIEW TOGGLE ───────────────────────────────────────────────────
+window.setView=function(v){
+    currentView=v;
+    var gb=document.getElementById('vbtn-grid'),lb=document.getElementById('vbtn-list'),grid=document.getElementById('article-grid');
+    if(v==='list'){gb.classList.remove('active');lb.classList.add('active');grid.classList.add('list-view');applyListCards();}
+    else{lb.classList.remove('active');gb.classList.add('active');grid.classList.remove('list-view');
+        grid.querySelectorAll('.card').forEach(function(c){c.classList.remove('list-mode');var img=c.querySelector('.card-img');if(img){img.style.width='';img.style.flexShrink='';}});}
+    try{localStorage.setItem('dekho_view',v);}catch(x){}
+};
+function applyListCards(){document.getElementById('article-grid').querySelectorAll('.card').forEach(function(c){c.classList.add('list-mode');var img=c.querySelector('.card-img');if(img){img.style.width='160px';img.style.flexShrink='0';}});}
+
 // ── FILTER ────────────────────────────────────────────────────────
-window.filterCat = function(cat) {
-    activeFilter = cat;
-    document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
-    var btn = document.querySelector('.cat-btn[data-cat="'+cat+'"]');
-    if (btn) { btn.classList.add('active'); btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' }); }
+window.filterCat=function(cat){
+    activeFilter=cat;
+    document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('active');});
+    var btn=document.querySelector('.cat-btn[data-cat="'+cat+'"]');
+    if(btn){btn.classList.add('active');btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}
     applyFilterAndSearch();
 };
 
-function applyFilterAndSearch() {
-    var items   = document.querySelectorAll('.article-item');
-    var visible = 0;
-    var lbl     = document.getElementById('active-filter-label');
-    items.forEach(function(item) {
-        var catMatch    = activeFilter === 'all' || item.dataset.cat === activeFilter;
-        var titleEl     = item.querySelector('h2, h3');
-        var titleText   = titleEl ? titleEl.textContent.toLowerCase() : '';
-        var descEl      = item.querySelector('p');
-        var descText    = descEl ? descEl.textContent.toLowerCase() : '';
-        var searchMatch = !activeSearch || titleText.includes(activeSearch) || descText.includes(activeSearch);
-        var isVis       = catMatch && searchMatch;
-        item.style.transition = 'opacity .3s';
-        if (isVis) { item.style.display = ''; item.style.opacity = '1'; visible++; }
-        else { item.style.opacity = '0'; setTimeout(function(el){ return function(){ if(el.style.opacity==='0') el.style.display='none'; }; }(item), 300); }
+function applyFilterAndSearch(){
+    var items=document.querySelectorAll('.article-item'),visible=0;
+    var lbl=document.getElementById('active-filter-label');
+    items.forEach(function(item){
+        var catOk=activeFilter==='all'||item.dataset.cat===activeFilter;
+        var tEl=item.querySelector('h2,h3'), dEl=item.querySelector('p');
+        var srchOk=!activeSearch||(tEl&&tEl.textContent.toLowerCase().includes(activeSearch))||(dEl&&dEl.textContent.toLowerCase().includes(activeSearch));
+        var vis=catOk&&srchOk;
+        item.style.transition='opacity .3s';
+        if(vis){item.style.display='';item.style.opacity='1';visible++;}
+        else{item.style.opacity='0';setTimeout((function(el){return function(){if(el.style.opacity==='0')el.style.display='none';};})(item),300);}
     });
-    // Featured card
-    var fw = document.getElementById('featured-wrap');
-    if (fw) {
-        var fi = fw.querySelector('.article-item');
-        if (fi) {
-            var fv = (activeFilter==='all' || fi.dataset.cat===activeFilter) && (!activeSearch || fw.textContent.toLowerCase().includes(activeSearch));
-            fw.style.display = fv ? '' : 'none';
-        }
+    var fw=document.getElementById('featured-wrap');
+    if(fw){var fi=fw.querySelector('.article-item');if(fi){var fv=(activeFilter==='all'||fi.dataset.cat===activeFilter)&&(!activeSearch||fw.textContent.toLowerCase().includes(activeSearch));fw.style.display=fv?'':'none';}}
+    if(lbl){
+        if(activeFilter!=='all') lbl.textContent=tagDisplay(activeFilter).toUpperCase()+' only';
+        else if(activeSearch)    lbl.textContent='Searching: "'+activeSearch+'"';
+        else                     lbl.textContent='';
     }
-    // Active filter label
-    if (lbl) {
-        if (activeFilter !== 'all') lbl.textContent = tagDisplay(activeFilter).toUpperCase() + ' only';
-        else if (activeSearch)      lbl.textContent = 'Searching: "' + activeSearch + '"';
-        else                        lbl.textContent = '';
-    }
-    document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+    document.getElementById('no-results').style.display=visible===0?'block':'none';
 }
 
 // ── SORT ──────────────────────────────────────────────────────────
-window.sortArticles = function() {
-    var val = document.getElementById('sort-select').value;
-    sortedArticles = allArticles.slice().sort(function(a, b) {
-        if (val === 'rating')   return parseFloat(b.rating||0) - parseFloat(a.rating||0);
-        if (val === 'readtime') return parseInt(a.readTime||99) - parseInt(b.readTime||99);
-        return new Date(b.publishedAt) - new Date(a.publishedAt);
+window.sortArticles=function(){
+    var val=document.getElementById('sort-select').value;
+    sortedArticles=allArticles.slice().sort(function(a,b){
+        if(val==='rating')  return parseFloat(b.rating||0)-parseFloat(a.rating||0);
+        if(val==='readtime')return parseInt(a.readTime||99)-parseInt(b.readTime||99);
+        return new Date(b.publishedAt)-new Date(a.publishedAt);
     });
-    renderAll();
-    applyFilterAndSearch();
+    renderAll(); applyFilterAndSearch();
 };
 
 // ── SEARCH OVERLAY ────────────────────────────────────────────────
-function renderSearchOverlay(q) {
-    var results = document.getElementById('search-results');
-    var inner   = document.getElementById('search-results-inner');
-    if (!q) { results.style.display = 'none'; return; }
-    var matches = allArticles.filter(function(a) {
-        return (a.title||'').toLowerCase().includes(q) || (a.excerpt||'').toLowerCase().includes(q) || (a.tag||'').toLowerCase().includes(q);
-    });
-    if (!matches.length) {
-        inner.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:.5rem 0;">No articles found for &ldquo;'+esc(q)+'&rdquo;</p>';
-    } else {
-        inner.innerHTML =
-            '<p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem;">'+matches.length+' RESULT'+(matches.length>1?'S':'')+'</p>' +
-            matches.slice(0, 8).map(function(a) {
-                var url = 'dekho-article.html?id=' + encodeURIComponent(a.id);
-                return '<a href="'+url+'" class="search-result-item">' +
-                    '<span class="tag '+tagCls(a.category)+'">'+tagDisplay(a.category)+'</span>' +
-                    '<span style="font-size:13px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(a.title)+'</span>' +
-                    '<span class="mono" style="font-size:10px;color:var(--muted);flex-shrink:0;">'+(a.readTime||5)+' min</span>' +
-                    '<span style="flex-shrink:0;font-size:12px;color:var(--accent);">&rarr;</span>' +
-                    '</a>';
-            }).join('') +
-            (matches.length > 8 ? '<p style="font-size:12px;color:var(--muted);text-align:center;padding:.5rem 0;">+' + (matches.length-8) + ' more &mdash; keep typing to narrow down</p>' : '');
+function renderSearchOverlay(q){
+    var results=document.getElementById('search-results'),inner=document.getElementById('search-results-inner');
+    if(!q){results.style.display='none';return;}
+    var matches=allArticles.filter(function(a){return(a.title||'').toLowerCase().includes(q)||(a.excerpt||'').toLowerCase().includes(q)||(a.tag||'').toLowerCase().includes(q);});
+    if(!matches.length){inner.innerHTML='<p style="color:var(--muted);font-size:13px;padding:.5rem 0;">No articles found for &ldquo;'+esc(q)+'&rdquo;</p>';}
+    else{
+        inner.innerHTML='<p class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem;">'+matches.length+' RESULT'+(matches.length>1?'S':'')+'</p>'+
+        matches.slice(0,8).map(function(a){
+            return '<a href="'+artUrl(a)+'" class="search-result-item">'+
+                '<span class="tag '+tagCls(a.category)+'">'+tagDisplay(a.category)+'</span>'+
+                '<span style="font-size:13px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(a.title)+'</span>'+
+                '<span class="mono" style="font-size:10px;color:var(--muted);flex-shrink:0;">'+(a.readTime||5)+' min</span>'+
+                '<span style="flex-shrink:0;font-size:12px;color:var(--accent);">&rarr;</span></a>';
+        }).join('')+
+        (matches.length>8?'<p style="font-size:12px;color:var(--muted);text-align:center;padding:.5rem 0;">+'+(matches.length-8)+' more — keep typing</p>':'');
     }
-    results.style.display = 'block';
+    results.style.display='block';
 }
 
-// ── REVEAL (scroll animation) ─────────────────────────────────────
-function initReveal() {
-    if (!('IntersectionObserver' in window)) {
-        document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('active'); });
-        return;
-    }
-    var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('active'); obs.unobserve(e.target); } });
-    }, { threshold: 0.06 });
-    document.querySelectorAll('.reveal:not(.active)').forEach(function(el) { obs.observe(el); });
-}
-
-// ── NEWSLETTER ────────────────────────────────────────────────────
-window.handleNewsletter = function(e) {
+// ── NEWSLETTER — saves to Subscribers sheet in Google Sheets ──────
+// Backend must implement action:'subscribeNewsletter' and action:'getSubCount'
+// See Code.gs additions at the bottom of this file comment block.
+window.handleNewsletter=function(e){
     e.preventDefault();
-    var btn   = e.target.querySelector('button[type="submit"]');
-    var input = e.target.querySelector('input[type="email"]');
-    btn.textContent = 'Subscribed!';
-    btn.style.background = '#16A34A';
-    btn.disabled = true;
-    if (input) input.disabled = true;
-    showToast('Welcome to DEKHO! You\'re subscribed.');
+    var btn=document.getElementById('nl-btn');
+    var email=document.getElementById('nl-email').value.trim();
+    if(!email)return;
+    btn.textContent='Subscribing…'; btn.disabled=true;
+
+    apiFetch({action:'subscribeNewsletter',email:email},true)
+    .then(function(r){return r.json();})
+    .then(function(d){
+        if(d.ok){
+            btn.textContent='✓ Subscribed!'; btn.style.background='#16A34A';
+            document.getElementById('nl-email').disabled=true;
+            showToast('Welcome! You\'re on the DEKHO list 🎉');
+            fetchSubCount();
+        } else if(d.error==='already_subscribed'){
+            btn.textContent='Already subscribed!'; btn.style.background='#ca8a04';
+            showToast('You\'re already on our list 📬');
+        } else {
+            btn.textContent='Try again'; btn.disabled=false;
+            showToast('Something went wrong, please try again.');
+        }
+    })
+    .catch(function(){btn.textContent='Try again';btn.disabled=false;showToast('Network error, please try again.');});
 };
 
-// ── TOAST ─────────────────────────────────────────────────────────
-function showToast(msg) {
-    var t = document.getElementById('toast');
-    if (!t) return;
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(function() { t.classList.remove('show'); }, 3200);
+// ── REVEAL ────────────────────────────────────────────────────────
+function initReveal(){
+    if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('active');});return;}
+    var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('active');obs.unobserve(e.target);}});},{threshold:0.06});
+    document.querySelectorAll('.reveal:not(.active)').forEach(function(el){obs.observe(el);});
 }
 
+// ── TOAST ─────────────────────────────────────────────────────────
+function showToast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3200);}
+
 // ── HELPERS ───────────────────────────────────────────────────────
-function tagCls(cat) {
-    var m = { review:'tag-review', comparison:'tag-comparison', top:'tag-top', guide:'tag-guide', news:'tag-news', opinion:'tag-opinion' };
-    return m[cat] || 'tag-review';
-}
-function tagDisplay(cat) {
-    var m = { review:'Review', comparison:'Comparison', top:'Top List', guide:'Guide', news:'News', opinion:'Opinion' };
-    return m[cat] ? m[cat] : (cat ? cat.charAt(0).toUpperCase()+cat.slice(1) : 'Article');
-}
-function readCTA(cat) {
-    var m = { review:'Read full review', comparison:'See comparison', top:'View top list', guide:'Read guide', news:'Read more', opinion:'Read opinion' };
-    return (m[cat] || 'Read article') + ' \u2192';
-}
-function fmtDate(iso) {
-    if (!iso) return '';
-    try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }); } catch(e) { return ''; }
-}
-function dateSortKey(iso) {
-    if (!iso) return '0';
-    try { return new Date(iso).getTime().toString(); } catch(e) { return '0'; }
-}
-function esc(s) {
-    if (!s) return '';
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function show(id) { var el=document.getElementById(id); if(el) el.style.display=''; }
-function hide(id) { var el=document.getElementById(id); if(el) el.style.display='none'; }
-function showError(msg) {
-    show('error-state');
-    var em = document.getElementById('error-msg');
-    if (em) em.textContent = msg || 'Could not load articles.';
-}
-</script>
-</body>
-</html>
+function artUrl(a){ return a.slug?'dekho-article.html?slug='+encodeURIComponent(a.slug):'dekho-article.html?id='+encodeURIComponent(a.id); }
+function freshArticle(iso){ if(!iso)return false; try{return(Date.now()-new Date(iso).getTime())<7*24*3600000;}catch(e){return false;} }
+function tagCls(cat){var m={review:'tag-review',comparison:'tag-comparison',top:'tag-top',guide:'tag-guide',news:'tag-news',opinion:'tag-opinion'};return m[cat]||'tag-review';}
+function tagDisplay(cat){var m={review:'Review',comparison:'Comparison',top:'Top List',guide:'Guide',news:'News',opinion:'Opinion'};return m[cat]||(cat?cat.charAt(0).toUpperCase()+cat.slice(1):'Article');}
+function readCTA(cat){var m={review:'Read full review',comparison:'See comparison',top:'View top list',guide:'Read guide',news:'Read more',opinion:'Read opinion'};return(m[cat]||'Read article')+' \u2192';}
+function fmtDate(iso){if(!iso)return'';try{return new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(e){return'';}}
+function dateSortKey(iso){if(!iso)return'0';try{return new Date(iso).getTime().toString();}catch(e){return'0';}}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function show(id){var el=document.getElementById(id);if(el)el.style.display='';}
+function hide(id){var el=document.getElementById(id);if(el)el.style.display='none';}
+function showError(msg){show('error-state');var em=document.getElementById('error-msg');if(em)em.textContent=msg||'Could not load articles.';}
+
+/*
+ ══════════════════════════════════════════════════════════
+  CODE.GS ADDITIONS REQUIRED for newsletter + sub count
+  Add these two functions to your Code.gs and redeploy:
+ ══════════════════════════════════════════════════════════
+
+  // In doPost router, add:
+  else if (action === "subscribeNewsletter") result = subscribeNewsletter(body);
+  else if (action === "getSubCount")         result = getSubCount();
+
+  // ── subscribeNewsletter ──────────────────────────────
+  function subscribeNewsletter(body) {
+    var email = (body.email || '').toString().trim().toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return { ok: false, error: 'invalid_email' };
+
+    var ss    = SpreadsheetApp.openById(SHEET_ID);
+    var sheet = ss.getSheetByName('Subscribers') ||
+                ss.insertSheet('Subscribers').setFrozenRows(1);
+
+    // Create header if sheet is brand new
+    if (sheet.getLastRow() === 0)
+      sheet.appendRow(['email', 'subscribedAt', 'source']);
+
+    // Check for duplicate
+    var data = sheet.getDataRange().getValues();
+    for (var i = 1; i < data.length; i++) {
+      if (String(data[i][0]).toLowerCase() === email)
+        return { ok: false, error: 'already_subscribed' };
+    }
+
+    sheet.appendRow([email, new Date().toISOString(), 'dekho.html']);
+    return { ok: true };
+  }
+
+  // ── getSubCount ──────────────────────────────────────
+  function getSubCount() {
+    try {
+      var ss    = SpreadsheetApp.openById(SHEET_ID);
+      var sheet = ss.getSheetByName('Subscribers');
+      if (!sheet) return { ok: true, count: 0 };
+      var count = Math.max(0, sheet.getLastRow() - 1); // subtract header row
+      return { ok: true, count: count };
+    } catch(e) {
+      return
