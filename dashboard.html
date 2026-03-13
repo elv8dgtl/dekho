@@ -1843,7 +1843,7 @@ function call(action, body) {
   if (_GAS_ACTIONS[action]) {
     return fetch(GAS_API, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
+      redirect: 'follow',
       body: JSON.stringify(Object.assign({ action: action }, body || {}))
     })
     .then(function(r){
