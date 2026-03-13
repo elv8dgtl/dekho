@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-
-  <!-- ═══════════════════════════════════════════════════════════
-       DEKHO BLOG — High priority (active content hub)
-       Updated frequently — Google should crawl often
-       ═══════════════════════════════════════════════════════════ -->
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://dekho.elv8dgtl.in/index.html</loc>
-    <lastmod>2026-03-11</lastmod>
+    <loc>https://dekho.elv8dgtl.in/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-
+  <url>
+    <loc>https://dekho.elv8dgtl.in/dekho-article.html?slug=ai-in-digital-marketing-trends-tools-strategy-guide-2026</loc>
+    <lastmod>2026-03-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dekho.elv8dgtl.in/dekho-article.html?slug=tech-news-today-march-11-2026</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dekho.elv8dgtl.in/dekho-article.html?slug=is-ai-making-us-dumber-the-neuroscience-of-ai-cognitive-decline</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://dekho.elv8dgtl.in/dekho-article.html?slug=transforming-data-into-strategy-the-power-of-marketing-insights</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
