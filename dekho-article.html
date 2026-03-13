@@ -643,7 +643,7 @@
   // ════════════════════════════════════════════════════════════
   var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
   var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
-  var TABLE         = 'article';
+  var TABLE         = 'articles';
   var SITE          = 'https://dekho.elv8dgtl.in';
   var FALLBACK_IMG  = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80';
   var FALLBACK_THUMB= 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=200&q=60';
@@ -1055,21 +1055,25 @@
   }
 
   // ════════════════════════════════════════════════════════════
-  //  FETCH ARTICLE — by id only (no slug filter)
+  //  FETCH ARTICLE — slug first (matches dekho.html artUrl),
+  //                  id as fallback for direct links
   // ════════════════════════════════════════════════════════════
-  function fetchArticle(id) {
-    if (!id) { showError('No article ID provided.'); return; }
+  function fetchArticle(id, slug) {
+    // dekho.html passes ?slug= when the article has one, ?id= otherwise
+    var filter = slug
+      ? 'slug=eq.' + encodeURIComponent(slug)
+      : 'id=eq.'   + encodeURIComponent(id);
 
-    // Fetch by id only — no status filter so we can catch the row even if
-    // the status value doesn't exactly match and show a clearer error.
-    sbFetchOne('id=eq.' + encodeURIComponent(id), '*')
+    if (!id && !slug) { showError('No article specified.'); return; }
+
+    sbFetchOne(filter, '*')
       .then(function(article) {
         if (!article) {
-          showError('Article not found. (ID: ' + id + ')');
+          showError('Article not found. (' + (slug ? 'slug: ' + slug : 'id: ' + id) + ')');
           return;
         }
 
-        // Guard: only show published articles on the public page
+        // Guard: only show published articles
         var status = (article.status || '').toLowerCase().trim();
         if (status && status !== 'published') {
           showError('This article is not published yet.');
@@ -1143,16 +1147,19 @@
       if (backTop) backTop.classList.toggle('show', sy > 400);
     }, { passive: true });
 
-    // Fetch by ?id= only
-    var id = getParam('id');
+    // Read ?slug= (primary, used by dekho.html) or ?id= (fallback)
+    var slug = getParam('slug');
+    var id   = getParam('id');
 
-    if (!id) {
-      showError('No article ID specified. Add ?id=... to the URL.');
+    dbg('URL PARAM slug', slug || '(none)');
+    dbg('URL PARAM id',   id   || '(none)');
+
+    if (!slug && !id) {
+      showError('No article specified. Use ?slug=... or ?id=... in the URL.');
       return;
     }
 
-    dbg('URL PARAM id', id);
-    fetchArticle(id);
+    fetchArticle(id, slug);
   }
 
   // Guard: run after DOM is ready regardless of when the script ex
