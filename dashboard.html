@@ -1717,7 +1717,13 @@ table.t tr:hover td{background:var(--paper);}
 <!-- ═══════════ SCRIPT ══════════════════════════════════════════════════════ -->
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-var API = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvHjqt2hYisva_Ghn3rDGszn-t6F-qCEHiFcM5L-Z/exec';
+// ── SUPABASE CONFIG ──────────────────────────────────────────────────────────
+var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
+var API_BASE      = SUPABASE_URL + '/functions/v1';
+
+// GAS endpoint — kept ONLY for image upload (not yet migrated to Supabase)
+var GAS_API = 'https://script.google.com/macros/s/AKfycbwdxLo0LwxI-dXHQGjH0nqcSq9iE4TFVKJ82tMGsz0l1TVFaDovv7DuhBs7C0W_9DiSpQ/exec';
 
 // ── STATE ────────────────────────────────────────────────────────────────────
 var $ = {
@@ -1757,10 +1763,38 @@ function clearCookieSession() {
   try { document.cookie = COOKIE_NAME + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict'; } catch(e){}
 }
 
-// ── BOOT ─────────────────────────────────────────────────────────────────────
+// ── API ──────────────────────────────────────────────────────────────────────
+// MUST be defined before boot() runs — boot calls call('getMe') immediately
+var _GAS_ACTIONS = { uploadImage: true, listMyImages: true, deleteImageRecord: true }; // images stay on Google Drive
+
+var _FN_MAP = {
+  login: 'articles', logout: 'articles', getMe: 'articles',
+  listArticles: 'articles', getArticle: 'articles', adminPreviewArticle: 'articles',
+  saveArticle: 'articles', submitReview: 'articles',
+  approveArticle: 'articles', rejectArticle: 'articles',
+  unpublishArticle: 'articles', deleteArticle: 'articles',
+  listPublished: 'articles',
+  addUser: 'users', listUsers: 'users', toggleUser: 'users', changePassword: 'users',
+  listTrash: 'trash', restoreArticle: 'trash', purgeArticle: 'trash',
+  subscribe: 'newsletter',
+  // images function
+  uploadImage: 'images', listMyImages: 'images', deleteImageRecord: 'images'
+};
+
+// ── BOOT ──────────────────────────────────────────────────────────────────
 (function boot() {
   var t = '';
   try { t = localStorage.getItem('dekho_token') || ''; } catch(e){}
+
+  // Supabase tokens are JWTs: three base64 segments separated by dots (xxx.yyy.zzz)
+  // Old GAS tokens are plain UUIDs with no dots — clear them automatically
+  var isJWT = t && (t.split('.').length === 3);
+  if (t && !isJWT) {
+    try { localStorage.removeItem('dekho_token'); } catch(e){}
+    clearCookieSession();
+    t = '';
+  }
+
   if (!t) { showLogin(); return; }
 
   var _cs = getCookieSession();
@@ -1774,10 +1808,12 @@ function clearCookieSession() {
     return;
   }
 
+  // Set $.token BEFORE calling getMe so call() sends the real JWT as Bearer
+  $.token = t;
   call('getMe', { token: t }).then(function(r) {
-    if (r.ok) { $.token = t; $.user = r.user; setCookieSession(t, r.user); bootApp(); }
-    else { try { localStorage.removeItem('dekho_token'); } catch(e){} showLogin(); }
-  }).catch(function(){ showLogin(); });
+    if (r.ok) { $.user = r.user; setCookieSession(t, r.user); bootApp(); }
+    else { $.token = null; try { localStorage.removeItem('dekho_token'); } catch(e){} clearCookieSession(); showLogin(); }
+  }).catch(function(){ $.token = null; showLogin(); });
 })();
 
 function showLogin() {
@@ -1802,83 +1838,46 @@ function bootApp() {
   setTimeout(function(){ imgToolbarInit(); _imgResizeInit(); buildSwatches(); }, 300);
 }
 
-// ── API ──────────────────────────────────────────────────────────────────────
-var PAYLOAD_LIMIT = 20000; // 20 KB — safe under Apps Script payload + Sheets cell limits
-
 function call(action, body) {
-  return fetch(API, {
+  // Image actions → GAS (not yet migrated)
+  if (_GAS_ACTIONS[action]) {
+    return fetch(GAS_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(Object.assign({ action: action }, body || {}))
+    })
+    .then(function(r){
+      if (!r.ok) return { ok: false, error: 'Server error ' + r.status };
+      return r.json();
+    })
+    .catch(function(e){ return { ok: false, error: 'Network error: ' + (e.message||'') }; });
+  }
+
+  // All other actions → Supabase Edge Functions
+  var fn = _FN_MAP[action] || 'articles';
+  var url = API_BASE + '/' + fn;
+  var payload = Object.assign({ action: action }, body || {});
+
+  return fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(Object.assign({ action: action }, body || {}))
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON,
+      'Authorization': 'Bearer ' + (($.token) ? $.token : SUPABASE_ANON)
+    },
+    body: JSON.stringify(payload)
   })
   .then(function(r){
-    if (!r.ok) return { ok: false, error: 'Server error ' + r.status };
+    if (!r.ok) return r.json().catch(function(){ return { ok: false, error: 'Server error ' + r.status }; });
     return r.json();
   })
   .catch(function(e){ return { ok: false, error: 'Network error: ' + (e.message||'') }; });
 }
 
-// Save article with automatic content chunking for large articles
-// Strategy:
-//   1. Always send metadata (no content) first → get/confirm the article ID
-//   2. If content fits in one chunk, send it in one saveContent call
-//   3. If content > PAYLOAD_LIMIT, send it in multiple saveContentChunk calls
-//      with chunk index + total, backend reassembles
+// Save article — single call (no chunking needed, Supabase handles large payloads)
 function callSaveArticle(art, token) {
-  var content = art.content || '';
-  var contentBytes = content.length; // character count (conservative estimate)
-
-  // Build metadata payload (no content)
-  var meta = Object.assign({}, art, { content: '' });
-
   setSv('Saving…');
-
-  // Step 1: save metadata
-  return call('saveArticle', { token: token, article: meta })
-    .then(function(r) {
-      if (!r.ok) return r; // metadata save failed — return error
-      var artId = r.id || art.id;
-      if (!artId) return r; // no content to save (shouldn't happen)
-
-      if (!content) return r; // no content at all — done
-
-      // Step 2: save content
-      if (contentBytes <= PAYLOAD_LIMIT) {
-        // Small enough — single content save call
-        return call('saveContent', { token: token, id: artId, content: content })
-          .then(function(r2) {
-            if (!r2.ok) return { ok: false, error: 'Metadata saved but content failed: ' + (r2.error||'unknown') };
-            return { ok: true, id: artId, message: r.message || 'Saved.' };
-          });
-      } else {
-        // Large content — chunk it
-        var CHUNK = PAYLOAD_LIMIT;
-        var chunks = [];
-        for (var i = 0; i < content.length; i += CHUNK) {
-          chunks.push(content.slice(i, i + CHUNK));
-        }
-        var total = chunks.length;
-        setSv('Saving… (large article, ' + total + ' parts)');
-
-        // Send chunks sequentially
-        var idx = 0;
-        function sendNext() {
-          if (idx >= total) return Promise.resolve({ ok: true, id: artId, message: 'Saved (' + total + ' parts).' });
-          var chunk = chunks[idx];
-          var isLast = (idx === total - 1);
-          idx++;
-          setSv('Saving part ' + idx + '/' + total + '…');
-          return call('saveContentChunk', {
-            token: token, id: artId,
-            chunk: chunk, chunkIndex: idx - 1, totalChunks: total, isLast: isLast
-          }).then(function(rc) {
-            if (!rc.ok) return { ok: false, error: 'Chunk ' + idx + ' failed: ' + (rc.error||'') };
-            return sendNext();
-          });
-        }
-        return sendNext();
-      }
-    });
+  return call('saveArticle', { token: token, article: art });
 }
 
 // ── LOGIN ────────────────────────────────────────────────────────────────────
@@ -1996,9 +1995,12 @@ function renderArts() {
   if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No articles found.</td></tr>'; return; }
   tbody.innerHTML = list.map(function(a) {
     var acts = '<button class="btn btn-p btn-sm" onclick="openEdit(\'' + a.id + '\')">Edit</button> ';
-    // Submit button: only for WRITERS on their own draft/rejected articles. Admin never submits.
-    if ($.user.role !== 'admin' && (a.status === 'draft' || a.status === 'rejected') && a.authorEmail === $.user.email) {
-      acts += '<button class="btn btn-s btn-sm" onclick="quickSubmit(\'' + a.id + '\')">Submit</button> ';
+    // Submit button: writers on their own draft/rejected/blank-status articles
+    // (blank status = legacy article created before status was set correctly)
+    var artSt = (a.status || '').trim();
+    if ($.user.role !== 'admin' && a.authorEmail === $.user.email &&
+        (artSt === 'draft' || artSt === 'rejected' || artSt === '')) {
+      acts += '<button class="btn btn-s btn-sm" onclick="quickSubmit(\'' + a.id + '\')">Submit for Review</button> ';
     }
     acts += '<button class="btn btn-d btn-sm" onclick="askDel(\'' + a.id + '\')">Delete</button>';
     return '<tr><td style="max-width:230px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px;">' + esc(a.title||'Untitled') + '</div>' +
@@ -2057,9 +2059,10 @@ function confDel() {
   });
 }
 function quickSubmit(id) {
+  if (!confirm('Submit this article for admin review?')) return;
   call('submitReview', { token: $.token, id: id }).then(function(r) {
-    if (r.ok) { toast(r.message, 'ok'); loadArts(); }
-    else toast(r.error, 'bad');
+    if (r.ok) { toast(r.message || 'Submitted for review! Admin will approve shortly.', 'ok'); loadArts(); }
+    else toast(r.error || 'Submit failed. Please try again.', 'bad');
   });
 }
 
@@ -2120,8 +2123,11 @@ function loadIntoEditor(a, readOnly) {
   document.getElementById('ed-cat').value     = a.category  || 'review';
 
   var isOwnArticle = (a.authorEmail === $.user.email);
-  // Admin never submits — only writers submit their own draft/rejected articles
-  var canSubmit = $.user.role !== 'admin' && isOwnArticle && (a.status === 'draft' || a.status === 'rejected' || !a.status);
+  var artStatus    = (a.status || '').trim();
+  // Writer can submit if: they own it, AND it's a draft / rejected / blank-status (legacy)
+  // Writers cannot re-submit if already under review or published
+  var canSubmit = $.user.role !== 'admin' && isOwnArticle &&
+                  (artStatus === 'draft' || artStatus === 'rejected' || artStatus === '');
   document.getElementById('submit-review-btn').style.display = canSubmit ? 'flex' : 'none';
 
   // Restore SEO fields from article data (if saved)
@@ -2232,18 +2238,43 @@ function saveArt(status) {
 
 function submitReview() {
   if (!document.getElementById('ed-title').value.trim()) { toast('Please add a title first.', 'bad'); return; }
-  // Save content with status='review' directly so there is no intermediate
-  // 'draft' flash in the admin Articles tab. The article goes straight to
-  // Pending Review the moment the writer submits.
-  var art = buildArtPayload('review');
+  var btn = document.getElementById('submit-review-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+
+  // Step 1: save all content (meta + body) as a draft first to ensure it exists in the sheet
+  var art = buildArtPayload('draft');
   callSaveArticle(art, $.token).then(function(r) {
-    if (!r.ok) { setSv('Failed ✗'); toast('Save failed: ' + (r.error||''), 'bad'); return; }
-    if (!$.editId) $.editId = r.id;
-    $.editStatus = 'review';
-    toast('Submitted for review! Admin will approve shortly.', 'ok');
-    setPill('review');
-    setSv('Submitted ✓');
-    loadArts();
+    if (!r.ok) {
+      setSv('Failed ✗');
+      toast('Save failed: ' + (r.error || 'Unknown error. Please try again.'), 'bad');
+      if (btn) { btn.disabled = false; btn.textContent = 'Submit for Review'; }
+      return;
+    }
+
+    // Step 2: article is saved — capture its ID
+    var artId = r.id || $.editId;
+    if (!artId) {
+      toast('Could not get article ID after save. Please try again.', 'bad');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i data-lucide="send" style="width:14px;height:14px;"></i> Submit for Review'; lucide.createIcons(); }
+      return;
+    }
+    $.editId = artId;
+
+    // Step 3: call submitReview backend to set status='review' (atomic, correct)
+    call('submitReview', { token: $.token, id: artId }).then(function(r2) {
+      if (!r2.ok) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Submit for Review'; }
+        toast('Submit failed: ' + (r2.error || 'Please try again.'), 'bad');
+        return;
+      }
+      $.editStatus = 'review';
+      setPill('review');
+      setSv('Submitted ✓');
+      // Hide submit button — article is now under review, writer cannot re-submit
+      if (btn) btn.style.display = 'none';
+      toast('Submitted for review! Admin will approve shortly. ✓', 'ok');
+      loadArts();
+    });
   });
 }
 
@@ -4703,15 +4734,20 @@ function renderGallery(images) {
   }
 
   grid.innerHTML = images.map(function(img, i) {
-    var thumb = img.thumbUrl || img.url;
-    var name  = img.filename || 'image';
-    var date  = img.uploadedAt ? new Date(img.uploadedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '';
+    var thumb  = img.thumbUrl || img.url;
+    var name   = img.filename || 'image';
+    var date   = img.uploadedAt ? new Date(img.uploadedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '';
+    // Admins see who uploaded each image (except their own)
+    var byLine = ($.user && $.user.role === 'admin' && img.uploaderName && img.uploaderEmail !== $.user.email)
+      ? '<div class="gal-date" style="color:var(--accent);font-size:9px;padding-top:0;">↑ ' + esc(img.uploaderName) + '</div>'
+      : '';
     return '<div class="gal-item" data-idx="' + i + '" onclick="galItemClick(event,' + i + ')" title="' + esc(name) + '">' +
       '<div class="gal-thumb">' +
       '<img src="' + esc(thumb) + '" alt="' + esc(name) + '" loading="lazy" onerror="this.parentNode.innerHTML=\'<div style=&quot;display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:11px;font-family:DM Mono,monospace;&quot;>IMG</div>\'">' +
       '</div>' +
       '<div class="gal-name">' + esc(name.replace(/\.[^.]+$/,'').substring(0,18)) + '</div>' +
       '<div class="gal-date">' + date + '</div>' +
+      byLine +
       '</div>';
   }).join('');
 
@@ -4803,14 +4839,15 @@ function loadTeam() {
     var tbody = document.getElementById('team-tbody');
     if (!r.users.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">No users yet.</td></tr>'; return; }
     tbody.innerHTML = r.users.map(function(u) {
-      var me = u.email === $.user.email;
+      var me     = u.email === $.user.email;
+      var active = u.is_active !== undefined ? u.is_active : u.active;
       return '<tr>' +
         '<td style="font-weight:600;">' + esc(u.name) + '</td>' +
         '<td style="font-size:12px;color:var(--muted);">' + esc(u.email) + '</td>' +
-        '<td><span class="pill ' + (u.role==='admin'?'p-published':'p-draft') + '">' + u.role + '</span></td>' +
-        '<td><span class="pill ' + (u.active?'p-published':'p-rejected') + '">' + (u.active?'Active':'Inactive') + '</span></td>' +
+        '<td><span class="pill ' + (u.role==='admin'?'p-published':'p-draft') + '">' + (u.role||'—') + '</span></td>' +
+        '<td><span class="pill ' + (active?'p-published':'p-rejected') + '">' + (active?'Active':'Inactive') + '</span></td>' +
         '<td>' + (me ? '<span style="font-size:11px;color:var(--muted);">You</span>' :
-          '<button class="btn btn-s btn-sm" onclick="doToggle(\'' + u.email + '\')">' + (u.active?'Deactivate':'Activate') + '</button>') + '</td></tr>';
+          '<button class="btn btn-s btn-sm" onclick="doToggle(\'' + u.id + '\')">' + (active?'Deactivate':'Activate') + '</button>') + '</td></tr>';
     }).join('');
   });
 }
@@ -4881,9 +4918,10 @@ function loadTrash() {
     document.getElementById('empty-trash-btn').style.display = ($.user.role==='admin' && list.length>0) ? 'inline-flex' : 'none';
     if (!list.length) { tbody.innerHTML = '<tr><td colspan="5" class="te">Trash is empty.</td></tr>'; return; }
     tbody.innerHTML = list.map(function(a) {
-      // Guard: if daysLeft is NaN or negative, treat as 0
+      // Supabase returns snake_case — support both
+      var authorName  = a.authorName  || a.author_name  || a.authorEmail || a.author_email || '—';
+      var deletedAt   = a.deletedAt   || a.deleted_at   || '';
       var dl        = (typeof a.daysLeft === 'number' && !isNaN(a.daysLeft)) ? Math.max(0, a.daysLeft) : 0;
-      var urgent    = dl <= 1;
       var daysLabel = dl <= 0
         ? '<span style="color:var(--red);font-weight:700;">⚠ Expires today</span>'
         : dl === 1
@@ -4891,9 +4929,9 @@ function loadTrash() {
           : '<span style="color:var(--muted);">' + dl + ' days left</span>';
       return '<tr>' +
         '<td style="max-width:220px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;">' + esc(a.title||'Untitled') + '</div>' +
-        '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + esc(a.authorName||a.authorEmail||'—') + '</div></td>' +
+        '<div style="font-size:11px;color:var(--muted);margin-top:2px;">' + esc(authorName) + '</div></td>' +
         '<td><span class="pill" style="background:var(--surface);color:var(--muted);border-color:var(--border);">' + esc(a.category||'—') + '</span></td>' +
-        '<td style="font-size:12px;color:var(--muted);">' + fmtD(a.deletedAt) + '</td>' +
+        '<td style="font-size:12px;color:var(--muted);">' + fmtD(deletedAt) + '</td>' +
         '<td>' + daysLabel + '</td>' +
         '<td><div style="display:flex;gap:4px;">' +
           '<button class="btn btn-s btn-sm" onclick="doRestore(\'' + a.id + '\')">Restore</button>' +
@@ -5055,65 +5093,8 @@ function _attachEditBtn(wrapper, iframe) {
   wrapper.appendChild(editBtn);
 }
 
-// ── DEVTOOLS BLOCKER ──────────────────────────────────────────────────────────
-(function() {
-  // Block keyboard shortcuts that open devtools
-  document.addEventListener('keydown', function(e) {
-    var key = e.key || e.keyCode;
-    // F12
-    if (key === 'F12' || e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C
-    if (e.ctrlKey && e.shiftKey && (key==='I'||key==='i'||key==='J'||key==='j'||key==='C'||key==='c')) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Ctrl+U (view source)
-    if (e.ctrlKey && (key==='U'||key==='u')) { e.preventDefault(); e.stopPropagation(); return false; }
-    // Cmd+Option+I / Cmd+Option+J (Mac)
-    if (e.metaKey && e.altKey && (key==='I'||key==='i'||key==='J'||key==='j')) { e.preventDefault(); e.stopPropagation(); return false; }
-  }, true);
-
-  // Block right-click context menu
-  document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, true);
-
-  // Nuke content function — clears session and shows access denied screen
-  function nukeContent() {
-    try { localStorage.removeItem('dekho_token'); } catch(e) {}
-    clearCookieSession();
-    document.body.innerHTML =
-      '<div style="position:fixed;inset:0;background:#0D0D0D;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:\'DM Mono\',monospace;color:#fff;text-align:center;padding:2rem;">' +
-      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:5rem;color:#E8380D;letter-spacing:.1em;line-height:1;">DEKHO</div>' +
-      '<div style="font-size:11px;letter-spacing:.3em;color:#444;margin-bottom:2rem;">CMS · ELV8 DGTL</div>' +
-      '<div style="font-size:1.1rem;font-weight:700;color:#E8380D;margin-bottom:.75rem;">⛔ Access Denied</div>' +
-      '<div style="font-size:13px;color:#888;max-width:360px;line-height:1.7;">Developer tools detected.<br>For security, your session has been terminated.<br><br>Close DevTools and reload to continue.</div>' +
-      '<button onclick="location.reload()" style="margin-top:2rem;padding:11px 28px;background:#E8380D;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Reload Page</button>' +
-      '</div>';
-  }
-
-  // Skip devtools size detection on mobile — window size checks are unreliable on touch devices
-  var _isMobile = /iphone|ipad|ipod|android/i.test(navigator.userAgent);
-  var _devopen  = false;
-
-  if (!_isMobile) {
-    // Method 1: Window size differential — detects undocked devtools panel
-    setTimeout(function() {
-      setInterval(function() {
-        var widthDiff  = window.outerWidth  - window.innerWidth;
-        var heightDiff = window.outerHeight - window.innerHeight;
-        var open = widthDiff > 200 || heightDiff > 200;
-        if (open && !_devopen) { _devopen = true; nukeContent(); }
-        else if (!open && _devopen) { _devopen = false; }
-      }, 1000);
-    }, 3000); // 3s delay so page loads before first check
-
-    // Method 2: Debugger trap — detects when JS execution is paused in devtools
-    setTimeout(function() {
-      var c = setInterval(function() {
-        var t = Date.now();
-        (function(){}).constructor('debugger')();
-        // If more than 200ms passed, devtools paused execution
-        if (Date.now() - t > 200) { clearInterval(c); nukeContent(); }
-      }, 2000);
-    }, 4000); // 4s delay — starts after Method 1
-  }
-})();
+// ── DEVTOOLS BLOCKER — disabled during development, re-enable before going live ──
+// (function() { ... })();
 </script>
 <div id="toasts"></div>
 </body>
