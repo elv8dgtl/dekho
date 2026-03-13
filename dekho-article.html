@@ -125,7 +125,6 @@
     }
     @media (max-width: 900px) {
       .content-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-      /* Sidebar goes BELOW article on mobile — no order swap */
     }
 
     /* ══════════════════════════════════════
@@ -133,10 +132,8 @@
     ══════════════════════════════════════ */
     .article-main {}
 
-    /* Category badge row */
     .art-badge-row { display: flex; align-items: center; gap: 10px; margin-bottom: .75rem; }
 
-    /* Title — large, bold, serif */
     .art-title {
       font-family: 'Merriweather', Georgia, serif;
       font-size: clamp(22px, 3.5vw, 36px);
@@ -145,14 +142,12 @@
       letter-spacing: -.01em;
     }
 
-    /* Excerpt / standfirst — italic grey */
     .art-excerpt {
       font-size: 15px; color: var(--muted);
       line-height: 1.7; margin-bottom: 1rem;
       font-style: italic;
     }
 
-    /* Byline */
     .art-byline {
       display: flex; align-items: center; gap: 10px;
       padding: .65rem 0; margin-bottom: 1.25rem;
@@ -181,7 +176,6 @@
     .byline-share-btn:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
     @media (max-width: 600px) { .byline-share-btns { display: none; } }
 
-    /* Rating card */
     #rating-wrap { margin-bottom: 1.25rem; }
     .rating-card {
       display: inline-flex; align-items: center; gap: 12px;
@@ -192,7 +186,6 @@
     .rating-denom { font-family: 'DM Mono', monospace; font-size: 13px; color: rgba(255,255,255,.35); align-self: flex-end; padding-bottom: 4px; }
     .rating-lbl   { font-family: 'DM Mono', monospace; font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: .1em; }
 
-    /* Hero image — contained, below title */
     .art-cover {
       width: 100%; overflow: hidden;
       border-radius: 6px; margin-bottom: 1.5rem;
@@ -219,7 +212,6 @@
     .mobile-toc a:hover { color: var(--accent); }
     @media (max-width: 900px) { .mobile-toc { display: block; } }
 
-    /* Article body — Merriweather serif for readability */
     .article-body {
       font-family: 'Merriweather', Georgia, serif;
       font-size: 16px; line-height: 1.9; color: #2d2d2d;
@@ -269,14 +261,11 @@
     .pg-embed { margin: 1.5rem 0; border-radius: 6px; overflow: hidden; }
     .pg-embed iframe { width: 100%; border: none; display: block; transition: height .3s ease; }
 
-    /* Tags at bottom */
     .art-tags { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
     .art-tags .tags-label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-right: 4px; }
 
-    /* Related articles — numbered, below body */
     .related-bottom { margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--ink); }
     .related-bottom-title { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--ink); }
-    .related-bottom-list {}
     .related-b-item {
       display: flex; gap: 12px; align-items: flex-start;
       padding: .75rem 0; border-bottom: 1px solid var(--border);
@@ -289,7 +278,6 @@
     .related-b-title { font-size: 14px; font-weight: 600; line-height: 1.45; transition: color .15s; }
     .related-b-meta  { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); margin-top: 4px; }
 
-    /* Author card */
     .author-card {
       margin-top: 2rem;
       background: #1a1a1a; color: #fff;
@@ -319,13 +307,11 @@
     ══════════════════════════════════════ */
     .article-sidebar { position: sticky; top: 72px; }
     @media (max-width: 900px) { .article-sidebar { position: static; } }
-    /* On mobile: hide TOC + related sidebar cards — they reappear inline */
     @media (max-width: 900px) {
       #toc-card { display: none !important; }
       #related-card { display: none !important; }
     }
 
-    /* Sidebar card */
     .scard { margin-bottom: 1.5rem; }
     .scard-title {
       font-family: 'Inter', sans-serif; font-size: 13px;
@@ -334,7 +320,6 @@
       border-bottom: 2px solid var(--ink); margin-bottom: 1rem;
     }
 
-    /* Share buttons in sidebar */
     .share-btn {
       display: flex; align-items: center; gap: 7px;
       width: 100%; padding: .55rem .8rem; border-radius: 4px;
@@ -346,7 +331,6 @@
     .share-btn:last-child { margin-bottom: 0; }
     .share-btn:hover { background: var(--ink); color: var(--lime); border-color: var(--ink); }
 
-    /* TOC */
     .toc-list { list-style: none; }
     .toc-list li { border-bottom: 1px solid var(--border); }
     .toc-list li:last-child { border-bottom: none; }
@@ -354,7 +338,6 @@
     .toc-list a:hover,.toc-list a.active { color: var(--accent); font-weight: 600; }
     .toc-h3 { padding-left: .9rem !important; font-size: 12px !important; }
 
-    /* Sidebar related — with thumbnails like Beebom trending */
     .srel-item {
       display: flex; gap: 10px; align-items: flex-start;
       padding: .75rem 0; border-bottom: 1px solid var(--border);
@@ -368,7 +351,6 @@
     .srel-title { font-size: 13px; font-weight: 600; line-height: 1.4; transition: color .15s; }
     .srel-meta  { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); margin-top: 3px; }
 
-    /* DEKHO promo in sidebar */
     .scard-promo {
       background: var(--ink); border-radius: 7px;
       padding: 1.25rem; text-align: center;
@@ -484,18 +466,13 @@
       <!-- ── MAIN COLUMN ── -->
       <main class="article-main">
 
-        <!-- Category badge -->
         <div class="art-badge-row">
           <span id="meta-tag" class="tag"></span>
         </div>
 
-        <!-- Title — BIG, above image -->
         <h1 class="art-title" id="art-title"></h1>
-
-        <!-- Standfirst / excerpt -->
         <p class="art-excerpt" id="art-excerpt"></p>
 
-        <!-- Byline row with inline share -->
         <div class="art-byline">
           <div class="byline-avatar" id="author-avatar"></div>
           <div>
@@ -513,14 +490,13 @@
             <a id="byline-whatsapp" class="byline-share-btn" target="_blank" rel="noopener noreferrer">
               <i data-lucide="message-circle" style="width:11px;height:11px;"></i> WhatsApp
             </a>
-            <button class="byline-share-btn" onclick="copyLink()">
+            <button class="byline-share-btn" data-copy-link>
               <i data-lucide="link" style="width:11px;height:11px;"></i>
               <span id="copy-label">Copy link</span>
             </button>
           </div>
         </div>
 
-        <!-- Rating (reviews only) -->
         <div id="rating-wrap" style="display:none;">
           <div class="rating-card">
             <div class="rating-num" id="rating-num"></div>
@@ -532,35 +508,29 @@
           </div>
         </div>
 
-        <!-- Cover image — BELOW title, full column width -->
         <div class="art-cover">
           <img id="hero-img" src="" alt="" loading="eager">
           <div class="art-cover-caption">Image Credit: DEKHO by elv8 dgtl</div>
         </div>
 
-        <!-- Mobile-only inline TOC (populated by buildTOC) -->
         <div class="mobile-toc" id="mobile-toc" style="display:none;">
           <div class="mobile-toc-title">In This Article</div>
           <ul id="mobile-toc-list"></ul>
         </div>
 
-        <!-- Article body -->
         <article class="article-body" id="article-body" itemprop="articleBody"></article>
 
-        <!-- Tags -->
         <div class="art-tags">
           <span class="tags-label">Tags:</span>
           <span id="bottom-tag" class="tag"></span>
           <span id="bottom-category" class="tag" style="background:var(--surface);color:var(--ink);border:1px solid var(--border);"></span>
         </div>
 
-        <!-- Related articles (numbered list like Beebom) -->
         <div class="related-bottom" id="related-bottom" style="display:none;">
           <div class="related-bottom-title">Related Articles</div>
           <div class="related-bottom-list" id="related-list"></div>
         </div>
 
-        <!-- Author card at very bottom -->
         <div class="author-card">
           <div class="author-card-avatar" id="author-card-avatar"></div>
           <div>
@@ -586,7 +556,6 @@
       <!-- ── SIDEBAR ── -->
       <aside class="article-sidebar" aria-label="Article sidebar">
 
-        <!-- Share -->
         <div class="scard">
           <div class="scard-title">Share this article</div>
           <a id="share-twitter" class="share-btn" target="_blank" rel="noopener noreferrer">
@@ -597,25 +566,22 @@
             <i data-lucide="message-circle" style="width:13px;height:13px;flex-shrink:0;"></i>
             Share on WhatsApp
           </a>
-          <button class="share-btn" onclick="copyLink()">
+          <button class="share-btn" data-copy-link>
             <i data-lucide="link" style="width:13px;height:13px;flex-shrink:0;"></i>
             <span id="copy-label2">Copy link</span>
           </button>
         </div>
 
-        <!-- TOC -->
         <div class="scard" id="toc-card" style="display:none;">
           <div class="scard-title">In this article</div>
           <ul class="toc-list" id="toc-list"></ul>
         </div>
 
-        <!-- Related / Trending in sidebar (numbered + thumbs like Beebom) -->
         <div class="scard" id="related-card" style="display:none;">
           <div class="scard-title">Trending on DEKHO</div>
           <div id="related-sidebar-list"></div>
         </div>
 
-        <!-- DEKHO promo -->
         <div class="scard-promo">
           <div class="scard-promo-logo">DEKHO</div>
           <div class="scard-promo-sub">BY ELV8 DGTL</div>
@@ -664,311 +630,513 @@
   </div>
 </footer>
 
-<button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+<button id="back-top" aria-label="Back to top">
   <i data-lucide="chevron-up" style="width:18px;height:18px;"></i>
 </button>
 
 <script>
-var API  = 'https://script.google.com/macros/s/AKfycbxaOr-7mI4YWdNia0Fd3qVKUptBvHjqt2hYisva_Ghn3rDGszn-t6F-qCEHiFcM5L-Z/exec';
-var SITE = 'https://dekho.elv8dgtl.in';
-var GA_ID = 'G-V77HPC9EX8';
+(function () {
+  'use strict';
 
-function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function fmtDate(iso) { if (!iso) return ''; try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return ''; } }
-function tagCls(cat) { var m={review:'tag-review',comparison:'tag-comparison',top:'tag-top',guide:'tag-guide',news:'tag-news',opinion:'tag-opinion'}; return m[cat]||'tag-review'; }
-function tagDisplay(cat) { var m={review:'Review',comparison:'Comparison',top:'Top List',guide:'Guide',news:'News',opinion:'Opinion'}; return m[cat]?(m[cat]):(cat?cat.charAt(0).toUpperCase()+cat.slice(1):'Article'); }
-function getParam(key) { return new URLSearchParams(window.location.search).get(key); }
-function show(id) { var el=document.getElementById(id); if(el) el.style.display=''; }
-function hide(id) { var el=document.getElementById(id); if(el) el.style.display='none'; }
+  // ════════════════════════════════════════════════════════════
+  //  SUPABASE CONFIG
+  // ════════════════════════════════════════════════════════════
+  var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
+  var TABLE         = 'article';
+  var SITE          = 'https://dekho.elv8dgtl.in';
+  var FALLBACK_IMG  = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80';
+  var FALLBACK_THUMB= 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=200&q=60';
 
-window.addEventListener('message', function(e) {
-  if (!e.data || e.data.type !== 'pg-resize') return;
-  var h = parseInt(e.data.h); if (!h || h < 50) return;
-  document.querySelectorAll('.pg-embed iframe').forEach(function(f) { try { if (f.contentWindow === e.source) f.style.height = (h + 24) + 'px'; } catch(x) {} });
-});
+  // ════════════════════════════════════════════════════════════
+  //  SUPABASE REST HELPERS
+  // ════════════════════════════════════════════════════════════
 
-function restorePlaygrounds(content, playgrounds) {
-  if (!content) return content || '';
-  if (!playgrounds || !Object.keys(playgrounds).length) return content;
-  return content.replace(/(?:<span[^>]*data-pg-token="([^"]+)"[^>]*>[\s\S]*?<\/span>|\[\[PG:([^\]]+)\]\])/g, function(match, uid1, uid2) {
-    var uid = uid1 || uid2; if (!uid) return '';
-    var pg  = playgrounds[uid]; if (!pg) return '';
-    var isAuto = pg.autoheight !== '0';
-    var height = isAuto ? '200px' : (pg.height || '400px');
-    var border = pg.border === '1' ? 'border:1.5px solid #E2E0DA;border-radius:8px;' : '';
-    var scroll = pg.scroll === '1' ? 'auto' : 'hidden';
-    var autoScript = isAuto ? '<scr'+'ipt>(function(){function r(){var h=document.documentElement.scrollHeight||document.body.scrollHeight;parent.postMessage({type:"pg-resize",h:h},"*");}window.addEventListener("load",r);window.addEventListener("resize",r);setTimeout(r,200);setTimeout(r,800);})();<\/scr'+'ipt>' : '';
-    var doc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;}</style>'+(pg.css?'<style>'+pg.css+'</style>':'')+autoScript+'</head><body>'+(pg.html||'')+(pg.js?'<scr'+'ipt>'+pg.js+'<\/scr'+'ipt>':'')+'</body></html>';
-    var safeDoc = doc.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-    return '<div class="pg-embed" style="'+border+'"><iframe data-srcdoc="'+safeDoc+'" style="width:100%;height:'+height+';border:none;display:block;overflow:'+scroll+';transition:height .3s ease;" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>';
-  });
-}
-function initPlaygrounds(container) {
-  (container || document).querySelectorAll('iframe[data-srcdoc]').forEach(function(iframe) {
-    var enc = iframe.getAttribute('data-srcdoc'); if (!enc) return;
-    var doc = enc.replace(/&quot;/g,'"').replace(/&amp;/g,'&');
-    iframe.removeAttribute('data-srcdoc');
-    try { iframe.srcdoc = doc; } catch(e) { iframe.src = URL.createObjectURL(new Blob([doc],{type:'text/html'})); }
-  });
-}
+  /**
+   * Build a Supabase REST URL with query params.
+   * @param {string} filter  e.g. 'slug=eq.my-slug&status=eq.published'
+   * @param {string} select  columns to return (default: *)
+   * @param {number} limit
+   */
+  function sbURL(filter, select, limit) {
+    var base = SUPABASE_URL + '/rest/v1/' + TABLE + '?';
+    var parts = [];
+    if (select) parts.push('select=' + encodeURIComponent(select));
+    if (filter) parts.push(filter);
+    if (limit)  parts.push('limit=' + limit);
+    return base + parts.join('&');
+  }
 
-function injectSEO(article) {
-  var title     = article.seoMetaTitle || article.title + ' — DEKHO by elv8';
-  var desc      = article.seoMetaDesc  || article.excerpt || '';
-  var ogImg     = article.seoOgImage   || article.coverImage || '';
-  var canonical = article.seoCanonical ||
-    (article.slug
-      ? SITE + '/dekho-article.html?slug=' + encodeURIComponent(article.slug)
-      : SITE + '/dekho-article.html?id='   + encodeURIComponent(article.id));
-  document.title = title;
-  setMeta('name','description',desc); setMeta('name','robots','index, follow'); setMeta('name','author',article.authorName||'DEKHO');
-  if (article.seoKeyword) setMeta('name','keywords',article.seoKeyword);
-  var canonEl = document.getElementById('meta-canonical'); if (canonEl) canonEl.setAttribute('href',canonical);
-  setMeta('property','og:title',title); setMeta('property','og:description',desc); setMeta('property','og:image',ogImg);
-  setMeta('property','og:url',canonical); setMeta('property','og:type','article'); setMeta('property','og:site_name','DEKHO by elv8 dgtl');
-  if (article.publishedAt) setMeta('property','article:published_time',article.publishedAt);
-  setMeta('property','article:author',article.authorName||'DEKHO'); setMeta('property','article:section',tagDisplay(article.category));
-  setMeta('name','twitter:title',title); setMeta('name','twitter:description',desc); setMeta('name','twitter:image',ogImg);
-  setMeta('name','twitter:card','summary_large_image'); setMeta('name','twitter:site','@elv8dgtl');
-  var ld = { '@context':'https://schema.org', '@type':article.category==='review'?'Review':'Article', headline:article.title, description:desc, image:ogImg, url:canonical, datePublished:article.publishedAt, dateModified:article.updatedAt||article.publishedAt, author:{'@type':'Person',name:article.authorName||'DEKHO'}, publisher:{'@type':'Organization',name:'elv8 dgtl',logo:{'@type':'ImageObject',url:SITE+'/logo.png'}}, mainEntityOfPage:{'@type':'WebPage','@id':canonical} };
-  if (article.rating && article.category==='review') ld.reviewRating = {'@type':'Rating',ratingValue:parseFloat(article.rating).toFixed(1),bestRating:'10',worstRating:'0'};
-  var ldEl = document.getElementById('json-ld'); if (ldEl) ldEl.textContent = JSON.stringify(ld);
-  if (window.gtag) gtag('event','page_view',{page_title:title,page_location:window.location.href});
-}
-function setMeta(attr,name,content) {
-  if (!content) return;
-  var el = document.querySelector('meta['+attr+'="'+name+'"]');
-  if (el) el.setAttribute('content',content);
-  else { var m=document.createElement('meta'); m.setAttribute(attr,name); m.setAttribute('content',content); document.head.appendChild(m); }
-}
+  function sbHeaders() {
+    return {
+      'apikey':        SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Content-Type':  'application/json'
+    };
+  }
 
-function buildTOC() {
-  var body     = document.getElementById('article-body');
-  var tocList  = document.getElementById('toc-list');
-  var tocCard  = document.getElementById('toc-card');
-  var mobToc   = document.getElementById('mobile-toc');
-  var mobList  = document.getElementById('mobile-toc-list');
-  var headings = body.querySelectorAll('h2, h3');
-  if (headings.length < 3) return;
-
-  tocList.innerHTML = '';
-  if (mobList) mobList.innerHTML = '';
-
-  headings.forEach(function(h, i) {
-    var id = 'section-' + i;
-    h.id = id;
-
-    // Sidebar TOC item
-    var li = document.createElement('li');
-    var a  = document.createElement('a');
-    a.href = '#' + id; a.textContent = h.textContent;
-    if (h.tagName === 'H3') a.classList.add('toc-h3');
-    li.appendChild(a); tocList.appendChild(li);
-
-    // Mobile inline TOC item (same links, same text)
-    if (mobList) {
-      var mLi = document.createElement('li');
-      var mA  = document.createElement('a');
-      mA.href = '#' + id; mA.textContent = h.textContent;
-      mLi.appendChild(mA); mobList.appendChild(mLi);
-    }
-  });
-
-  tocCard.style.display = '';
-  // Show mobile TOC (CSS media query controls actual visibility)
-  if (mobToc) mobToc.style.display = '';
-
-  // Intersection observer for active-link highlighting (sidebar TOC only)
-  if ('IntersectionObserver' in window) {
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        var link = tocList.querySelector('a[href="#' + e.target.id + '"]');
-        if (!link) return;
-        if (e.isIntersecting) {
-          tocList.querySelectorAll('a').forEach(function(a){ a.classList.remove('active'); });
-          link.classList.add('active');
-        }
+  /**
+   * Fetch a single row. Returns the first element of the array or null.
+   */
+  function sbFetchOne(filter, select) {
+    return fetch(sbURL(filter, select, 1), { headers: sbHeaders() })
+      .then(function(r) {
+        if (!r.ok) throw new Error('Supabase error ' + r.status);
+        return r.json();
+      })
+      .then(function(rows) {
+        return (rows && rows.length) ? rows[0] : null;
       });
-    }, { rootMargin: '0px 0px -60% 0px' });
-    headings.forEach(function(h){ obs.observe(h); });
-  }
-}
-
-function renderRelated(currentArticle, allArticles) {
-  var related = allArticles.filter(function(a) { return a.id!==currentArticle.id&&(a.category===currentArticle.category||a.tag===currentArticle.tag); }).slice(0,4);
-  if (!related.length) related=allArticles.filter(function(a){return a.id!==currentArticle.id;}).slice(0,4);
-  if (!related.length) return;
-
-  var fallbackImg = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=200&q=60';
-
-  // Bottom list (numbered like Beebom)
-  var relatedBottom=document.getElementById('related-bottom'), relatedList=document.getElementById('related-list');
-  relatedList.innerHTML=related.map(function(a,i) {
-    var cover=a.coverImage||fallbackImg;
-    var href='https://dekho.elv8dgtl.in/dekho-article.html?'+(a.slug?'slug='+encodeURIComponent(a.slug):'id='+encodeURIComponent(a.id));
-    return '<a href="'+href+'" class="related-b-item">'+
-           '<span class="related-b-num">0'+(i+1)+'</span>'+
-           '<img class="related-b-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+fallbackImg+'\'">'+
-           '<div><div class="related-b-title">'+esc(a.title)+'</div>'+
-           '<div class="related-b-meta">'+tagDisplay(a.category)+' · '+(a.readTime||'5')+' min read</div></div></a>';
-  }).join('');
-  relatedBottom.style.display='';
-
-  // Sidebar list (thumbs + title like Beebom trending)
-  var relatedCard=document.getElementById('related-card'), sidebarList=document.getElementById('related-sidebar-list');
-  sidebarList.innerHTML=related.map(function(a,i) {
-    var cover=a.coverImage||fallbackImg;
-    var href2='https://dekho.elv8dgtl.in/dekho-article.html?'+(a.slug?'slug='+encodeURIComponent(a.slug):'id='+encodeURIComponent(a.id));
-    return '<a href="'+href2+'" class="srel-item">'+
-           '<span class="srel-num">0'+(i+1)+'</span>'+
-           '<img class="srel-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+fallbackImg+'\'">'+
-           '<div><div class="srel-title">'+esc(a.title)+'</div>'+
-           '<div class="srel-meta">'+tagDisplay(a.category)+'</div></div></a>';
-  }).join('');
-  relatedCard.style.display='';
-}
-
-function setupShare(title,url) {
-  var tw=document.getElementById('share-twitter'), wa=document.getElementById('share-whatsapp');
-  if (tw) tw.href='https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url)+'&via=elv8dgtl';
-  if (wa) wa.href='https://wa.me/?text='+encodeURIComponent(title+' — '+url);
-  var btw=document.getElementById('byline-twitter'), bwa=document.getElementById('byline-whatsapp');
-  if (btw) btw.href='https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url)+'&via=elv8dgtl';
-  if (bwa) bwa.href='https://wa.me/?text='+encodeURIComponent(title+' — '+url);
-}
-function copyLink() {
-  var label=document.getElementById('copy-label'), label2=document.getElementById('copy-label2');
-  navigator.clipboard.writeText(window.location.href).then(function(){
-    if(label) label.textContent='Copied! ✓'; if(label2) label2.textContent='Copied! ✓';
-    setTimeout(function(){ if(label) label.textContent='Copy link'; if(label2) label2.textContent='Copy link'; },2000);
-  }).catch(function(){
-    var ta=document.createElement('textarea');ta.value=window.location.href;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    if(label) label.textContent='Copied! ✓'; if(label2) label2.textContent='Copied! ✓';
-    setTimeout(function(){ if(label) label.textContent='Copy link'; if(label2) label2.textContent='Copy link'; },2000);
-  });
-}
-
-function renderArticle(article) {
-  var cover = article.coverImage || 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80';
-  var heroImg=document.getElementById('hero-img'); heroImg.src=cover; heroImg.alt=article.title||'';
-  heroImg.onerror=function(){this.src='https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1200&q=80';};
-
-  // Tag + breadcrumb
-  var tagEl=document.getElementById('meta-tag'); tagEl.className='tag '+tagCls(article.category); tagEl.textContent=tagDisplay(article.category);
-  var bcCatLink=document.getElementById('breadcrumb-cat-link'); if(bcCatLink) bcCatLink.textContent=tagDisplay(article.category);
-  var bcTitle=document.getElementById('breadcrumb-title'); if(bcTitle) bcTitle.textContent=(article.title||'').substring(0,60)+((article.title||'').length>60?'…':'');
-
-  // Meta
-  document.getElementById('meta-readtime').textContent=(article.readTime||'5')+' min read';
-  document.getElementById('meta-date').textContent=fmtDate(article.publishedAt);
-  document.getElementById('art-title').textContent=article.title||'';
-  document.getElementById('art-excerpt').textContent=article.excerpt||'';
-
-  // Rating
-  if (article.rating && parseFloat(article.rating)>0) {
-    document.getElementById('rating-num').textContent=parseFloat(article.rating).toFixed(1);
-    document.getElementById('rating-wrap').style.display='';
   }
 
-  // Author
-  var ini=(article.authorName||'D').charAt(0).toUpperCase();
-  document.getElementById('author-avatar').textContent=ini;
-  document.getElementById('author-name').textContent=article.authorName||'DEKHO';
-  document.getElementById('author-date').textContent='Published '+fmtDate(article.publishedAt);
-  document.getElementById('author-card-avatar').textContent=ini;
-  document.getElementById('author-card-name').textContent=article.authorName||'DEKHO';
-  document.getElementById('author-card-meta').textContent='Writer · DEKHO by elv8 dgtl';
+  /**
+   * Fetch multiple rows.
+   */
+  function sbFetchMany(filter, select, limit) {
+    return fetch(sbURL(filter, select, limit || 20), { headers: sbHeaders() })
+      .then(function(r) {
+        if (!r.ok) throw new Error('Supabase error ' + r.status);
+        return r.json();
+      })
+      .then(function(rows) { return rows || []; });
+  }
 
-  // Body
-  var content=restorePlaygrounds(article.content||'',article.playgrounds||{});
-  var bodyEl=document.getElementById('article-body'); bodyEl.innerHTML=content; initPlaygrounds(bodyEl);
+  // ════════════════════════════════════════════════════════════
+  //  UTILS
+  // ════════════════════════════════════════════════════════════
+  function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function fmtDate(iso) { if (!iso) return ''; try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return ''; } }
+  function tagCls(cat) { var m={review:'tag-review',comparison:'tag-comparison',top:'tag-top',guide:'tag-guide',news:'tag-news',opinion:'tag-opinion'}; return m[(cat||'').toLowerCase()]||'tag-review'; }
+  function tagDisplay(cat) { var m={review:'Review',comparison:'Comparison',top:'Top List',guide:'Guide',news:'News',opinion:'Opinion'}; var k=(cat||'').toLowerCase(); return m[k]||(cat?cat.charAt(0).toUpperCase()+cat.slice(1):'Article'); }
+  function getParam(key) { return new URLSearchParams(window.location.search).get(key); }
+  function show(id) { var el=document.getElementById(id); if(el) el.style.display=''; }
+  function hide(id) { var el=document.getElementById(id); if(el) el.style.display='none'; }
 
-  // Tags
-  var btTag=document.getElementById('bottom-tag'); btTag.className='tag '+tagCls(article.category); btTag.textContent=tagDisplay(article.category);
-  if (article.tag) { document.getElementById('bottom-category').textContent='#'+article.tag; document.getElementById('bottom-category').style.display=''; }
-  else { document.getElementById('bottom-category').style.display='none'; }
+  function articleURL(a) {
+    return SITE + '/dekho-article.html?' + (a.slug ? 'slug=' + encodeURIComponent(a.slug) : 'id=' + encodeURIComponent(a.id));
+  }
 
-  setupShare(article.title, window.location.href);
-  injectSEO(article);
-  buildTOC();
-  var fy=document.getElementById('footer-year'); if(fy) fy.textContent=new Date().getFullYear();
-  hide('loading-state'); show('article-wrap');
-  if (window.gtag) gtag('event','article_view',{article_id:article.id,article_title:article.title,article_category:article.category,article_author:article.authorName});
-}
+  // ════════════════════════════════════════════════════════════
+  //  PLAYGROUND (inline code embeds — kept from original)
+  // ════════════════════════════════════════════════════════════
+  // Registered inside DOMContentLoaded below — see INIT section
 
-// Hardened fetch wrapper: handles Apps Script 302 redirects, bad JSON, network errors
-function apiFetch(payload) {
-  return fetch(API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
-    redirect: 'follow',
-    body: JSON.stringify(payload)
-  })
-  .then(function(r) {
-    if (!r.ok) throw new Error('Server error ' + r.status);
-    return r.text();
-  })
-  .then(function(text) {
-    try { return JSON.parse(text); }
-    catch(e) { throw new Error('Bad response from server. Try again.'); }
-  });
-}
+  function restorePlaygrounds(content, playgrounds) {
+    if (!content) return content || '';
+    if (!playgrounds || !Object.keys(playgrounds).length) return content;
+    return content.replace(/(?:<span[^>]*data-pg-token="([^"]+)"[^>]*>[\s\S]*?<\/span>|\[\[PG:([^\]]+)\]\])/g, function(match, uid1, uid2) {
+      var uid = uid1 || uid2; if (!uid) return '';
+      var pg  = playgrounds[uid]; if (!pg) return '';
+      var isAuto = pg.autoheight !== '0';
+      var height = isAuto ? '200px' : (pg.height || '400px');
+      var border = pg.border === '1' ? 'border:1.5px solid #E2E0DA;border-radius:8px;' : '';
+      var scroll = pg.scroll === '1' ? 'auto' : 'hidden';
+      var autoScript = isAuto ? '<scr'+'ipt>(function(){function r(){var h=document.documentElement.scrollHeight||document.body.scrollHeight;parent.postMessage({type:"pg-resize",h:h},"*");}window.addEventListener("load",r);window.addEventListener("resize",r);setTimeout(r,200);setTimeout(r,800);})();<\/scr'+'ipt>' : '';
+      var doc = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:0;}</style>'+(pg.css?'<style>'+pg.css+'</style>':'')+autoScript+'</head><body>'+(pg.html||'')+(pg.js?'<scr'+'ipt>'+pg.js+'<\/scr'+'ipt>':'')+'</body></html>';
+      var safeDoc = doc.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+      return '<div class="pg-embed" style="'+border+'"><iframe data-srcdoc="'+safeDoc+'" style="width:100%;height:'+height+';border:none;display:block;overflow:'+scroll+';transition:height .3s ease;" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>';
+    });
+  }
 
-function fetchArticle(id, slug) {
-  var body = id ? {action:'getPublishedArticle',id:id} : {action:'getPublishedArticle',slug:slug};
-  apiFetch(body)
-  .then(function(data){
-    if (!data||!data.ok||!data.article){showError(data&&data.error?data.error:'Article not found.');return;}
-    var article = data.article;
+  function initPlaygrounds(container) {
+    (container || document).querySelectorAll('iframe[data-srcdoc]').forEach(function(iframe) {
+      var enc = iframe.getAttribute('data-srcdoc'); if (!enc) return;
+      var doc = enc.replace(/&quot;/g,'"').replace(/&amp;/g,'&');
+      iframe.removeAttribute('data-srcdoc');
+      try { iframe.srcdoc = doc; } catch(e) { iframe.src = URL.createObjectURL(new Blob([doc],{type:'text/html'})); }
+    });
+  }
 
-    // ── Rewrite URL to slug-based if we have a slug ────────────────────────────────────────────
-    if (article.slug) {
-      var currentSlug = getParam('slug');
-      if (currentSlug !== article.slug) {
-        var cleanURL = window.location.pathname + '?slug=' + encodeURIComponent(article.slug);
-        try { window.history.replaceState({slug: article.slug}, '', cleanURL); } catch(e){}
+  // ════════════════════════════════════════════════════════════
+  //  SEO
+  // ════════════════════════════════════════════════════════════
+  function injectSEO(article) {
+    var title     = article.seoMetaTitle || article.title + ' — DEKHO by elv8';
+    var desc      = article.seoMetaDesc  || article.excerpt || '';
+    var ogImg     = article.seoOgImage   || article.coverImage || article.cover_image || '';
+    var canonical = article.seoCanonical || articleURL(article);
+
+    document.title = title;
+    setMeta('name','description',desc);
+    setMeta('name','robots','index, follow');
+    setMeta('name','author', article.authorName || article.author_name || 'DEKHO');
+    if (article.seoKeyword || article.seo_keyword) setMeta('name','keywords', article.seoKeyword || article.seo_keyword);
+
+    var canonEl = document.getElementById('meta-canonical');
+    if (canonEl) canonEl.setAttribute('href', canonical);
+
+    setMeta('property','og:title',title);
+    setMeta('property','og:description',desc);
+    setMeta('property','og:image',ogImg);
+    setMeta('property','og:url',canonical);
+    setMeta('property','og:type','article');
+    setMeta('property','og:site_name','DEKHO by elv8 dgtl');
+
+    var pubDate = article.publishedAt || article.published_at;
+    if (pubDate) setMeta('property','article:published_time', pubDate);
+    setMeta('property','article:author', article.authorName || article.author_name || 'DEKHO');
+    setMeta('property','article:section', tagDisplay(article.category));
+
+    setMeta('name','twitter:title',title);
+    setMeta('name','twitter:description',desc);
+    setMeta('name','twitter:image',ogImg);
+    setMeta('name','twitter:card','summary_large_image');
+    setMeta('name','twitter:site','@elv8dgtl');
+
+    var ld = {
+      '@context': 'https://schema.org',
+      '@type': article.category === 'review' ? 'Review' : 'Article',
+      headline: article.title,
+      description: desc,
+      image: ogImg,
+      url: canonical,
+      datePublished: pubDate,
+      dateModified: article.updatedAt || article.updated_at || pubDate,
+      author: { '@type': 'Person', name: article.authorName || article.author_name || 'DEKHO' },
+      publisher: { '@type': 'Organization', name: 'elv8 dgtl', logo: { '@type': 'ImageObject', url: SITE + '/logo.png' } },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical }
+    };
+    var rating = article.rating;
+    if (rating && parseFloat(rating) > 0 && article.category === 'review') {
+      ld.reviewRating = { '@type': 'Rating', ratingValue: parseFloat(rating).toFixed(1), bestRating: '10', worstRating: '0' };
+    }
+    var ldEl = document.getElementById('json-ld');
+    if (ldEl) ldEl.textContent = JSON.stringify(ld);
+
+    if (window.gtag) gtag('event','page_view',{ page_title: title, page_location: window.location.href });
+  }
+
+  function setMeta(attr, name, content) {
+    if (!content) return;
+    var el = document.querySelector('meta['+attr+'="'+name+'"]');
+    if (el) { el.setAttribute('content', content); }
+    else { var m = document.createElement('meta'); m.setAttribute(attr,name); m.setAttribute('content',content); document.head.appendChild(m); }
+  }
+
+  // ════════════════════════════════════════════════════════════
+  //  TOC
+  // ════════════════════════════════════════════════════════════
+  function buildTOC() {
+    var body     = document.getElementById('article-body');
+    var tocList  = document.getElementById('toc-list');
+    var tocCard  = document.getElementById('toc-card');
+    var mobToc   = document.getElementById('mobile-toc');
+    var mobList  = document.getElementById('mobile-toc-list');
+    var headings = body.querySelectorAll('h2, h3');
+    if (headings.length < 3) return;
+
+    tocList.innerHTML = '';
+    if (mobList) mobList.innerHTML = '';
+
+    headings.forEach(function(h, i) {
+      var id = 'section-' + i;
+      h.id = id;
+
+      var li = document.createElement('li');
+      var a  = document.createElement('a');
+      a.href = '#' + id; a.textContent = h.textContent;
+      if (h.tagName === 'H3') a.classList.add('toc-h3');
+      li.appendChild(a); tocList.appendChild(li);
+
+      if (mobList) {
+        var mLi = document.createElement('li');
+        var mA  = document.createElement('a');
+        mA.href = '#' + id; mA.textContent = h.textContent;
+        mLi.appendChild(mA); mobList.appendChild(mLi);
       }
+    });
+
+    tocCard.style.display = '';
+    if (mobToc) mobToc.style.display = '';
+
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          var link = tocList.querySelector('a[href="#' + e.target.id + '"]');
+          if (!link) return;
+          if (e.isIntersecting) {
+            tocList.querySelectorAll('a').forEach(function(a){ a.classList.remove('active'); });
+            link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '0px 0px -60% 0px' });
+      headings.forEach(function(h){ obs.observe(h); });
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════
+  //  RELATED ARTICLES
+  // ════════════════════════════════════════════════════════════
+  function renderRelated(currentArticle, allArticles) {
+    var related = allArticles.filter(function(a) {
+      return a.id !== currentArticle.id &&
+        (a.category === currentArticle.category || a.tag === currentArticle.tag);
+    }).slice(0, 4);
+
+    if (!related.length) {
+      related = allArticles.filter(function(a){ return a.id !== currentArticle.id; }).slice(0, 4);
+    }
+    if (!related.length) return;
+
+    // Bottom numbered list
+    var relatedBottom = document.getElementById('related-bottom');
+    var relatedList   = document.getElementById('related-list');
+    relatedList.innerHTML = related.map(function(a, i) {
+      var cover = a.coverImage || a.cover_image || FALLBACK_THUMB;
+      var href  = articleURL(a);
+      return '<a href="'+href+'" class="related-b-item">' +
+        '<span class="related-b-num">0'+(i+1)+'</span>' +
+        '<img class="related-b-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+FALLBACK_THUMB+'\'">' +
+        '<div><div class="related-b-title">'+esc(a.title)+'</div>' +
+        '<div class="related-b-meta">'+tagDisplay(a.category)+' · '+(a.readTime||a.read_time||'5')+' min read</div></div></a>';
+    }).join('');
+    relatedBottom.style.display = '';
+
+    // Sidebar list
+    var relatedCard   = document.getElementById('related-card');
+    var sidebarList   = document.getElementById('related-sidebar-list');
+    sidebarList.innerHTML = related.map(function(a, i) {
+      var cover = a.coverImage || a.cover_image || FALLBACK_THUMB;
+      var href  = articleURL(a);
+      return '<a href="'+href+'" class="srel-item">' +
+        '<span class="srel-num">0'+(i+1)+'</span>' +
+        '<img class="srel-thumb" src="'+esc(cover)+'" alt="'+esc(a.title)+'" loading="lazy" onerror="this.src=\''+FALLBACK_THUMB+'\'">' +
+        '<div><div class="srel-title">'+esc(a.title)+'</div>' +
+        '<div class="srel-meta">'+tagDisplay(a.category)+'</div></div></a>';
+    }).join('');
+    relatedCard.style.display = '';
+  }
+
+  // ════════════════════════════════════════════════════════════
+  //  SHARE
+  // ════════════════════════════════════════════════════════════
+  function setupShare(title, url) {
+    var tweetURL = 'https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url)+'&via=elv8dgtl';
+    var waURL    = 'https://wa.me/?text='+encodeURIComponent(title+' — '+url);
+
+    var tw  = document.getElementById('share-twitter');
+    var wa  = document.getElementById('share-whatsapp');
+    var btw = document.getElementById('byline-twitter');
+    var bwa = document.getElementById('byline-whatsapp');
+
+    if (tw)  tw.href  = tweetURL;
+    if (wa)  wa.href  = waURL;
+    if (btw) btw.href = tweetURL;
+    if (bwa) bwa.href = waURL;
+  }
+
+  function copyLink() {
+    var label  = document.getElementById('copy-label');
+    var label2 = document.getElementById('copy-label2');
+    var done = function() {
+      if (label)  label.textContent  = 'Copied! ✓';
+      if (label2) label2.textContent = 'Copied! ✓';
+      setTimeout(function(){
+        if (label)  label.textContent  = 'Copy link';
+        if (label2) label2.textContent = 'Copy link';
+      }, 2000);
+    };
+    navigator.clipboard.writeText(window.location.href).then(done).catch(function() {
+      var ta = document.createElement('textarea');
+      ta.value = window.location.href; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      done();
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════
+  //  RENDER
+  // ════════════════════════════════════════════════════════════
+  function renderArticle(article) {
+    // Normalise camelCase / snake_case field names gracefully
+    var cover      = article.coverImage  || article.cover_image  || FALLBACK_IMG;
+    var pubDate    = article.publishedAt || article.published_at || '';
+    var authorName = article.authorName  || article.author_name  || 'DEKHO';
+    var readTime   = article.readTime    || article.read_time    || '5';
+    var rating     = article.rating;
+    var excerpt    = article.excerpt     || '';
+    var content    = article.content     || '';
+    var playgrounds= article.playgrounds || {};
+    var tag        = article.tag         || '';
+
+    // Hero image
+    var heroImg = document.getElementById('hero-img');
+    heroImg.src = cover; heroImg.alt = article.title || '';
+    heroImg.onerror = function(){ this.src = FALLBACK_IMG; };
+
+    // Tag + breadcrumb
+    var tagEl = document.getElementById('meta-tag');
+    tagEl.className = 'tag ' + tagCls(article.category);
+    tagEl.textContent = tagDisplay(article.category);
+
+    var bcCat   = document.getElementById('breadcrumb-cat-link');
+    var bcTitle = document.getElementById('breadcrumb-title');
+    if (bcCat)   bcCat.textContent   = tagDisplay(article.category);
+    if (bcTitle) bcTitle.textContent = (article.title || '').substring(0, 60) + ((article.title||'').length > 60 ? '…' : '');
+
+    // Meta row
+    document.getElementById('meta-readtime').textContent = readTime + ' min read';
+    document.getElementById('meta-date').textContent     = fmtDate(pubDate);
+    document.getElementById('art-title').textContent     = article.title || '';
+    document.getElementById('art-excerpt').textContent   = excerpt;
+
+    // Rating (reviews only)
+    if (rating && parseFloat(rating) > 0) {
+      document.getElementById('rating-num').textContent = parseFloat(rating).toFixed(1);
+      document.getElementById('rating-wrap').style.display = '';
     }
 
-    renderArticle(article);
-    apiFetch({action:'listPublished'})
-    .then(function(listData){if(listData&&listData.ok&&listData.articles)renderRelated(article,listData.articles);})
-    .catch(function(){});
-  })
-  .catch(function(e){showError('Could not load article. ' + (e&&e.message?e.message:'Check your connection.'));});
-}
+    // Author
+    var ini = (authorName).charAt(0).toUpperCase();
+    document.getElementById('author-avatar').textContent     = ini;
+    document.getElementById('author-name').textContent       = authorName;
+    document.getElementById('author-date').textContent       = 'Published ' + fmtDate(pubDate);
+    document.getElementById('author-card-avatar').textContent= ini;
+    document.getElementById('author-card-name').textContent  = authorName;
+    document.getElementById('author-card-meta').textContent  = 'Writer · DEKHO by elv8 dgtl';
 
-function showError(msg) {
-  hide('loading-state');hide('article-wrap');
-  var msgEl=document.getElementById('error-msg'); if(msgEl&&msg) msgEl.textContent=msg;
-  show('error-state'); document.title='Article Not Found — DEKHO by elv8';
-}
+    // Body
+    var rendered = restorePlaygrounds(content, playgrounds);
+    var bodyEl   = document.getElementById('article-body');
+    bodyEl.innerHTML = rendered;
+    initPlaygrounds(bodyEl);
 
-document.addEventListener('DOMContentLoaded', function() {
-  lucide.createIcons();
-  var fy=document.getElementById('footer-year'); if(fy) fy.textContent=new Date().getFullYear();
-  var navbar=document.getElementById('navbar'), backTop=document.getElementById('back-top'), prog=document.getElementById('read-progress');
-  window.addEventListener('scroll', function() {
-    var sy=window.scrollY, docH=document.documentElement.scrollHeight-window.innerHeight;
-    if(prog&&docH>0) prog.style.width=Math.min(100,sy/docH*100)+'%';
-    if(navbar) navbar.classList.toggle('scrolled',sy>40);
-    if(backTop) backTop.classList.toggle('show',sy>400);
-  });
+    // Bottom tags
+    var btTag = document.getElementById('bottom-tag');
+    btTag.className   = 'tag ' + tagCls(article.category);
+    btTag.textContent = tagDisplay(article.category);
 
-  // ── Slug-first URL resolution ──────────────────────────────────────────────
-  // Priority: ?slug= first (clean SEO URL), then ?id= as fallback.
-  // If only ?id= is present and the article has a slug, we rewrite the URL
-  // to use ?slug= so the browser address bar and search engines see the slug.
-  var slug = getParam('slug');
-  var id   = getParam('id');
+    var btCat = document.getElementById('bottom-category');
+    if (tag) { btCat.textContent = '#' + tag; btCat.style.display = ''; }
+    else      { btCat.style.display = 'none'; }
 
-  if (!slug && !id) {
-    showError('No article specified. Use ?slug=your-slug or ?id=... in the URL.');
-    return;
+    setupShare(article.title, window.location.href);
+    injectSEO(article);
+    buildTOC();
+
+    var fy = document.getElementById('footer-year');
+    if (fy) fy.textContent = new Date().getFullYear();
+
+    hide('loading-state');
+    show('article-wrap');
+
+    if (window.gtag) gtag('event','article_view',{
+      article_id:       article.id,
+      article_title:    article.title,
+      article_category: article.category,
+      article_author:   authorName
+    });
   }
 
-  fetchArticle(id, slug);
-});
+  // ════════════════════════════════════════════════════════════
+  //  FETCH ARTICLE — slug → id fallback
+  // ════════════════════════════════════════════════════════════
+  function fetchArticle(id, slug) {
+    // Build the correct filter: prefer slug, fall back to id
+    var filter = slug
+      ? 'slug=eq.' + encodeURIComponent(slug) + '&status=eq.published'
+      : 'id=eq.'   + encodeURIComponent(id)   + '&status=eq.published';
+
+    sbFetchOne(filter, '*')
+      .then(function(article) {
+        if (!article) { showError('Article not found.'); return; }
+
+        // Rewrite URL to slug-based if we loaded by id and a slug exists
+        if (article.slug) {
+          var currentSlug = getParam('slug');
+          if (currentSlug !== article.slug) {
+            var cleanURL = window.location.pathname + '?slug=' + encodeURIComponent(article.slug);
+            try { window.history.replaceState({ slug: article.slug }, '', cleanURL); } catch(e) {}
+          }
+        }
+
+        renderArticle(article);
+
+        // Load related articles in the background (same category, published)
+        sbFetchMany('status=eq.published', 'id,slug,title,category,tag,coverImage,cover_image,readTime,read_time', 20)
+          .then(function(articles) { renderRelated(article, articles); })
+          .catch(function() {}); // silently skip if related fails
+      })
+      .catch(function(e) {
+        showError('Could not load article. ' + (e && e.message ? e.message : 'Check your connection.'));
+      });
+  }
+
+  function showError(msg) {
+    hide('loading-state'); hide('article-wrap');
+    var msgEl = document.getElementById('error-msg');
+    if (msgEl && msg) msgEl.textContent = msg;
+    show('error-state');
+    document.title = 'Article Not Found — DEKHO by elv8';
+  }
+
+  // ════════════════════════════════════════════════════════════
+  //  INIT
+  // ════════════════════════════════════════════════════════════
+  function init() {
+    // Playground iframe resize messages
+    window.addEventListener('message', function (e) {
+      if (!e.data || e.data.type !== 'pg-resize') return;
+      var h = parseInt(e.data.h);
+      if (!h || h < 50) return;
+      document.querySelectorAll('.pg-embed iframe').forEach(function (f) {
+        try { if (f.contentWindow === e.source) f.style.height = (h + 24) + 'px'; } catch (x) {}
+      });
+    });
+
+    // Lucide icons
+    if (window.lucide) lucide.createIcons();
+
+    // Footer year
+    var fy = document.getElementById('footer-year');
+    if (fy) fy.textContent = new Date().getFullYear();
+
+    // Back-to-top button (wired via JS, not inline onclick)
+    var backTopBtn = document.getElementById('back-top');
+    if (backTopBtn) {
+      backTopBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Copy-link buttons (wired via JS instead of inline onclick)
+    document.querySelectorAll('[data-copy-link]').forEach(function (btn) {
+      btn.addEventListener('click', copyLink);
+    });
+
+    // Scroll: progress bar + navbar shadow + back-to-top visibility
+    var navbar  = document.getElementById('navbar');
+    var backTop = document.getElementById('back-top');
+    var prog    = document.getElementById('read-progress');
+
+    window.addEventListener('scroll', function () {
+      var sy   = window.scrollY;
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      if (prog && docH > 0) prog.style.width = Math.min(100, sy / docH * 100) + '%';
+      if (navbar)  navbar.classList.toggle('scrolled', sy > 40);
+      if (backTop) backTop.classList.toggle('show', sy > 400);
+    }, { passive: true });
+
+    // URL resolution: ?slug= first (canonical), ?id= as fallback
+    var slug = getParam('slug');
+    var id   = getParam('id');
+
+    if (!slug && !id) {
+      showError('No article specified. Use ?slug=your-slug or ?id=... in the URL.');
+      return;
+    }
+
+    fetchArticle(id, slug);
+  }
+
+  // Guard: run after DOM is ready regardless of when the script executes
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init(); // DOM already ready (script is deferred or at end of body)
+  }
+
+}()); // end IIFE
 </script>
 </body>
 </html>
