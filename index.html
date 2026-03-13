@@ -893,26 +893,29 @@ window.toggleSearch = function(){ document.getElementById('search-wrap').classLi
 // ── LOAD ARTICLES ─────────────────────────────────────────────────
 function loadArticles() {
     show('loading-state'); hide('error-state'); hide('empty-state'); hide('articles-loaded');
-    var cached=getCached();
-    if (cached) {
-        hide('loading-state'); allArticles=cached; onLoaded(allArticles);
-        apiFetch({action:'listPublished'})
-        .then(function(d){if(d.ok&&d.articles){setCache(d.articles);if(d.articles.length!==allArticles.length){allArticles=d.articles;onLoaded(allArticles);}}})
-        .catch(function(){});
-        return;
-    }
+    // Always clear old cache to force fresh fetch
+    try { localStorage.removeItem(CACHE_KEY); } catch(x){}
+    console.log('[DEKHO] Fetching articles from Supabase...');
     apiFetch({action:'listPublished'})
     .then(function(d){
         hide('loading-state');
-        console.log('[DEKHO] listPublished response:', d);
-        if(!d.ok){showError((d.error||'Failed to load.')+' (check console)');return;}
-        if(!d.articles||!d.articles.length){showError('No published articles found in database.');return;}
-        allArticles=d.articles; setCache(allArticles); onLoaded(allArticles);
+        console.log('[DEKHO] Response:', JSON.stringify(d).substring(0,300));
+        if(!d.ok){
+            showError('Server error: '+(d.error||'Unknown error'));
+            return;
+        }
+        if(!d.articles||!d.articles.length){
+            showError('No published articles in database. Publish some articles first.');
+            return;
+        }
+        allArticles=d.articles;
+        try { setCache(allArticles); } catch(x){}
+        onLoaded(allArticles);
     })
     .catch(function(err){
         hide('loading-state');
-        console.error('[DEKHO] fetch error:', err);
-        showError('Network error: '+err.message);
+        console.error('[DEKHO] Fetch failed:', err);
+        showError('Could not reach server: '+err.message);
     });
 }
 
