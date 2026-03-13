@@ -930,8 +930,7 @@ function updateTicker(arts) {
 
 // ── SUBSCRIBER COUNT ──────────────────────────────────────────────
 function fetchSubCount() {
-    apiFetch({action:'getSubCount'})
-    .then(function(r){return r.json();})
+    apiFetch({action:'getSubCount'},true)
     .then(function(d){
         if(d.ok&&d.count!==undefined){
             var hsc=document.getElementById('hero-sub-count'); if(hsc)hsc.textContent=d.count;
