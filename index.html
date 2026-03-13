@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
         /* ── VARIABLES (light) ───────────────────────── */
         :root {
@@ -685,6 +685,10 @@
                     <a href="https://elv8dgtl.in/contact.html"      class="footer-link">Contact</a>
                     <a href="https://elv8dgtl.in/work.html"         class="footer-link">Work</a>
                     <a href="https://dekho.elv8dgtl.in/dashboard" class="footer-link" style="color:var(--accent);">CMS Dashboard &rarr;</a>
+                    <!-- CMS Dashboard — accent coloured for easy spotting -->
+                    <a href="https://dekho.elv8dgtl.in/dekho-cms.html" class="footer-link footer-link-dash" style="display:inline-flex;align-items:center;gap:5px;margin-top:.15rem;">
+                        <i data-lucide="layout-dashboard" style="width:12px;height:12px;flex-shrink:0;"></i>CMS Dashboard
+                    </a>
                 </div>
             </div>
 
@@ -774,8 +778,10 @@ function setCache(d) { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ts:
 function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     var icon = document.getElementById('dark-icon');
-    if (icon) icon.setAttribute('data-lucide', t==='dark'?'sun':'moon');
-    lucide.createIcons();
+    if (icon) {
+        icon.setAttribute('data-lucide', t==='dark'?'sun':'moon');
+        try { if(window.lucide) lucide.createIcons(); } catch(e){}
+    }
 }
 function toggleDark() {
     var next = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
@@ -807,9 +813,26 @@ function initStickyFilter() {
 
 // ── BOOT ──────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
-    lucide.createIcons();
-    // apply saved theme icon after icons are created
-    applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+    // Load articles immediately — don't let icon failures block this
+    loadArticles();
+
+    // Icons — safe wrap so a CDN failure never blocks the page
+    try {
+        if (window.lucide) {
+            lucide.createIcons();
+            applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+        } else {
+            // Wait a bit longer for lucide to load, then retry
+            var _iconRetry = setInterval(function(){
+                if (window.lucide) {
+                    clearInterval(_iconRetry);
+                    lucide.createIcons();
+                    applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+                }
+            }, 100);
+            setTimeout(function(){ clearInterval(_iconRetry); }, 5000);
+        }
+    } catch(e) { console.warn('Lucide icons failed to load:', e); }
 
     var navbar  = document.getElementById('navbar');
     var backTop = document.getElementById('back-top');
@@ -850,7 +873,6 @@ document.addEventListener('DOMContentLoaded', function() {
     try { if(localStorage.getItem('dekho_view')==='list') setView('list'); } catch(x){}
 
     initStickyFilter();
-    loadArticles();
 });
 
 // ── SEARCH ────────────────────────────────────────────────────────
@@ -882,10 +904,16 @@ function loadArticles() {
     apiFetch({action:'listPublished'})
     .then(function(d){
         hide('loading-state');
-        if(!d.ok){showError(d.error||'Failed to load.');return;}
-        allArticles=d.articles||[]; setCache(allArticles); onLoaded(allArticles);
+        console.log('[DEKHO] listPublished response:', d);
+        if(!d.ok){showError((d.error||'Failed to load.')+' (check console)');return;}
+        if(!d.articles||!d.articles.length){showError('No published articles found in database.');return;}
+        allArticles=d.articles; setCache(allArticles); onLoaded(allArticles);
     })
-    .catch(function(err){hide('loading-state');showError('Could not reach the server. Check your connection.');console.error(err);});
+    .catch(function(err){
+        hide('loading-state');
+        console.error('[DEKHO] fetch error:', err);
+        showError('Network error: '+err.message);
+    });
 }
 
 function onLoaded(arts) {
