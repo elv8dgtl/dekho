@@ -1,2029 +1,2199 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEKHO by elv8 — Loading…</title>
-  <meta name="description" content="">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="" id="meta-canonical">
-
-  <meta property="og:type"        content="article">
-  <meta property="og:site_name"   content="DEKHO by elv8 dgtl">
-  <meta property="og:title"       content="" id="og-title">
-  <meta property="og:description" content="" id="og-desc">
-  <meta property="og:image"       content="" id="og-image">
-  <meta property="og:url"         content="" id="og-url">
-
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:site"        content="@elv8dgtl">
-  <meta name="twitter:title"       content="" id="tw-title">
-  <meta name="twitter:description" content="" id="tw-desc">
-  <meta name="twitter:image"       content="" id="tw-image">
-
-  <script type="application/ld+json" id="json-ld"></script>
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-V77HPC9EX8');
-  </script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
-  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-
-  <style>
-    /* ── TOKENS ──────────────────────────────────────────── */
-    :root {
-      /* Main Color Scheme (Light) */
-      --ink:      #0D0D0D;
-      --paper:    #FDFDFB; /* Brighter paper for clean minimalism */
-      --surface:  #F5F4F1; /* Subtle subtle surface contrast */
-      --border:   #EBEBE8; /* Clean borders */
-      --muted:    #8E8C83; /* Soft muted text */
-      
-      /* Accent Colors */
-      --accent:   #E8380D; /* Primary orange-red */
-      --accent-soft: rgba(232, 56, 13, 0.1);
-      --lime:     #CCF381; /* Neon lime utility accent */
-      
-      /* Elements */
-      --card-bg:  #ffffff;
-      --shadow:   0 8px 24px rgba(0,0,0,.04);
-      --nav-bg:   rgba(253,253,251,0.97); /* Match brighter paper */
-      
-      /* Typography */
-      --body-font:'Instrument Sans', sans-serif;
-      --read-font:'Lora', Georgia, serif;
-      --display:  'Bebas Neue', sans-serif;
-      --mono:     'DM Mono', monospace;
-      
-      /* Global Readability Spacing */
-      --line-height-body: 1.8;
-      --spacing-v: 1.5rem;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    [data-theme="dark"] {
-      /* Richer, warmer dark mode */
-      --ink:      #EBEAEA; /* Off-white text for less strain */
-      --paper:    #0D0D0B; /* Deep, rich warm black */
-      --surface:  #161614; /* Card/surface contrast */
-      --border:   #232321; /* Subtle borders */
-      --muted:    #74736E; /* Muted text in dark mode */
-      
-      /* Update elements for dark mode */
-      --card-bg:  #161614;
-      --shadow:   0 12px 36px rgba(0,0,0,.5);
-      --nav-bg:   rgba(13,13,11,0.97); /* Match deeper paper */
-      
-      /* Update accents softly if needed for better contrast on dark */
-      --accent:   #FF4C1C;
-    }
-
-    *, *::before, *::after { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-    }
-
-    html { 
-      scroll-behavior: smooth; 
-      font-size: 16px; 
-    }
-
-    body {
-      background: var(--paper); 
-      color: var(--ink);
-      font-family: var(--body-font);
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-      transition: background .25s, color .25s;
-      line-height: var(--line-height-body);
-    }
-
-    .display { 
-      font-family: var(--display); 
-      letter-spacing: .02em; 
-      line-height: .95; 
-    }
-
-    .mono { 
-      font-family: var(--mono); 
-    }
-
-    ::-webkit-scrollbar { 
-      width: 4px; 
-    }
-    ::-webkit-scrollbar-track { 
-      background: var(--paper); 
-    }
-    ::-webkit-scrollbar-thumb { 
-      background: var(--border); 
-      border-radius: 4px; 
-    }
-
-    /* ── READ PROGRESS ────────────────────────────────── */
-    #read-progress {
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      height: 3px;
-      background: var(--accent); 
-      z-index: 200; 
-      width: 0%;
-      transition: width .1s linear;
-    }
-
-    /* ── NAVBAR (MINIMALIST REDESIGN) ──────────────────── */
-    #navbar {
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      width: 100%; 
-      z-index: 100;
-      background: var(--nav-bg);
-      backdrop-filter: blur(14px); 
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1.5px solid var(--border);
-      transition: box-shadow .3s, background .25s, border-color .25s;
-    }
-
-    #navbar.scrolled { 
-      box-shadow: 0 2px 24px var(--shadow); 
-    }
-
-    .nav-inner {
-      max-width: 900px; 
-      margin: auto; 
-      padding: 0 1.25rem;
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between;
-      height: 60px; 
-      gap: 1rem;
-    }
-    
-    /* Navbar Logo wordmark */
-    .nav-wordmark {
-      display: flex; 
-      flex-direction: column; 
-      align-items: flex-start;
-      text-decoration: none; 
-      line-height: 1; 
-      flex-shrink: 0;
-    }
-
-    .nav-wordmark .wm { 
-      font-family: var(--display); 
-      font-size: 1.75rem; 
-      letter-spacing: .06em; 
-      color: var(--ink); 
-    }
-
-    .nav-wordmark .wm .red { 
-      color: var(--accent); 
-    }
-
-    .nav-wordmark .sub { 
-      font-family: var(--body-font); 
-      font-weight: 500; 
-      font-size: 8px; 
-      color: var(--muted); 
-      letter-spacing: .1em; 
-      margin-top: 1px; 
-    }
-
-    /* Navbar center links */
-    .nav-links { 
-      display: flex; 
-      align-items: center; 
-      gap: 1.5rem; 
-    }
-
-    .nav-link { 
-      font-family: var(--body-font); 
-      font-size: 13px; 
-      color: var(--ink); 
-      text-decoration: none; 
-      font-weight: 500; 
-      transition: color .2s; 
-    }
-
-    .nav-link:hover { 
-      color: var(--accent); 
-    }
-
-    @media (max-width: 768px) { 
-      .nav-links { 
-        display: none; 
-      } 
-    }
-
-    /* Navbar right elements */
-    .nav-right { 
-      display: flex; 
-      align-items: center; 
-      gap: .75rem; 
-      flex-shrink: 0; 
-    }
-    
-    /* Minimalist Dark toggle button */
-    #dark-toggle {
-      width: 30px; 
-      height: 30px; 
-      border-radius: 8px;
-      border: 1.5px solid var(--border); 
-      background: var(--surface);
-      cursor: pointer; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      color: var(--muted); 
-      transition: all .2s; 
-      flex-shrink: 0;
-    }
-
-    #dark-toggle:hover { 
-      border-color: var(--ink); 
-      color: var(--ink); 
-    }
-
-    /* Right button (pill-style bordered text button) */
-    .pill-btn {
-      display: inline-flex; 
-      align-items: center; 
-      gap: 6px;
-      padding: 7px 18px; 
-      border-radius: 999px;
-      border: 1.5px solid var(--border); 
-      background: #ffffff;
-      font-family: var(--mono); 
-      font-size: 11px; 
-      color: var(--ink);
-      text-decoration: none; 
-      white-space: nowrap; 
-      font-weight: 500;
-      transition: all .2s;
-      cursor: pointer;
-    }
-
-    [data-theme="dark"] .pill-btn { 
-      background: #1a1918; 
-    }
-
-    .pill-btn:hover { 
-      border-color: var(--ink); 
-      box-shadow: 0 4px 12px var(--shadow); 
-    }
-
-    /* ── STATES ───────────────────────────────────────── */
-    #loading-state, 
-    #error-state { 
-      padding-top: 100px; 
-      text-align: center; 
-      min-height: 60vh; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 1rem; 
-    }
-
-    .skel-block { 
-      border-radius: 8px; 
-      background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%); 
-      background-size: 200% 100%; 
-      animation: shimmer 1.4s infinite; 
-    }
-
-    @keyframes shimmer { 
-      0% { background-position: 200% 0; } 
-      100% { background-position: -200% 0; } 
-    }
-
-    #error-icon { 
-      font-size: 3rem; 
-    }
-
-    /* ── ARTICLE WRAPPER ──────────────────────────────── */
-    #article-wrap { 
-      padding-top: 60px; 
-    }
-
-    /* ── CARDS (shared style) ─────────────────────────── */
-    .rel-card {
-      background: var(--card-bg); 
-      border: 1.5px solid var(--border);
-      border-radius: 12px; 
-      overflow: hidden; 
-      text-decoration: none; 
-      color: var(--ink);
-      transition: transform .25s, box-shadow .25s, border-color .25s;
-    }
-
-    .rel-card:hover { 
-      border-color: var(--ink); 
-      box-shadow: var(--shadow); 
-    }
-
-    /* ── HERO-to-CARD (MAIN REDESIGN) ──────────────────── */
-    #hero-card {
-      max-width: 900px; 
-      margin: 2rem auto var(--spacing-v); 
-      padding: 0;
-      overflow: hidden;
-    }
-    
-    /* Hero image at top of card */
-    #hero-img-wrap { 
-      width: 100%; 
-      aspect-ratio: 16/9; 
-      position: relative; 
-      overflow: hidden; 
-    }
-
-    #hero-img { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      transition: transform .6s ease; 
-    }
-
-    #hero-card:hover #hero-img { 
-      transform: scale(1.02); 
-    }
-    
-    /* Subtler overlay over the card image */
-    #hero-overlay {
-      position: absolute; 
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* Content below the card image */
-    #hero-content { 
-      padding: 1.5rem 1.5rem 1.5rem; 
-      position: relative; 
-    }
-    
-    /* Meta row (tag and author in card) */
-    #card-meta { 
-      display: flex; 
-      align-items: center; 
-      gap: .75rem; 
-      margin-bottom: 1rem; 
-      flex-wrap: wrap; 
-    }
-
-    #hero-tag { 
-      align-self: flex-start; 
-    }
-
-    .meta-divider { 
-      color: var(--border); 
-      font-size: 12px; 
-    }
-
-    /* Full article title in card */
-    #article-title-card {
-      font-family: var(--display);
-      font-size: clamp(2.25rem, 5vw, 3.5rem);
-      line-height: .95; 
-      color: var(--ink);
-      margin-bottom: var(--spacing-v);
-    }
-    
-    /* Author meta in card */
-    .author-meta-card { 
-      display: flex; 
-      align-items: center; 
-      gap: .6rem; 
-      flex-wrap: wrap; 
-    }
-
-    .author-avatar {
-      width: 32px; 
-      height: 32px; 
-      border-radius: 50%;
-      background: var(--ink); 
-      color: var(--lime);
-      font-family: var(--display); 
-      font-size: 15px;
-      display: inline-flex; 
-      align-items: center; 
-      justify-content: center;
-    }
-
-    /* Rating stamp (inside card) */
-    .rating-stamp {
-      position: absolute; 
-      top: -25px; 
-      right: 1.5rem; 
-      display: inline-flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center;
-      width: 50px; 
-      height: 50px; 
-      border-radius: 50%;
-      background: var(--ink); 
-      color: var(--lime);
-      font-family: var(--display); 
-      font-size: 18px; 
-      line-height: 1;
-      border: 2.5px solid var(--paper); 
-      box-shadow: 0 4px 18px rgba(0,0,0,.2);
-    }
-
-    .rating-stamp span { 
-      font-family: var(--mono); 
-      font-size: 7px; 
-      color: #aaa; 
-    }
-
-    /* ── TAG / BADGE ──────────────────────────────────── */
-    .tag {
-      display: inline-block; 
-      font-family: var(--mono);
-      font-size: 10px; 
-      font-weight: 500; 
-      letter-spacing: .12em;
-      text-transform: uppercase; 
-      padding: 3px 10px; 
-      border-radius: 3px; 
-      white-space: nowrap;
-    }
-
-    .tag-review { 
-      background: #FFF0ED; 
-      color: var(--accent);  
-      border: 1px solid #FCCABB; 
-    }
-    .tag-comparison { 
-      background: #EDF3FF; 
-      color: var(--accent2); 
-      border: 1px solid #BCCFFF; 
-    }
-    .tag-top { 
-      background: #F0FDE8; 
-      color: #2E7D10;        
-      border: 1px solid #B6EDAA; 
-    }
-    .tag-guide { 
-      background: #F5F0FF; 
-      color: #6B3FD4;        
-      border: 1px solid #CDB8FF; 
-    }
-    .tag-news { 
-      background: #EFF8FF; 
-      color: #0369A1;        
-      border: 1px solid #BAE6FD; 
-    }
-    .tag-opinion { 
-      background: #FFF7ED; 
-      color: #C2410C;        
-      border: 1px solid #FED7AA; 
-    }
-
-    [data-theme="dark"] .tag-review { 
-      background: #2a1008; 
-      border-color: #6b2010; 
-      color: #ff7a5a; 
-    }
-    [data-theme="dark"] .tag-comparison { 
-      background: #071320; 
-      border-color: #0d2a5a; 
-      color: #6ea3ff; 
-    }
-    [data-theme="dark"] .tag-top { 
-      background: #0a1e05; 
-      border-color: #1a4a0a; 
-      color: #6fcc50; 
-    }
-    [data-theme="dark"] .tag-guide { 
-      background: #150d28; 
-      border-color: #3a1f7a; 
-      color: #b48aff; 
-    }
-    [data-theme="dark"] .tag-news { 
-      background: #071520; 
-      border-color: #0a3050; 
-      color: #60b8f0; 
-    }
-    [data-theme="dark"] .tag-opinion { 
-      background: #1e0e02; 
-      border-color: #6b2a08; 
-      color: #f09060; 
-    }
-
-    /* ── CONTENT LAYOUT ───────────────────────────────── */
-    #content-wrap {
-      max-width: 900px; 
-      margin: 0 auto; 
-      padding: 0 1.25rem;
-      display: grid;
-      grid-template-columns: 1fr 220px;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    @media (max-width: 768px) {
-      #content-wrap { 
-        grid-template-columns: 1fr; 
-        gap: 2rem; 
-      }
-      #sidebar { 
-        order: 2; 
-      }
-    }
-
-    /* Original header hidden, content now in card */
-    #article-header { 
-      padding-top: 1rem; 
-      border-top: 1.5px solid var(--border); 
-      margin-top: 1rem; 
-      display: none; 
-    }
-
-    /* ── PROSE (article body) ─────────────────────────── */
-    #article-body {
-      font-family: var(--read-font);
-      font-size: 18px; 
-      line-height: 1.8;
-      color: var(--ink);
-    }
-    
-    #article-body h1,
-    #article-body h2 {
-      font-family: var(--display);
-      font-size: clamp(1.75rem, 3.5vw, 2.25rem);
-      color: var(--ink); 
-      line-height: 1.0;
-      margin: calc(2.25rem) 0 .9rem;
-    }
-
-    #article-body h3 {
-      font-family: var(--body-font);
-      font-size: 1.125rem; 
-      font-weight: 700;
-      color: var(--ink); 
-      margin: calc(var(--spacing-v)) 0 .65rem;
-    }
-
-    #article-body p { 
-      margin-bottom: 1.3rem; 
-    }
-
-    #article-body a { 
-      color: var(--accent); 
-      text-decoration: underline; 
-      text-underline-offset: 3px; 
-      transition: opacity .2s; 
-    }
-
-    #article-body a:hover { 
-      opacity: .7; 
-    }
-
-    #article-body strong { 
-      font-weight: 700; 
-    }
-
-    #article-body ul, 
-    #article-body ol { 
-      padding-left: 1.5rem; 
-      margin-bottom: calc(var(--spacing-v)); 
-    }
-
-    #article-body li { 
-      margin-bottom: .45rem; 
-    }
-
-    #article-body blockquote {
-      border-left: 4px solid var(--accent);
-      margin: calc(var(--spacing-v)) 0; 
-      padding: .85rem 1.35rem;
-      background: var(--surface); 
-      border-radius: 0 12px 12px 0;
-      font-style: italic; 
-      color: var(--muted);
-    }
-
-    #article-body blockquote p { 
-      margin: 0; 
-    }
-
-    #article-body img {
-      width: 100%; 
-      border-radius: 12px; 
-      margin: calc(var(--spacing-v)) 0;
-      border: 1.5px solid var(--border);
-    }
-
-    #article-body pre {
-      background: var(--surface); 
-      border: 1.5px solid var(--border);
-      border-radius: 8px; 
-      padding: 1.15rem 1.25rem;
-      overflow-x: auto; 
-      margin: calc(var(--spacing-v)) 0;
-      font-family: var(--mono); 
-      font-size: 13px; 
-      line-height: 1.6;
-    }
-
-    #article-body code {
-      font-family: var(--mono); 
-      font-size: .88em;
-      background: var(--surface); 
-      padding: 2px 6px;
-      border-radius: 4px; 
-      border: 1px solid var(--border);
-    }
-
-    #article-body pre code { 
-      background: none; 
-      border: none; 
-      padding: 0; 
-      font-size: 13px; 
-    }
-
-    #article-body hr {
-      border: none; 
-      border-top: 1.5px solid var(--border);
-      margin: calc(var(--spacing-v)) 0;
-    }
-
-    #article-body table {
-      width: 100%; 
-      border-collapse: collapse;
-      margin: calc(var(--spacing-v)) 0; 
-      font-size: 14px;
-    }
-
-    #article-body th {
-      background: var(--surface); 
-      font-family: var(--mono);
-      font-size: 10px; 
-      letter-spacing: .1em; 
-      text-transform: uppercase;
-      padding: 9px 12px; 
-      border: 1.5px solid var(--border);
-      text-align: left; 
-      color: var(--muted);
-    }
-
-    #article-body td {
-      padding: 9px 12px; 
-      border: 1.5px solid var(--border);
-      vertical-align: top;
-    }
-
-    #article-body tr:nth-child(even) td { 
-      background: var(--surface); 
-    }
-
-
-    /* ── TAGS FOOTER ──────────────────────────────────── */
-    #tags-row {
-      display: flex; 
-      flex-wrap: wrap; 
-      gap: 6px;
-      padding: 1.5rem 0; 
-      border-top: 1.5px solid var(--border);
-      margin-top: 2rem;
-    }
-
-    /* ── SHARE BAR ────────────────────────────────────── */
-    #share-bar {
-      display: flex; 
-      gap: 8px; 
-      align-items: center;
-      padding: 1.25rem 0; 
-      border-top: 1.5px solid var(--border);
-      flex-wrap: wrap; 
-      margin-bottom: 2rem;
-    }
-
-    .share-btn {
-      display: inline-flex; 
-      align-items: center; 
-      gap: 6px;
-      padding: 7px 14px; 
-      border-radius: 999px;
-      border: 1.5px solid var(--border); 
-      background: var(--card-bg);
-      font-family: var(--mono); 
-      font-size: 11px; 
-      color: var(--muted);
-      cursor: pointer; 
-      transition: all .2s; 
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .share-btn:hover { 
-      border-color: var(--ink); 
-      color: var(--ink); 
-    }
-
-    .share-btn.accent { 
-      background: var(--accent); 
-      border-color: var(--accent); 
-      color: #fff; 
-    }
-
-    .share-btn.accent:hover { 
-      opacity: .88; 
-    }
-
-    /* ── AUTHOR BOX ───────────────────────────────────── */
-    #author-box {
-      display: flex; 
-      gap: 1rem; 
-      align-items: flex-start;
-      background: var(--surface); 
-      border: 1.5px solid var(--border);
-      border-radius: 14px; 
-      padding: 1.25rem 1.5rem;
-      margin-top: calc(var(--spacing-v)); 
-      margin-bottom: calc(var(--spacing-v));
-    }
-
-    .author-avatar-lg {
-      width: 48px; 
-      height: 48px; 
-      border-radius: 50%; 
-      flex-shrink: 0;
-      background: var(--ink); 
-      color: var(--lime);
-      font-family: var(--display); 
-      font-size: 22px;
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-    }
-
-    /* ── SIDEBAR ──────────────────────────────────────── */
-    #sidebar { 
-      padding-top: 2rem; 
-    }
-
-    .sidebar-section {
-      margin-bottom: 2rem;
-      padding-bottom: 2rem;
-      border-bottom: 1.5px solid var(--border);
-    }
-
-    .sidebar-section:last-child { 
-      border-bottom: none; 
-      margin-bottom: 0; 
-    }
-
-    .sidebar-label {
-      font-family: var(--mono); 
-      font-size: 9px; 
-      letter-spacing: .18em;
-      text-transform: uppercase; 
-      color: var(--muted);
-      margin-bottom: .85rem;
-    }
-
-    /* TOC */
-    #toc-list { 
-      list-style: none; 
-    }
-
-    #toc-list li { 
-      margin-bottom: .35rem; 
-    }
-
-    #toc-list a {
-      font-size: 13px; 
-      color: var(--muted); 
-      text-decoration: none;
-      transition: color .2s; 
-      line-height: 1.4; 
-      display: block;
-      padding: 2px 0 2px 10px;
-      border-left: 2px solid transparent;
-    }
-
-    #toc-list a:hover,
-    #toc-list a.active { 
-      color: var(--ink); 
-      border-left-color: var(--accent); 
-    }
-
-    /* Sticky sidebar */
-    #sidebar-sticky { 
-      position: sticky; 
-      top: 80px; 
-    }
-
-    /* Stats */
-    .stat-row { 
-      display: flex; 
-      flex-direction: column; 
-      gap: .6rem; 
-    }
-
-    .stat-item {
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between;
-      font-size: 13px;
-    }
-
-    .stat-label { 
-      color: var(--muted); 
-      font-size: 12px; 
-    }
-
-    .stat-val { 
-      font-family: var(--mono); 
-      font-size: 12px; 
-      color: var(--ink); 
-    }
-
-    /* ── RELATED ARTICLES ─────────────────────────────── */
-    #related-section {
-      max-width: 900px; 
-      margin: calc(2 * var(--spacing-v)) auto 0;
-      padding: 0 1.25rem 5rem;
-    }
-
-    .related-grid {
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.25rem; 
-      margin-top: 1.25rem;
-    }
-
-    @media (max-width: 640px) { 
-      .related-grid { 
-        grid-template-columns: 1fr; 
-      } 
-    }
-
-    .rel-card { 
-      display: flex; 
-      flex-direction: column; 
-    }
-
-    .rel-img { 
-      aspect-ratio: 16/9; 
-      overflow: hidden; 
-    }
-
-    .rel-img img { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-      transition: transform .4s; 
-      display: block; 
-    }
-
-    .rel-card:hover .rel-img img { 
-      transform: scale(1.05); 
-    }
-
-    .rel-body { 
-      padding: 1rem; 
-      flex: 1; 
-      display: flex; 
-      flex-direction: column; 
-      gap: .4rem; 
-    }
-
-    .rel-title { 
-      font-family: var(--display); 
-      font-size: 18px; 
-      line-height: 1.05; 
-      transition: color .2s; 
-    }
-
-    .rel-card:hover .rel-title { 
-      color: var(--accent); 
-    }
-
-    /* ── TOAST ────────────────────────────────────────── */
-    #toast {
-      position: fixed; 
-      bottom: 1.5rem; 
-      left: 50%;
-      transform: translateX(-50%) translateY(12px);
-      background: var(--ink); 
-      color: #fff;
-      padding: .6rem 1.25rem; 
-      border-radius: 999px;
-      font-family: var(--mono); 
-      font-size: 12px; 
-      letter-spacing: .04em;
-      z-index: 300; 
-      opacity: 0; 
-      transition: opacity .3s, transform .3s;
-      pointer-events: none; 
-      white-space: nowrap;
-    }
-
-    #toast.show { 
-      opacity: 1; 
-      transform: translateX(-50%) translateY(0); 
-    }
-
-    /* ── BACK TO TOP ──────────────────────────────────── */
-    #back-top {
-      position: fixed; 
-      bottom: 5.5rem; 
-      right: 1.25rem; 
-      z-index: 39;
-      width: 38px; 
-      height: 38px; 
-      background: var(--ink); 
-      color: #fff;
-      border: none; 
-      border-radius: 50%; 
-      cursor: pointer;
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      box-shadow: 0 4px 14px rgba(0,0,0,.3);
-      opacity: 0; 
-      pointer-events: none; 
-      transition: opacity .3s, transform .2s;
-    }
-
-    #back-top.visible { 
-      opacity: 1; 
-      pointer-events: auto; 
-    }
-
-    #back-top:hover { 
-      transform: scale(1.1); 
-    }
-
-    /* ── SUBSCRIPTION POPUP ────────────────────────────── */
-    #sub-popup-overlay {
-      position: fixed; 
-      inset: 0; 
-      z-index: 400;
-      background: rgba(0,0,0,.7); 
-      backdrop-filter: blur(8px); 
-      -webkit-backdrop-filter: blur(8px);
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 2rem;
-    }
-
-    #sub-popup-overlay.open { 
-      display: flex; 
-    }
-
-    #sub-card {
-      background: var(--card-bg); 
-      border: 1.5px solid var(--border);
-      border-radius: 16px; 
-      padding: 2.5rem 2rem; 
-      width: 100%; 
-      max-width: 440px;
-      position: relative; 
-      box-shadow: var(--shadow);
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      text-align: center;
-      transform: scale(.9); 
-      transition: transform .3s cubic-bezier(.175,.885,.32,1.275);
-    }
-
-    #sub-popup-overlay.open #sub-card { 
-      transform: scale(1); 
-    }
-
-    #sub-close {
-      position: absolute; 
-      top: 1rem; 
-      right: 1rem;
-      background: none; 
-      border: none; 
-      cursor: pointer;
-      color: var(--muted); 
-      padding: 5px; 
-      transition: color .2s;
-    }
-
-    #sub-close:hover { 
-      color: var(--ink); 
-    }
-    
-    .sub-title { 
-      font-family: var(--display); 
-      font-size: 2.25rem; 
-      color: var(--ink); 
-      line-height: 1; 
-      margin-bottom: .75rem; 
-    }
-
-    .sub-text { 
-      font-size: 14px; 
-      color: var(--muted); 
-      margin-bottom: 1.5rem; 
-      line-height: 1.6; 
-    }
-    
-    #sub-form { 
-      width: 100%; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 10px; 
-    }
-
-    .sub-input {
-      width: 100%; 
-      padding: 11px 16px; 
-      border-radius: 8px;
-      border: 1.5px solid var(--border); 
-      background: var(--surface);
-      font-family: var(--body-font); 
-      font-size: 14px; 
-      color: var(--ink);
-    }
-
-    .sub-input:focus { 
-      outline: none; 
-      border-color: var(--ink); 
-    }
-
-    .sub-btn {
-      width: 100%; 
-      padding: 11px; 
-      border-radius: 8px; 
-      border: none;
-      background: var(--accent); 
-      color: #fff; 
-      font-weight: 700;
-      font-family: var(--body-font); 
-      font-size: 14px; 
-      cursor: pointer; 
-      transition: opacity .2s;
-    }
-
-    .sub-btn:hover { 
-      opacity: .9; 
-    }
-
-    .sub-btn:disabled { 
-      opacity: 0.5; 
-      cursor: not-allowed; 
-    }
-
-    /* ── MOBILE MENU ──────────────────────────────────── */
-    #mobile-menu {
-      position: fixed; 
-      inset: 0; 
-      background: var(--paper); 
-      z-index: 150;
-      transform: translateX(100%);
-      transition: transform .4s cubic-bezier(.4,0,.2,1);
-      display: flex; 
-      flex-direction: column; 
-      align-items: center;
-      justify-content: center; 
-      gap: 1.5rem; 
-      padding: 2rem;
-    }
-
-    #mobile-menu.open { 
-      transform: translateX(0); 
-    }
-
-    /* MISC */
-    @media (max-width: 640px) { 
-      .hide-sm { 
-        display: none !important; 
-      } 
-    }
-
-    .wm-ho { 
-      color: var(--accent); 
-    }
-    
-  </style>
+    <title>DEKHO by elv8 dgtl — Honest Tech Reviews</title>
+    <meta name="description" content="Read the latest tech reviews, comparisons, top picks, and buyer's guides for Indian consumers on DEKHO by elv8 dgtl.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="" id="meta-canonical">
+
+    <meta property="og:type"        content="article">
+    <meta property="og:site_name"   content="DEKHO by elv8 dgtl">
+    <meta property="og:title"       content="DEKHO by elv8 dgtl — Honest Tech Reviews" id="og-title">
+    <meta property="og:description" content="Read the latest tech reviews, comparisons, top picks, and buyer's guides." id="og-desc">
+    <meta property="og:image"       content="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80" id="og-image">
+    <meta property="og:url"         content="https://dekho.elv8dgtl.in" id="og-url">
+
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:site"        content="@elv8dgtl">
+    <meta name="twitter:title"       content="DEKHO by elv8 dgtl" id="tw-title">
+    <meta name="twitter:description" content="Read the latest tech reviews, comparisons, top picks, and buyer's guides." id="tw-desc">
+    <meta name="twitter:image"       content="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80" id="tw-image">
+
+    <script type="application/ld+json" id="json-ld"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V77HPC9EX8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-V77HPC9EX8');
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        /* ── TOKENS ──────────────────────────────────────────── */
+        :root {
+            /* Main Color Scheme (Light) */
+            --ink:      #0D0D0D;
+            --paper:    #FDFDFB; 
+            --surface:  #F5F4F1; 
+            --border:   #EBEBE8; 
+            --muted:    #8E8C83; 
+            
+            /* Accent Colors */
+            --accent:   #E8380D; 
+            --accent-soft: rgba(232, 56, 13, 0.1);
+            --lime:     #CCF381; 
+            
+            /* Elements */
+            --card-bg:  #ffffff;
+            --shadow:   0 8px 24px rgba(0,0,0,.04);
+            --nav-bg:   rgba(253,253,251,0.97); 
+            
+            /* Typography */
+            --body-font:'Instrument Sans', sans-serif;
+            --read-font:'Lora', Georgia, serif;
+            --display:  'Bebas Neue', sans-serif;
+            --mono:     'DM Mono', monospace;
+            
+            /* Global Readability Spacing */
+            --line-height-body: 1.8;
+            --spacing-v: 1.5rem;
+        }
+        
+        [data-theme="dark"] {
+            /* Richer, warmer dark mode */
+            --ink:      #EBEAEA; 
+            --paper:    #0D0D0B; 
+            --surface:  #161614; 
+            --border:   #232321; 
+            --muted:    #74736E; 
+            
+            /* Update elements for dark mode */
+            --card-bg:  #161614;
+            --shadow:   0 12px 36px rgba(0,0,0,.5);
+            --nav-bg:   rgba(13,13,11,0.97); 
+            
+            --accent:   #FF4C1C;
+        }
+
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px; 
+        }
+
+        body {
+            background: var(--paper); 
+            color: var(--ink);
+            font-family: var(--body-font);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            transition: background .25s, color .25s;
+            line-height: var(--line-height-body);
+        }
+
+        .display { 
+            font-family: var(--display); 
+            letter-spacing: .02em; 
+            line-height: .95; 
+        }
+
+        .mono { 
+            font-family: var(--mono); 
+        }
+
+        ::-webkit-scrollbar { 
+            width: 4px; 
+        }
+
+        ::-webkit-scrollbar-track { 
+            background: var(--paper); 
+        }
+
+        ::-webkit-scrollbar-thumb { 
+            background: var(--border); 
+            border-radius: 4px; 
+        }
+
+        /* ── READ PROGRESS ────────────────────────────────── */
+        #read-progress {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            height: 3px;
+            background: var(--accent); 
+            z-index: 200; 
+            width: 0%;
+            transition: width .1s linear;
+        }
+
+        /* ── NAVBAR (MINIMALIST REDESIGN) ──────────────────── */
+        #navbar {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(14px); 
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1.5px solid var(--border);
+            transition: box-shadow .3s, background .25s, border-color .25s;
+        }
+
+        #navbar.scrolled { 
+            box-shadow: 0 2px 24px var(--shadow); 
+        }
+
+        .nav-inner {
+            max-width: 900px; 
+            margin: auto; 
+            padding: 0 1.25rem;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            height: 60px; 
+            gap: 1rem;
+        }
+        
+        /* Navbar Logo wordmark */
+        .nav-wordmark {
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start;
+            text-decoration: none; 
+            line-height: 1; 
+            flex-shrink: 0;
+        }
+
+        .nav-wordmark .wm { 
+            font-family: var(--display); 
+            font-size: 1.75rem; 
+            letter-spacing: .06em; 
+            color: var(--ink); 
+        }
+
+        .nav-wordmark .wm .red { 
+            color: var(--accent); 
+        }
+
+        .nav-wordmark .sub { 
+            font-family: var(--body-font); 
+            font-weight: 500; 
+            font-size: 8px; 
+            color: var(--muted); 
+            letter-spacing: .1em; 
+            margin-top: 1px; 
+        }
+
+        /* Navbar center links */
+        .nav-links { 
+            display: flex; 
+            align-items: center; 
+            gap: 1.5rem; 
+        }
+
+        .nav-link { 
+            font-family: var(--body-font); 
+            font-size: 13px; 
+            color: var(--ink); 
+            text-decoration: none; 
+            font-weight: 500; 
+            transition: color .2s; 
+        }
+
+        .nav-link:hover { 
+            color: var(--accent); 
+        }
+
+        @media (max-width: 768px) { 
+            .nav-links { 
+                display: none; 
+            } 
+        }
+
+        /* Navbar right elements */
+        .nav-right { 
+            display: flex; 
+            align-items: center; 
+            gap: .75rem; 
+            flex-shrink: 0; 
+        }
+        
+        /* Minimalist Dark toggle button */
+        #dark-toggle {
+            width: 30px; 
+            height: 30px; 
+            border-radius: 8px;
+            border: 1.5px solid var(--border); 
+            background: var(--surface);
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: var(--muted); 
+            transition: all .2s; 
+            flex-shrink: 0;
+        }
+
+        #dark-toggle:hover { 
+            border-color: var(--ink); 
+            color: var(--ink); 
+        }
+
+        /* Right button (pill-style bordered text button) */
+        .pill-btn {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px;
+            padding: 7px 18px; 
+            border-radius: 999px;
+            border: 1.5px solid var(--border); 
+            background: var(--card-bg);
+            font-family: var(--mono); 
+            font-size: 11px; 
+            color: var(--ink);
+            text-decoration: none; 
+            white-space: nowrap; 
+            font-weight: 500;
+            transition: all .2s;
+            cursor: pointer;
+        }
+
+        [data-theme="dark"] .pill-btn { 
+            background: #1a1918; 
+        }
+
+        .pill-btn:hover { 
+            border-color: var(--ink); 
+            box-shadow: 0 4px 12px var(--shadow); 
+        }
+
+        /* ── STATES ───────────────────────────────────────── */
+        #loading-state, 
+        #error-state { 
+            padding-top: 100px; 
+            text-align: center; 
+            min-height: 60vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 1rem; 
+        }
+
+        .skel-block { 
+            border-radius: 8px; 
+            background: linear-gradient(90deg, var(--surface) 25%, var(--border) 50%, var(--surface) 75%); 
+            background-size: 200% 100%; 
+            animation: shimmer 1.4s infinite; 
+        }
+
+        @keyframes shimmer { 
+            0% { background-position: 200% 0; } 
+            100% { background-position: -200% 0; } 
+        }
+
+        #error-icon { 
+            font-size: 3rem; 
+        }
+
+        /* ── ARTICLE WRAPPER ──────────────────────────────── */
+        #article-wrap { 
+            padding-top: 60px; 
+        }
+
+        /* ── CARDS (shared style) ─────────────────────────── */
+        .rel-card {
+            background: var(--card-bg); 
+            border: 1.5px solid var(--border);
+            border-radius: 12px; 
+            overflow: hidden; 
+            text-decoration: none; 
+            color: var(--ink);
+            transition: transform .25s, box-shadow .25s, border-color .25s;
+        }
+
+        .rel-card:hover { 
+            border-color: var(--ink); 
+            box-shadow: var(--shadow); 
+        }
+
+        /* ── HERO-to-CARD (MAIN REDESIGN) ──────────────────── */
+        #hero-card {
+            max-width: 900px; 
+            margin: 2rem auto var(--spacing-v); 
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        /* Hero image at top of card */
+        #hero-img-wrap { 
+            width: 100%; 
+            aspect-ratio: 16/9; 
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        #hero-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform .6s ease; 
+        }
+
+        #hero-card:hover #hero-img { 
+            transform: scale(1.02); 
+        }
+        
+        /* Subtler overlay over the card image */
+        #hero-overlay {
+            position: absolute; 
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Content below the card image */
+        #hero-content { 
+            padding: 1.5rem 1.5rem 1.5rem; 
+            position: relative; 
+        }
+        
+        /* Meta row (tag and author in card) */
+        #card-meta { 
+            display: flex; 
+            align-items: center; 
+            gap: .75rem; 
+            margin-bottom: 1rem; 
+            flex-wrap: wrap; 
+        }
+
+        #hero-tag { 
+            align-self: flex-start; 
+        }
+
+        .meta-divider { 
+            color: var(--border); 
+            font-size: 12px; 
+        }
+
+        /* Full article title in card */
+        #article-title-card {
+            font-family: var(--display);
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+            line-height: .95; 
+            color: var(--ink);
+            margin-bottom: var(--spacing-v);
+        }
+        
+        /* Author meta in card */
+        .author-meta-card { 
+            display: flex; 
+            align-items: center; 
+            gap: .6rem; 
+            flex-wrap: wrap; 
+        }
+
+        /* ── DARK MODE CONTRAST FIX ── */
+        .author-avatar {
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%;
+            background: #111111; /* Locked to Dark */
+            color: var(--lime);
+            font-family: var(--display); 
+            font-size: 15px;
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+
+        /* ── DARK MODE CONTRAST FIX ── */
+        .rating-stamp {
+            position: absolute; 
+            top: -25px; 
+            right: 1.5rem; 
+            display: inline-flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%;
+            background: #111111; /* Locked to Dark */
+            color: var(--lime);
+            font-family: var(--display); 
+            font-size: 18px; 
+            line-height: 1;
+            border: 2.5px solid var(--card-bg); 
+            box-shadow: 0 4px 18px rgba(0,0,0,.2);
+        }
+
+        .rating-stamp span { 
+            font-family: var(--mono); 
+            font-size: 7px; 
+            color: #aaa; 
+        }
+
+        /* ── TAG / BADGE ──────────────────────────────────── */
+        .tag {
+            display: inline-block; 
+            font-family: var(--mono);
+            font-size: 10px; 
+            font-weight: 500; 
+            letter-spacing: .12em;
+            text-transform: uppercase; 
+            padding: 3px 10px; 
+            border-radius: 3px; 
+            white-space: nowrap;
+        }
+
+        .tag-review { 
+            background: #FFF0ED; 
+            color: var(--accent);  
+            border: 1px solid #FCCABB; 
+        }
+
+        .tag-comparison { 
+            background: #EDF3FF; 
+            color: var(--accent2); 
+            border: 1px solid #BCCFFF; 
+        }
+
+        .tag-top { 
+            background: #F0FDE8; 
+            color: #2E7D10;        
+            border: 1px solid #B6EDAA; 
+        }
+
+        .tag-guide { 
+            background: #F5F0FF; 
+            color: #6B3FD4;        
+            border: 1px solid #CDB8FF; 
+        }
+
+        .tag-news { 
+            background: #EFF8FF; 
+            color: #0369A1;        
+            border: 1px solid #BAE6FD; 
+        }
+
+        .tag-opinion { 
+            background: #FFF7ED; 
+            color: #C2410C;        
+            border: 1px solid #FED7AA; 
+        }
+
+        [data-theme="dark"] .tag-review { 
+            background: #2a1008; 
+            border-color: #6b2010; 
+            color: #ff7a5a; 
+        }
+
+        [data-theme="dark"] .tag-comparison { 
+            background: #071320; 
+            border-color: #0d2a5a; 
+            color: #6ea3ff; 
+        }
+
+        [data-theme="dark"] .tag-top { 
+            background: #0a1e05; 
+            border-color: #1a4a0a; 
+            color: #6fcc50; 
+        }
+
+        [data-theme="dark"] .tag-guide { 
+            background: #150d28; 
+            border-color: #3a1f7a; 
+            color: #b48aff; 
+        }
+
+        [data-theme="dark"] .tag-news { 
+            background: #071520; 
+            border-color: #0a3050; 
+            color: #60b8f0; 
+        }
+
+        [data-theme="dark"] .tag-opinion { 
+            background: #1e0e02; 
+            border-color: #6b2a08; 
+            color: #f09060; 
+        }
+
+        /* ── CONTENT LAYOUT ───────────────────────────────── */
+        #content-wrap {
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 0 1.25rem;
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            #content-wrap { 
+                grid-template-columns: 1fr; 
+                gap: 2rem; 
+            }
+            #sidebar { 
+                order: 2; 
+            }
+        }
+
+        /* Original header hidden, content now in card */
+        #article-header { 
+            padding-top: 1rem; 
+            border-top: 1.5px solid var(--border); 
+            margin-top: 1rem; 
+            display: none; 
+        }
+
+        /* ── PROSE (article body) ─────────────────────────── */
+        #article-body {
+            font-family: var(--read-font);
+            font-size: 18px; 
+            line-height: 1.8;
+            color: var(--ink);
+        }
+        
+        #article-body h1,
+        #article-body h2 {
+            font-family: var(--display);
+            font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+            color: var(--ink); 
+            line-height: 1.0;
+            margin: calc(2.25rem) 0 .9rem;
+        }
+
+        #article-body h3 {
+            font-family: var(--body-font);
+            font-size: 1.125rem; 
+            font-weight: 700;
+            color: var(--ink); 
+            margin: calc(var(--spacing-v)) 0 .65rem;
+        }
+
+        #article-body p { 
+            margin-bottom: 1.3rem; 
+        }
+
+        #article-body a { 
+            color: var(--accent); 
+            text-decoration: underline; 
+            text-underline-offset: 3px; 
+            transition: opacity .2s; 
+        }
+
+        #article-body a:hover { 
+            opacity: .7; 
+        }
+
+        #article-body strong { 
+            font-weight: 700; 
+        }
+
+        #article-body ul, 
+        #article-body ol { 
+            padding-left: 1.5rem; 
+            margin-bottom: calc(var(--spacing-v)); 
+        }
+
+        #article-body li { 
+            margin-bottom: .45rem; 
+        }
+
+        #article-body blockquote {
+            border-left: 4px solid var(--accent);
+            margin: calc(var(--spacing-v)) 0; 
+            padding: .85rem 1.35rem;
+            background: var(--surface); 
+            border-radius: 0 12px 12px 0;
+            font-style: italic; 
+            color: var(--muted);
+        }
+
+        #article-body blockquote p { 
+            margin: 0; 
+        }
+
+        #article-body img {
+            width: 100%; 
+            border-radius: 12px; 
+            margin: calc(var(--spacing-v)) 0;
+            border: 1.5px solid var(--border);
+        }
+
+        #article-body pre {
+            background: var(--surface); 
+            border: 1.5px solid var(--border);
+            border-radius: 8px; 
+            padding: 1.15rem 1.25rem;
+            overflow-x: auto; 
+            margin: calc(var(--spacing-v)) 0;
+            font-family: var(--mono); 
+            font-size: 13px; 
+            line-height: 1.6;
+        }
+
+        #article-body code {
+            font-family: var(--mono); 
+            font-size: .88em;
+            background: var(--surface); 
+            padding: 2px 6px;
+            border-radius: 4px; 
+            border: 1px solid var(--border);
+        }
+
+        #article-body pre code { 
+            background: none; 
+            border: none; 
+            padding: 0; 
+            font-size: 13px; 
+        }
+
+        #article-body hr {
+            border: none; 
+            border-top: 1.5px solid var(--border);
+            margin: calc(var(--spacing-v)) 0;
+        }
+
+        #article-body table {
+            width: 100%; 
+            border-collapse: collapse;
+            margin: calc(var(--spacing-v)) 0; 
+            font-size: 14px;
+        }
+
+        #article-body th {
+            background: var(--surface); 
+            font-family: var(--mono);
+            font-size: 10px; 
+            letter-spacing: .1em; 
+            text-transform: uppercase;
+            padding: 9px 12px; 
+            border: 1.5px solid var(--border);
+            text-align: left; 
+            color: var(--muted);
+        }
+
+        #article-body td {
+            padding: 9px 12px; 
+            border: 1.5px solid var(--border);
+            vertical-align: top;
+        }
+
+        #article-body tr:nth-child(even) td { 
+            background: var(--surface); 
+        }
+
+        /* ── TAGS FOOTER ──────────────────────────────────── */
+        #tags-row {
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 6px;
+            padding: 1.5rem 0; 
+            border-top: 1.5px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        /* ── SHARE BAR ────────────────────────────────────── */
+        #share-bar {
+            display: flex; 
+            gap: 8px; 
+            align-items: center;
+            padding: 1.25rem 0; 
+            border-top: 1.5px solid var(--border);
+            flex-wrap: wrap; 
+            margin-bottom: 2rem;
+        }
+
+        .share-btn {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px;
+            padding: 7px 14px; 
+            border-radius: 999px;
+            border: 1.5px solid var(--border); 
+            background: var(--card-bg);
+            font-family: var(--mono); 
+            font-size: 11px; 
+            color: var(--muted);
+            cursor: pointer; 
+            transition: all .2s; 
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .share-btn:hover { 
+            border-color: var(--ink); 
+            color: var(--ink); 
+        }
+
+        .share-btn.accent { 
+            background: var(--accent); 
+            border-color: var(--accent); 
+            color: #fff; 
+        }
+
+        .share-btn.accent:hover { 
+            opacity: .88; 
+        }
+
+        /* ── AUTHOR BOX ───────────────────────────────────── */
+        #author-box {
+            display: flex; 
+            gap: 1rem; 
+            align-items: flex-start;
+            background: var(--surface); 
+            border: 1.5px solid var(--border);
+            border-radius: 14px; 
+            padding: 1.25rem 1.5rem;
+            margin-top: calc(var(--spacing-v)); 
+            margin-bottom: calc(var(--spacing-v));
+        }
+
+        /* ── DARK MODE CONTRAST FIX ── */
+        .author-avatar-lg {
+            width: 48px; 
+            height: 48px; 
+            border-radius: 50%; 
+            flex-shrink: 0;
+            background: #111111; /* Locked to Dark */
+            color: var(--lime);
+            font-family: var(--display); 
+            font-size: 22px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+
+        /* ── SIDEBAR ──────────────────────────────────────── */
+        #sidebar { 
+            padding-top: 2rem; 
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        .sidebar-section:last-child { 
+            border-bottom: none; 
+            margin-bottom: 0; 
+        }
+
+        .sidebar-label {
+            font-family: var(--mono); 
+            font-size: 9px; 
+            letter-spacing: .18em;
+            text-transform: uppercase; 
+            color: var(--muted);
+            margin-bottom: .85rem;
+        }
+
+        /* TOC */
+        #toc-list { 
+            list-style: none; 
+        }
+
+        #toc-list li { 
+            margin-bottom: .35rem; 
+        }
+
+        #toc-list a {
+            font-size: 13px; 
+            color: var(--muted); 
+            text-decoration: none;
+            transition: color .2s; 
+            line-height: 1.4; 
+            display: block;
+            padding: 2px 0 2px 10px;
+            border-left: 2px solid transparent;
+        }
+
+        #toc-list a:hover,
+        #toc-list a.active { 
+            color: var(--ink); 
+            border-left-color: var(--accent); 
+        }
+
+        /* Sticky sidebar */
+        #sidebar-sticky { 
+            position: sticky; 
+            top: 80px; 
+        }
+
+        /* Stats */
+        .stat-row { 
+            display: flex; 
+            flex-direction: column; 
+            gap: .6rem; 
+        }
+
+        .stat-item {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .stat-label { 
+            color: var(--muted); 
+            font-size: 12px; 
+        }
+
+        .stat-val { 
+            font-family: var(--mono); 
+            font-size: 12px; 
+            color: var(--ink); 
+        }
+
+        /* ── RELATED ARTICLES ─────────────────────────────── */
+        #related-section {
+            max-width: 900px; 
+            margin: calc(2 * var(--spacing-v)) auto 0;
+            padding: 0 1.25rem 5rem;
+        }
+
+        .related-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.25rem; 
+            margin-top: 1.25rem;
+        }
+
+        @media (max-width: 640px) { 
+            .related-grid { 
+                grid-template-columns: 1fr; 
+            } 
+        }
+
+        .rel-card { 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        .rel-img { 
+            aspect-ratio: 16/9; 
+            overflow: hidden; 
+        }
+
+        .rel-img img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform .4s; 
+            display: block; 
+        }
+
+        .rel-card:hover .rel-img img { 
+            transform: scale(1.05); 
+        }
+
+        .rel-body { 
+            padding: 1rem; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            gap: .4rem; 
+        }
+
+        .rel-title { 
+            font-family: var(--display); 
+            font-size: 18px; 
+            line-height: 1.05; 
+            transition: color .2s; 
+        }
+
+        .rel-card:hover .rel-title { 
+            color: var(--accent); 
+        }
+
+        /* ── TOAST ────────────────────────────────────────── */
+        #toast {
+            position: fixed; 
+            bottom: 1.5rem; 
+            left: 50%;
+            transform: translateX(-50%) translateY(12px);
+            background: var(--ink); 
+            color: #fff;
+            padding: .6rem 1.25rem; 
+            border-radius: 999px;
+            font-family: var(--mono); 
+            font-size: 12px; 
+            letter-spacing: .04em;
+            z-index: 300; 
+            opacity: 0; 
+            transition: opacity .3s, transform .3s;
+            pointer-events: none; 
+            white-space: nowrap;
+        }
+
+        #toast.show { 
+            opacity: 1; 
+            transform: translateX(-50%) translateY(0); 
+        }
+
+        /* ── BACK TO TOP ──────────────────────────────────── */
+        #back-top {
+            position: fixed; 
+            bottom: 5.5rem; 
+            right: 1.25rem; 
+            z-index: 39;
+            width: 38px; 
+            height: 38px; 
+            background: var(--ink); 
+            color: #fff;
+            border: none; 
+            border-radius: 50%; 
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 4px 14px var(--shadow);
+            opacity: 0; 
+            pointer-events: none; 
+            transition: opacity .3s, transform .2s;
+        }
+
+        #back-top.visible { 
+            opacity: 1; 
+            pointer-events: auto; 
+        }
+
+        #back-top:hover { 
+            transform: scale(1.1); 
+        }
+
+        /* ── SUBSCRIPTION POPUP ────────────────────────────── */
+        #sub-popup-overlay {
+            position: fixed; 
+            inset: 0; 
+            z-index: 400;
+            background: rgba(0,0,0,.7); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 2rem;
+        }
+
+        #sub-popup-overlay.open { 
+            display: flex; 
+        }
+
+        #sub-card {
+            background: var(--card-bg); 
+            border: 1.5px solid var(--border);
+            border-radius: 16px; 
+            padding: 2.5rem 2rem; 
+            width: 100%; 
+            max-width: 440px;
+            position: relative; 
+            box-shadow: var(--shadow);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center;
+            transform: scale(.9); 
+            transition: transform .3s cubic-bezier(.175,.885,.32,1.275);
+        }
+
+        #sub-popup-overlay.open #sub-card { 
+            transform: scale(1); 
+        }
+
+        #sub-close {
+            position: absolute; 
+            top: 1rem; 
+            right: 1rem;
+            background: none; 
+            border: none; 
+            cursor: pointer;
+            color: var(--muted); 
+            padding: 5px; 
+            transition: color .2s;
+        }
+
+        #sub-close:hover { 
+            color: var(--ink); 
+        }
+        
+        .sub-title { 
+            font-family: var(--display); 
+            font-size: 2.25rem; 
+            color: var(--ink); 
+            line-height: 1; 
+            margin-bottom: .75rem; 
+        }
+
+        .sub-text { 
+            font-size: 14px; 
+            color: var(--muted); 
+            margin-bottom: 1.5rem; 
+            line-height: 1.6; 
+        }
+        
+        #sub-form { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+        }
+
+        .sub-input {
+            width: 100%; 
+            padding: 11px 16px; 
+            border-radius: 8px;
+            border: 1.5px solid var(--border); 
+            background: var(--surface);
+            font-family: var(--body-font); 
+            font-size: 14px; 
+            color: var(--ink);
+        }
+
+        .sub-input:focus { 
+            outline: none; 
+            border-color: var(--ink); 
+        }
+
+        .sub-btn {
+            width: 100%; 
+            padding: 11px; 
+            border-radius: 8px; 
+            border: none;
+            background: var(--accent); 
+            color: #fff; 
+            font-weight: 700;
+            font-family: var(--body-font); 
+            font-size: 14px; 
+            cursor: pointer; 
+            transition: opacity .2s;
+        }
+
+        .sub-btn:hover { 
+            opacity: .9; 
+        }
+
+        .sub-btn:disabled { 
+            opacity: 0.5; 
+            cursor: not-allowed; 
+        }
+
+        /* ── MOBILE MENU ──────────────────────────────────── */
+        #mobile-menu {
+            position: fixed; 
+            inset: 0; 
+            background: var(--paper); 
+            z-index: 150;
+            transform: translateX(100%);
+            transition: transform .4s cubic-bezier(.4,0,.2,1);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center; 
+            gap: 1.5rem; 
+            padding: 2rem;
+        }
+
+        #mobile-menu.open { 
+            transform: translateX(0); 
+        }
+
+        /* MISC */
+        @media (max-width: 640px) { 
+            .hide-sm { 
+                display: none !important; 
+            } 
+        }
+
+        .wm-ho { 
+            color: var(--accent); 
+        }
+        
+    </style>
 </head>
 <body>
 
 <div id="read-progress"></div>
 
 <nav id="navbar">
-  <div class="nav-inner">
-    <a href="https://dekho.elv8dgtl.in/" class="nav-wordmark">
-      <span class="wm">DEK<span class="red">HO</span></span>
-      <span class="sub">BY ELV8 DGTL</span>
-    </a>
+    <div class="nav-inner">
+        <a href="https://dekho.elv8dgtl.in/" class="nav-wordmark">
+            <span class="wm">DEK<span class="red">HO</span></span>
+            <span class="sub">BY ELV8 DGTL</span>
+        </a>
 
-    <div class="nav-links">
-      <a href="https://dekho.elv8dgtl.in/?cat=review" class="nav-link">Reviews</a>
-      <a href="https://dekho.elv8dgtl.in/?cat=guide" class="nav-link">Guides</a>
-      <a href="https://elv8dgtl.in/" target="_blank" class="nav-link">elv8dgtl.in</a>
-    </div>
+        <div class="nav-links">
+            <a href="https://dekho.elv8dgtl.in/?cat=review" class="nav-link">Reviews</a>
+            <a href="https://dekho.elv8dgtl.in/?cat=guide" class="nav-link">Guides</a>
+            <a href="https://elv8dgtl.in/" target="_blank" class="nav-link">elv8dgtl.in</a>
+        </div>
 
-    <div class="nav-right">
-      <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">
-        <i data-lucide="moon" id="dark-icon" style="width:13px;height:13px;"></i>
-      </button>
-      <a href="https://dekho.elv8dgtl.in/" class="pill-btn hide-sm">
-        All Articles
-      </a>
-      <button onclick="toggleMenu()" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink);display: flex;align-items: center;">
-        <i data-lucide="menu" style="width:20px;height:20px;"></i>
-      </button>
+        <div class="nav-right">
+            <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode" aria-label="Toggle dark mode">
+                <i data-lucide="moon" id="dark-icon" style="width:13px;height:13px;"></i>
+            </button>
+            <a href="https://dekho.elv8dgtl.in/" class="pill-btn hide-sm">
+                All Articles
+            </a>
+            <button onclick="toggleMenu()" style="background:none;border:none;cursor:pointer;padding:6px;color:var(--ink);display: flex;align-items: center;">
+                <i data-lucide="menu" style="width:20px;height:20px;"></i>
+            </button>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div id="mobile-menu" role="dialog" aria-modal="true">
-  <button onclick="toggleMenu()" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;cursor:pointer;" aria-label="Close menu">
-    <i data-lucide="x" style="width:24px;height:24px;color:var(--ink);"></i>
-  </button>
-  <a href="https://elv8dgtl.in/"              onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">HOME</a>
-  <a href="https://dekho.elv8dgtl.in/"        onclick="toggleMenu()" class="display" style="font-size:2.25rem;text-decoration:none;color:var(--ink);">DEK<span class="wm-ho">HO</span></a>
-  <a href="https://elv8dgtl.in/services.html" onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">SERVICES</a>
-  <a href="https://elv8dgtl.in/about.html"    onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">ABOUT</a>
-  <a href="https://elv8dgtl.in/contact.html"  onclick="toggleMenu()" style="margin-top:.5rem;background:var(--accent);color:#fff;padding:11px 32px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;">Get a Quote</a>
+    <button onclick="toggleMenu()" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;cursor:pointer;" aria-label="Close menu">
+        <i data-lucide="x" style="width:24px;height:24px;color:var(--ink);"></i>
+    </button>
+    <a href="https://elv8dgtl.in/"              onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">HOME</a>
+    <a href="https://dekho.elv8dgtl.in/"        onclick="toggleMenu()" class="display" style="font-size:2.25rem;text-decoration:none;color:var(--ink);">DEK<span class="wm-ho">HO</span></a>
+    <a href="https://elv8dgtl.in/services.html" onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">SERVICES</a>
+    <a href="https://elv8dgtl.in/about.html"    onclick="toggleMenu()" class="display" style="font-size:2.25rem;color:var(--ink);text-decoration:none;">ABOUT</a>
+    <a href="https://elv8dgtl.in/contact.html"  onclick="toggleMenu()" style="margin-top:.5rem;background:var(--accent);color:#fff;padding:11px 32px;border-radius:999px;font-weight:700;text-decoration:none;font-size:14px;">Get a Quote</a>
 </div>
 
 <div id="loading-state">
-  <div style="width:100%;max-width:900px;padding:0 1.25rem;margin:0 auto;">
-    <div class="skel-block" style="width:100%;height:380px;border-radius:12px;"></div>
-    <div style="padding:2.5rem 0;display:flex;flex-direction:column;gap:1rem;">
-      <div class="skel-block" style="width:80px;height:22px;border-radius:4px;"></div>
-      <div class="skel-block" style="width:70%;height:44px;border-radius:6px;"></div>
-      <div class="skel-block" style="width:50%;height:44px;border-radius:6px;"></div>
-      <div class="skel-block" style="width:220px;height:16px;border-radius:4px;margin-top:.5rem;"></div>
-      <div style="height:1.5rem;"></div>
-      <div class="skel-block" style="width:100%;height:14px;border-radius:4px;"></div>
-      <div class="skel-block" style="width:90%;height:14px;border-radius:4px;"></div>
-      <div class="skel-block" style="width:95%;height:14px;border-radius:4px;"></div>
-      <div class="skel-block" style="width:75%;height:14px;border-radius:4px;"></div>
+    <div style="width:100%;max-width:900px;padding:0 1.25rem;margin:0 auto;">
+        <div class="skel-block" style="width:100%;height:380px;border-radius:12px;"></div>
+        <div style="padding:2.5rem 0;display:flex;flex-direction:column;gap:1rem;">
+            <div class="skel-block" style="width:80px;height:22px;border-radius:4px;"></div>
+            <div class="skel-block" style="width:70%;height:44px;border-radius:6px;"></div>
+            <div class="skel-block" style="width:50%;height:44px;border-radius:6px;"></div>
+            <div class="skel-block" style="width:220px;height:16px;border-radius:4px;margin-top:.5rem;"></div>
+            <div style="height:1.5rem;"></div>
+            <div class="skel-block" style="width:100%;height:14px;border-radius:4px;"></div>
+            <div class="skel-block" style="width:90%;height:14px;border-radius:4px;"></div>
+            <div class="skel-block" style="width:95%;height:14px;border-radius:4px;"></div>
+            <div class="skel-block" style="width:75%;height:14px;border-radius:4px;"></div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div id="error-state" style="display:none;">
-  <div id="error-icon">🔍</div>
-  <p class="display" style="font-size:2.5rem;color:var(--border);">NOT FOUND</p>
-  <p style="color:var(--muted);font-size:14px;" id="error-msg">Could not load this article.</p>
-  <a href="https://dekho.elv8dgtl.in/" style="margin-top:1rem;padding:9px 24px;background:var(--ink);color:#fff;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
-    <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back to DEKHO
-  </a>
+    <div id="error-icon">🔍</div>
+    <p class="display" style="font-size:2.5rem;color:var(--border);">NOT FOUND</p>
+    <p style="color:var(--muted);font-size:14px;" id="error-msg">Could not load this article.</p>
+    <a href="https://dekho.elv8dgtl.in/" style="margin-top:1rem;padding:9px 24px;background:var(--ink);color:#fff;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+        <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back to DEKHO
+    </a>
 </div>
 
 <div id="sub-popup-overlay">
-  <div id="sub-card">
-    <button id="sub-close" onclick="closeSubPopup()" aria-label="Close popup">
-      <i data-lucide="x" style="width:16px;height:16px;"></i>
-    </button>
-    <i data-lucide="mail" style="width:40px;height:40px;color:var(--accent);margin-bottom:1rem;"></i>
-    <p class="sub-title">JOIN THE FOLD</p>
-    <p class="sub-text">Subscribe for the latest reviews, digital guides, and insights from DEKHO, delivered directly to your inbox.</p>
-    
-    <form id="sub-form">
-      <input type="email" class="sub-input" placeholder="Your best email address..." required>
-      <button type="submit" class="sub-btn">Sign Me Up</button>
-    </form>
-    
-    <p style="font-size:11px;color:var(--muted);margin-top:1.25rem;">No spam, ever. Just quality insights.</p>
-  </div>
+    <div id="sub-card">
+        <button id="sub-close" onclick="closeSubPopup()" aria-label="Close popup">
+            <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+        <i data-lucide="mail" style="width:40px;height:40px;color:var(--accent);margin-bottom:1rem;"></i>
+        <p class="sub-title">JOIN THE FOLD</p>
+        <p class="sub-text">Subscribe for the latest reviews, digital guides, and insights from DEKHO, delivered directly to your inbox.</p>
+        
+        <form id="sub-form">
+            <input type="email" class="sub-input" placeholder="Your best email address..." required>
+            <button type="submit" class="sub-btn">Sign Me Up</button>
+        </form>
+        
+        <p style="font-size:11px;color:var(--muted);margin-top:1.25rem;">No spam, ever. Just quality insights.</p>
+    </div>
 </div>
 
 <div id="article-wrap" style="display:none;">
 
-  <div style="max-width:900px;margin:1rem auto 0;padding:.75rem 1.25rem;border-bottom:1.5px solid var(--border);">
-    <nav aria-label="Breadcrumb" style="display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:11px;color:var(--muted);">
-      <a href="https://elv8dgtl.in/" style="color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">elv8 dgtl</a>
-      <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
-      <a href="https://dekho.elv8dgtl.in/" style="color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">DEKHO</a>
-      <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
-      <span id="breadcrumb-cat" style="color:var(--muted);"></span>
-      <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
-      <span id="breadcrumb-title" style="color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;"></span>
-    </nav>
-  </div>
-
-  <div id="hero-card" class="rel-card">
-    <div id="hero-img-wrap">
-      <img id="hero-img" src="" alt="">
-      <div id="hero-overlay"></div>
+    <div style="max-width:900px;margin:1rem auto 0;padding:.75rem 1.25rem;border-bottom:1.5px solid var(--border);">
+        <nav aria-label="Breadcrumb" style="display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:11px;color:var(--muted);">
+            <a href="https://elv8dgtl.in/" style="color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">elv8 dgtl</a>
+            <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
+            <a href="https://dekho.elv8dgtl.in/" style="color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">DEKHO</a>
+            <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
+            <span id="breadcrumb-cat" style="color:var(--muted);"></span>
+            <i data-lucide="chevron-right" style="width:12px;height:12px;flex-shrink:0;"></i>
+            <span id="breadcrumb-title" style="color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;"></span>
+        </nav>
     </div>
-    
-    <div id="hero-content">
-      <span id="hero-rating" class="rating-stamp" style="display:none;"></span>
-      <div id="card-meta">
-        <span id="hero-tag" class="tag"></span>
-      </div>
-      <h1 id="article-title-card"></h1>
-      <div class="author-meta-card">
-        <div class="author-avatar" id="meta-avatar"></div>
-        <span style="font-size:13px;color:var(--muted);" id="meta-author"></span>
-        <span class="meta-divider">·</span>
-        <span style="font-family:var(--mono);font-size:11px;color:var(--muted);" id="meta-date"></span>
-        <span class="meta-divider">·</span>
-        <span style="font-family:var(--mono);font-size:11px;color:var(--muted);" id="meta-read"></span>
-      </div>
-    </div>
-  </div>
 
-  <div id="content-wrap">
-
-    <main>
-      <div id="article-header"></div>
-
-      <div id="article-body"></div>
-
-      <div id="tags-row"></div>
-
-      <div id="share-bar">
-        <span class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-right:4px;">SHARE</span>
-        <button class="share-btn accent" onclick="copyLink()">
-          <i data-lucide="link" style="width:12px;height:12px;"></i> Copy link
-        </button>
-        <a id="share-wa" href="#" target="_blank" class="share-btn" style="color:#25D366;border-color:#25D366;">
-          <i data-lucide="message-circle" style="width:12px;height:12px;"></i> WhatsApp
-        </a>
-        <a id="share-tw" href="#" target="_blank" class="share-btn">
-          <i data-lucide="twitter" style="width:12px;height:12px;"></i> X/Twitter
-        </a>
-        <a id="share-li" href="#" target="_blank" class="share-btn">
-          <i data-lucide="linkedin" style="width:12px;height:12px;"></i> LinkedIn
-        </a>
-      </div>
-
-      <div id="author-box">
-        <div class="author-avatar-lg" id="author-avatar-lg"></div>
-        <div>
-          <p style="font-weight:700;font-size:15px;" id="author-name-box"></p>
-          <p style="font-size:13px;color:var(--muted);margin-top:3px;">Writer at DEKHO by elv8 dgtl</p>
-        </div>
-      </div>
-
-    </main>
-
-    <aside id="sidebar">
-      <div id="sidebar-sticky">
-
-        <div class="sidebar-section" id="toc-section" style="display:none;">
-          <p class="sidebar-label">In this article</p>
-          <ul id="toc-list"></ul>
-        </div>
-
-        <div class="sidebar-section">
-          <p class="sidebar-label">Article info</p>
-          <div class="stat-row">
-            <div class="stat-item">
-              <span class="stat-label">Category</span>
-              <span class="stat-val" id="stat-cat">—</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Read time</span>
-              <span class="stat-val" id="stat-read">—</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Published</span>
-              <span class="stat-val" id="stat-date">—</span>
-            </div>
-          </div>
+    <div id="hero-card" class="rel-card">
+        <div id="hero-img-wrap">
+            <img id="hero-img" src="" alt="">
+            <div id="hero-overlay"></div>
         </div>
         
-        <div class="sidebar-section">
-          <p class="sidebar-label">Keep Reading</p>
-          <button onclick="showSubPopup()" class="pill-btn" style="width:100%; justify-content:center; gap:8px;">
-            <i data-lucide="mail" style="width:12px;height:12px;"></i> Subscribe to Updates
-          </button>
+        <div id="hero-content">
+            <span id="hero-rating" class="rating-stamp" style="display:none;"></span>
+            <div id="card-meta">
+                <span id="hero-tag" class="tag"></span>
+            </div>
+            <h1 id="article-title-card"></h1>
+            <div class="author-meta-card">
+                <div class="author-avatar" id="meta-avatar"></div>
+                <span style="font-size:13px;color:var(--muted);" id="meta-author"></span>
+                <span class="meta-divider">·</span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--muted);" id="meta-date"></span>
+                <span class="meta-divider">·</span>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--muted);" id="meta-read"></span>
+            </div>
         </div>
-
-        <div class="sidebar-section">
-          <a href="https://dekho.elv8dgtl.in/" style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
-            <i data-lucide="arrow-left" style="width:13px;height:13px;flex-shrink:0;"></i>
-            All articles
-          </a>
-        </div>
-
-      </div>
-    </aside>
-  </div>
-
-  <section id="related-section" style="display:none;">
-    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.25rem;">
-      <h2 class="display" style="font-size:clamp(1.5rem,3vw,2rem);color:var(--ink);">MORE FROM DEKHO</h2>
     </div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;">You might also like these</p>
-    <div class="related-grid" id="related-grid"></div>
-  </section>
 
-</div><a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
+    <div id="content-wrap">
+
+        <main>
+            <div id="article-header"></div>
+
+            <div id="article-body"></div>
+
+            <div id="tags-row"></div>
+
+            <div id="share-bar">
+                <span class="mono" style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-right:4px;">SHARE</span>
+                <button class="share-btn accent" onclick="copyLink()">
+                    <i data-lucide="link" style="width:12px;height:12px;"></i> Copy link
+                </button>
+                <a id="share-wa" href="#" target="_blank" class="share-btn" style="color:#25D366;border-color:#25D366;">
+                    <i data-lucide="message-circle" style="width:12px;height:12px;"></i> WhatsApp
+                </a>
+                <a id="share-tw" href="#" target="_blank" class="share-btn">
+                    <i data-lucide="twitter" style="width:12px;height:12px;"></i> X/Twitter
+                </a>
+                <a id="share-li" href="#" target="_blank" class="share-btn">
+                    <i data-lucide="linkedin" style="width:12px;height:12px;"></i> LinkedIn
+                </a>
+            </div>
+
+            <div id="author-box">
+                <div class="author-avatar-lg" id="author-avatar-lg"></div>
+                <div>
+                    <p style="font-weight:700;font-size:15px;" id="author-name-box"></p>
+                    <p style="font-size:13px;color:var(--muted);margin-top:3px;">Writer at DEKHO by elv8 dgtl</p>
+                </div>
+            </div>
+
+        </main>
+
+        <aside id="sidebar">
+            <div id="sidebar-sticky">
+
+                <div class="sidebar-section" id="toc-section" style="display:none;">
+                    <p class="sidebar-label">In this article</p>
+                    <ul id="toc-list"></ul>
+                </div>
+
+                <div class="sidebar-section">
+                    <p class="sidebar-label">Article info</p>
+                    <div class="stat-row">
+                        <div class="stat-item">
+                            <span class="stat-label">Category</span>
+                            <span class="stat-val" id="stat-cat">—</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Read time</span>
+                            <span class="stat-val" id="stat-read">—</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Published</span>
+                            <span class="stat-val" id="stat-date">—</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <p class="sidebar-label">Keep Reading</p>
+                    <button onclick="showSubPopup()" class="pill-btn" style="width:100%; justify-content:center; gap:8px;">
+                        <i data-lucide="mail" style="width:12px;height:12px;"></i> Subscribe to Updates
+                    </button>
+                </div>
+
+                <div class="sidebar-section">
+                    <a href="https://dekho.elv8dgtl.in/" style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+                        <i data-lucide="arrow-left" style="width:13px;height:13px;flex-shrink:0;"></i>
+                        All articles
+                    </a>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+
+    <section id="related-section" style="display:none;">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.25rem;">
+            <h2 class="display" style="font-size:clamp(1.5rem,3vw,2rem);color:var(--ink);">MORE FROM DEKHO</h2>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;">You might also like these</p>
+        <div class="related-grid" id="related-grid"></div>
+    </section>
+
+</div>
+
+<a href="https://wa.me/918052743378" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"
    style="position:fixed;bottom:1.25rem;right:1.25rem;z-index:40;width:48px;height:48px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:transform .2s;"
    onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-  <i data-lucide="message-circle" style="width:24px;height:24px;color:#fff;"></i>
+    <i data-lucide="message-circle" style="width:24px;height:24px;color:#fff;"></i>
 </a>
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
-  <i data-lucide="arrow-up" style="width:16px;height:16px;"></i>
+    <i data-lucide="arrow-up" style="width:16px;height:16px;"></i>
 </button>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function () {
-  'use strict';
+    'use strict';
 
-  // ══════════════════════════════════════════════════════
-  //  CONFIG
-  // ══════════════════════════════════════════════════════
-  var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
-  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
-  var TABLE         = 'articles';            
-  var SITE          = 'https://dekho.elv8dgtl.in';
-  var FALLBACK_IMG  = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80';
+    // ══════════════════════════════════════════════════════
+    //  CONFIG
+    // ══════════════════════════════════════════════════════
+    var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
+    var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
+    var TABLE         = 'articles';            
+    var SITE          = 'https://dekho.elv8dgtl.in';
+    var FALLBACK_IMG  = 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=1400&q=80';
 
-  // ══════════════════════════════════════════════════════
-  //  SUPABASE REST HELPERS
-  // ══════════════════════════════════════════════════════
-  function sbHeaders() {
-    return {
-      'apikey':        SUPABASE_ANON,
-      'Authorization': 'Bearer ' + SUPABASE_ANON,
-      'Content-Type':  'application/json'
+    // ══════════════════════════════════════════════════════
+    //  SUPABASE REST HELPERS
+    // ══════════════════════════════════════════════════════
+    function sbHeaders() {
+        return {
+            'apikey':        SUPABASE_ANON,
+            'Authorization': 'Bearer ' + SUPABASE_ANON,
+            'Content-Type':  'application/json'
+        };
+    }
+
+    function sbFetchOne(filter, select) {
+        var parts = ['select=' + encodeURIComponent(select || '*')];
+        
+        if (filter) {
+            parts.push(filter);
+        }
+        
+        parts.push('limit=1');
+        var url = SUPABASE_URL + '/rest/v1/' + TABLE + '?' + parts.join('&');
+        
+        return fetch(url, { headers: sbHeaders() })
+            .then(function (r) {
+                if (!r.ok) {
+                    return r.text().then(function (t) { 
+                        throw new Error(t); 
+                    });
+                }
+                return r.json();
+            })
+            .then(function (rows) { 
+                return (rows && rows.length) ? rows[0] : null; 
+            });
+    }
+
+    function sbFetchMany(filter, select, limit) {
+        var parts = ['select=' + encodeURIComponent(select || '*')];
+        
+        if (filter) {
+            parts.push(filter);
+        }
+        
+        parts.push('limit=' + (limit || 20));
+        var url = SUPABASE_URL + '/rest/v1/' + TABLE + '?' + parts.join('&');
+        
+        return fetch(url, { headers: sbHeaders() })
+            .then(function (r) {
+                if (!r.ok) {
+                    throw new Error('Supabase error ' + r.status);
+                }
+                return r.json();
+            })
+            .then(function (rows) { 
+                return rows || []; 
+            });
+    }
+
+    function sbInsert(table, data) {
+        var url = SUPABASE_URL + '/rest/v1/' + table;
+        
+        return fetch(url, {
+            method: 'POST',
+            headers: Object.assign({ 'Prefer': 'return=minimal' }, sbHeaders()),
+            body: JSON.stringify(data)
+        }).then(function (r) {
+            if (!r.ok) {
+                throw new Error('Failed to insert');
+            }
+            return r;
+        });
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  UTILS
+    // ══════════════════════════════════════════════════════
+    function esc(s) {
+        if (!s) return '';
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function fmtDate(iso) {
+        if (!iso) return '';
+        try { 
+            return new Date(iso).toLocaleDateString('en-IN', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            }); 
+        } catch(e) { 
+            return ''; 
+        }
+    }
+
+    function tagCls(cat) {
+        var m = { 
+            review: 'tag-review', 
+            comparison: 'tag-comparison', 
+            top: 'tag-top', 
+            guide: 'tag-guide', 
+            news: 'tag-news', 
+            opinion: 'tag-opinion' 
+        };
+        return m[(cat || '').toLowerCase()] || 'tag-review';
+    }
+
+    function tagDisplay(cat) {
+        var m = { 
+            review: 'Review', 
+            comparison: 'Comparison', 
+            top: 'Top List', 
+            guide: 'Guide', 
+            news: 'News', 
+            opinion: 'Opinion' 
+        };
+        var k = (cat || '').toLowerCase();
+        return m[k] || (cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'Article');
+    }
+
+    function getParam(key) { 
+        return new URLSearchParams(window.location.search).get(key); 
+    }
+
+    function $(id) { 
+        return document.getElementById(id); 
+    }
+
+    function setText(id, val) { 
+        var el = $(id); 
+        if (el) {
+            el.textContent = val || ''; 
+        }
+    }
+
+    function setAttr(id, attr, val) { 
+        var el = $(id); 
+        if (el) {
+            el.setAttribute(attr, val || ''); 
+        }
+    }
+
+    function showEl(id) { 
+        var el = $(id); 
+        if (el) {
+            el.style.display = ''; 
+        }
+    }
+
+    function hideEl(id) { 
+        var el = $(id); 
+        if (el) {
+            el.style.display = 'none'; 
+        }
+    }
+
+    function showToast(msg) {
+        var t = $('toast'); 
+        if (!t) return;
+        
+        t.textContent = msg; 
+        t.classList.add('show');
+        
+        setTimeout(function() { 
+            t.classList.remove('show'); 
+        }, 3000);
+    }
+
+    function articleURL(a) {
+        // Automatically clean the slug by removing any leading slashes
+        var cleanSlug = a.slug ? a.slug.replace(/^\/+/, '') : '';
+        return SITE + '/dekho-article.html?' + (cleanSlug ? 'slug=' + encodeURIComponent(cleanSlug) : 'id=' + encodeURIComponent(a.id));
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  DARK MODE
+    // ══════════════════════════════════════════════════════
+    function applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        var btn = $('dark-toggle');
+        
+        if (btn) {
+            btn.innerHTML = '<i data-lucide="' + (t === 'dark' ? 'sun' : 'moon') + '" id="dark-icon" style="width:13px;height:13px;"></i>';
+            try { 
+                if (window.lucide) {
+                    lucide.createIcons(); 
+                }
+            } catch(e) {}
+        }
+    }
+
+    window.toggleDark = function() {
+        var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        try { 
+            localStorage.setItem('dekho_theme', next); 
+        } catch(x) {}
     };
-  }
 
-  function sbFetchOne(filter, select) {
-    var parts = ['select=' + encodeURIComponent(select || '*')];
-    if (filter) parts.push(filter);
-    parts.push('limit=1');
-    var url = SUPABASE_URL + '/rest/v1/' + TABLE + '?' + parts.join('&');
-    return fetch(url, { headers: sbHeaders() })
-      .then(function (r) {
-        if (!r.ok) return r.text().then(function (t) { throw new Error(t); });
-        return r.json();
-      })
-      .then(function (rows) { 
-        return (rows && rows.length) ? rows[0] : null; 
-      });
-  }
-
-  function sbFetchMany(filter, select, limit) {
-    var parts = ['select=' + encodeURIComponent(select || '*')];
-    if (filter) parts.push(filter);
-    parts.push('limit=' + (limit || 20));
-    var url = SUPABASE_URL + '/rest/v1/' + TABLE + '?' + parts.join('&');
-    return fetch(url, { headers: sbHeaders() })
-      .then(function (r) {
-        if (!r.ok) throw new Error('Supabase error ' + r.status);
-        return r.json();
-      })
-      .then(function (rows) { 
-        return rows || []; 
-      });
-  }
-
-  function sbInsert(table, data) {
-    var url = SUPABASE_URL + '/rest/v1/' + table;
-    return fetch(url, {
-      method: 'POST',
-      headers: Object.assign({ 'Prefer': 'return=minimal' }, sbHeaders()),
-      body: JSON.stringify(data)
-    }).then(function (r) {
-      if (!r.ok) throw new Error('Failed to insert');
-      return r;
-    });
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  UTILS
-  // ══════════════════════════════════════════════════════
-  function esc(s) {
-    if (!s) return '';
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function fmtDate(iso) {
-    if (!iso) return '';
-    try { 
-      return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); 
-    } catch(e) { 
-      return ''; 
-    }
-  }
-
-  function tagCls(cat) {
-    var m = { review:'tag-review', comparison:'tag-comparison', top:'tag-top', guide:'tag-guide', news:'tag-news', opinion:'tag-opinion' };
-    return m[(cat||'').toLowerCase()] || 'tag-review';
-  }
-
-  function tagDisplay(cat) {
-    var m = { review:'Review', comparison:'Comparison', top:'Top List', guide:'Guide', news:'News', opinion:'Opinion' };
-    var k = (cat||'').toLowerCase();
-    return m[k] || (cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'Article');
-  }
-
-  function getParam(key) { 
-    return new URLSearchParams(window.location.search).get(key); 
-  }
-
-  function $(id) { 
-    return document.getElementById(id); 
-  }
-
-  function setText(id, val) { 
-    var el = $(id); 
-    if(el) el.textContent = val||''; 
-  }
-
-  function setAttr(id, attr, val) { 
-    var el = $(id); 
-    if(el) el.setAttribute(attr, val||''); 
-  }
-
-  function showEl(id) { 
-    var el = $(id); 
-    if(el) el.style.display = ''; 
-  }
-
-  function hideEl(id) { 
-    var el = $(id); 
-    if(el) el.style.display = 'none'; 
-  }
-
-  function showToast(msg) {
-    var t = $('toast'); 
-    if(!t) return;
-    t.textContent = msg; 
-    t.classList.add('show');
-    setTimeout(function(){ 
-      t.classList.remove('show'); 
-    }, 3000);
-  }
-
-  function articleURL(a) {
-    return SITE + '/dekho-article.html?' + (a.slug ? 'slug=' + encodeURIComponent(a.slug) : 'id=' + encodeURIComponent(a.id));
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  DARK MODE
-  // ══════════════════════════════════════════════════════
-  function applyTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    var btn = $('dark-toggle');
-    if (btn) {
-      btn.innerHTML = '<i data-lucide="' + (t === 'dark' ? 'sun' : 'moon') + '" id="dark-icon" style="width:13px;height:13px;"></i>';
-      try { 
-        if (window.lucide) lucide.createIcons(); 
-      } catch(e){}
-    }
-  }
-
-  window.toggleDark = function() {
-    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-    try { 
-      localStorage.setItem('dekho_theme', next); 
-    } catch(x){}
-  };
-
-  (function initTheme() {
-    var saved = ''; 
-    try { 
-      saved = localStorage.getItem('dekho_theme')||''; 
-    } catch(x){}
-    var pref = saved || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
-    if (pref === 'dark') document.documentElement.setAttribute('data-theme','dark');
-  })();
-
-  // ══════════════════════════════════════════════════════
-  //  MOBILE MENU
-  // ══════════════════════════════════════════════════════
-  window.toggleMenu = function() {
-    var m = $('mobile-menu');
-    m.classList.toggle('open');
-    document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
-  };
-
-  // ══════════════════════════════════════════════════════
-  //  SUBSCRIPTION POPUP LOGIC
-  // ══════════════════════════════════════════════════════
-  window.showSubPopup = function() {
-    var ov = $('sub-popup-overlay');
-    if (ov) ov.classList.add('open');
-  };
-
-  window.closeSubPopup = function() {
-    var ov = $('sub-popup-overlay');
-    if (ov) ov.classList.remove('open');
-  };
-  
-  function checkPopupAutoShow() {
-    var shownBefore = false;
-    try { 
-      shownBefore = localStorage.getItem('dekho_sub_popup_shown'); 
-    } catch(e){}
-    
-    if (!shownBefore) {
-      setTimeout(function(){
-        if ($('article-wrap').style.display !== 'none') {
-          showSubPopup();
-          try { 
-            localStorage.setItem('dekho_sub_popup_shown', 'true'); 
-          } catch(e){}
-        }
-      }, 5000); 
-    }
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  FETCH ARTICLE
-  // ══════════════════════════════════════════════════════
-  function fetchArticle() {
-    var slug = getParam('slug');
-    var id   = getParam('id');
-
-    console.log('🔍 DEBUG: URL Parameters parsed ->', { slug: slug, id: id });
-
-    if (!slug && !id) {
-      console.warn('⚠️ DEBUG: No slug or id found in the URL.');
-      showError('No article specified.');
-      return;
-    }
-
-    var filter = slug
-      ? 'slug=eq.' + encodeURIComponent(slug)
-      : 'id=eq.'   + encodeURIComponent(id);
-
-    console.log('📡 DEBUG: Fetching from Supabase ->', filter);
-
-    sbFetchOne(filter, '*')
-      .then(function (article) {
-        console.log('✅ DEBUG: Supabase raw response ->', article);
+    (function initTheme() {
+        var saved = ''; 
+        try { 
+            saved = localStorage.getItem('dekho_theme') || ''; 
+        } catch(x) {}
         
-        if (!article) {
-          console.error('❌ DEBUG: Supabase returned null. Checking RLS policies or row existence.');
-          showError('Article not found.');
-          return;
+        var pref = saved || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+        if (pref === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
         }
-        
-        var status = (article.status || '').toLowerCase().trim();
-        if (status && status !== 'published') {
-          console.warn('⚠️ DEBUG: Article found, but status is not "published".');
-          showError('This article is not published yet.');
-          return;
-        }
-        
-        console.log('🚀 DEBUG: Validation passed. Rendering article...');
-        renderArticle(article);
-        
-        // Load related articles
-        sbFetchMany('status=eq.published', 'id,slug,title,category,cover_image,read_time,excerpt', 20)
-          .then(function(all) { 
-            renderRelated(article, all); 
-          })
-          .catch(function(err){ 
-            console.warn('⚠️ DEBUG: Failed to load related articles ->', err); 
-          });
-          
-        // Trigger popup logic
-        checkPopupAutoShow();
-      })
-      .catch(function (e) {
-        console.error('💥 DEBUG: Network or API Error ->', e);
-        showError('Could not load article. ' + (e && e.message ? e.message : 'Check connection.'));
-      });
-  }
+    })();
 
-  // ══════════════════════════════════════════════════════
-  //  RENDER ARTICLE
-  // ══════════════════════════════════════════════════════
-  function renderArticle(a) {
-    hideEl('loading-state');
-    showEl('article-wrap');
-
-    var title    = a.title || 'Untitled';
-    var slug     = a.slug || '';
-    var cat      = a.category || '';
-    var tag      = a.tag || '';
-    var cover    = a.cover_image || FALLBACK_IMG;
-    var author   = a.author_name || 'DEKHO';
-    var date     = fmtDate(a.published_at || a.created_at);
-    var readTime = a.read_time ? a.read_time + ' min read' : '';
-    var rating   = a.rating ? parseFloat(a.rating).toFixed(1) : '';
-    var excerpt  = a.excerpt || '';
-    var content  = a.content || '';
-    var pageURL  = articleURL(a);
-
-    // ── SEO / meta ──
-    var metaTitle = a.seo_meta_title || title;
-    var metaDesc  = a.seo_meta_desc  || excerpt;
-    var ogImg     = a.seo_og_image   || cover;
-    
-    document.title = metaTitle + ' — DEKHO by elv8 dgtl';
-    setMeta('description', metaDesc);
-    
-    setMeta('og:title',       metaTitle, true);
-    setMeta('og:description', metaDesc,  true);
-    setMeta('og:image',       ogImg,     true);
-    setMeta('og:url',         pageURL,   true);
-    
-    setMeta('twitter:title',       metaTitle, false);
-    setMeta('twitter:description', metaDesc,  false);
-    setMeta('twitter:image',       ogImg,     false);
-    
-    var canonical = a.seo_canonical || pageURL;
-    var canEl = $('meta-canonical'); 
-    if(canEl) canEl.setAttribute('href', canonical);
-
-    // JSON-LD
-    var ld = {
-      '@context':   'https://schema.org',
-      '@type':      'Article',
-      headline:     title,
-      description:  excerpt,
-      image:        cover,
-      datePublished: a.published_at || a.created_at,
-      dateModified:  a.updated_at   || a.published_at || a.created_at,
-      author: { '@type': 'Person', name: author },
-      publisher: {
-        '@type': 'Organization',
-        name: 'DEKHO by elv8 dgtl',
-        url:  'https://dekho.elv8dgtl.in'
-      },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': pageURL }
-    };
-    var ldEl = $('json-ld'); 
-    if(ldEl) ldEl.textContent = JSON.stringify(ld);
-
-    // ── Hero-to-Card Layout ──
-    var heroImg = $('hero-img');
-    if (heroImg) { 
-      heroImg.src = cover; 
-      heroImg.alt = title; 
-    }
-
-    var heroTag = $('hero-tag');
-    if (heroTag && cat) {
-      heroTag.textContent = tagDisplay(cat);
-      heroTag.className = 'tag ' + tagCls(cat);
-    }
-
-    var heroRating = $('hero-rating');
-    if (heroRating && rating) {
-      heroRating.style.display = '';
-      heroRating.innerHTML = rating + '<span>/ 10</span>';
-    }
-    
-    setText('article-title-card', title);
-    
-    var avatarEl = $('meta-avatar');
-    if (avatarEl) avatarEl.textContent = author.charAt(0).toUpperCase();
-    
-    setText('meta-author', author);
-    setText('meta-date',   date);
-    setText('meta-read',   readTime);
-
-    // ── Breadcrumb ──
-    setText('breadcrumb-cat',   tagDisplay(cat));
-    setText('breadcrumb-title', title);
-
-    // ── Sidebar stats ──
-    setText('stat-cat',  tagDisplay(cat));
-    setText('stat-read', readTime || '—');
-    setText('stat-date', date || '—');
-
-    // ── Author box ──
-    var avgLg = $('author-avatar-lg');
-    if (avgLg) avgLg.textContent = author.charAt(0).toUpperCase();
-    setText('author-name-box', author);
-
-    // ── Share links ──
-    var encoded = encodeURIComponent(pageURL);
-    var encTitle = encodeURIComponent(title);
-    var waEl = $('share-wa');
-    var twEl = $('share-tw');
-    var liEl = $('share-li');
-    
-    if (waEl) waEl.href = 'https://wa.me/?text=' + encodeURIComponent(title + ' ' + pageURL);
-    if (twEl) twEl.href = 'https://twitter.com/intent/tweet?url=' + encoded + '&text=' + encTitle;
-    if (liEl) liEl.href = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encoded + '&title=' + encTitle;
-
-    // ── Body ──
-    var bodyEl = $('article-body');
-    if (bodyEl) {
-      if (content) {
-        var isHTML = /<[a-z][\s\S]*>/i.test(content);
-        bodyEl.innerHTML = isHTML ? content : plainToHTML(content);
-      } else {
-        bodyEl.innerHTML = '<p style="color:var(--muted);font-style:italic;">No content available.</p>';
-      }
-    }
-
-    // ── Tags row ──
-    var tagsEl = $('tags-row');
-    if (tagsEl) {
-      var allTags = [];
-      if (cat) allTags.push(tagDisplay(cat));
-      
-      if (tag && typeof tag === 'string') {
-        tag.split(',').forEach(function(t){ 
-          var v = t.trim(); 
-          if(v) allTags.push(v); 
-        });
-      } else if (Array.isArray(tag)) {
-        tag.forEach(function(t){ 
-          var v = String(t).trim(); 
-          if(v) allTags.push(v); 
-        });
-      }
-      
-      if (a.seo_tags && typeof a.seo_tags === 'string') {
-        a.seo_tags.split(',').forEach(function(t){ 
-          var v = t.trim(); 
-          if(v && !allTags.includes(v)) allTags.push(v); 
-        });
-      }
-      
-      tagsEl.innerHTML = allTags.map(function(t){
-        return '<span class="tag ' + tagCls(t.toLowerCase()) + '">' + esc(t) + '</span>';
-      }).join('');
-    }
-
-    // ── TOC ──
-    buildTOC();
-
-    // Re-initialize icons and apply theme correctly for new elements
-    try { 
-      if(window.lucide) lucide.createIcons(); 
-    } catch(e){}
-    applyTheme(document.documentElement.getAttribute('data-theme')||'light');
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  PLAIN TEXT → HTML
-  // ══════════════════════════════════════════════════════
-  function plainToHTML(text) {
-    return text.split(/\n\n+/).map(function(para) {
-      var p = para.trim();
-      if (!p) return '';
-      if (p.startsWith('# '))  return '<h2>' + esc(p.slice(2)) + '</h2>';
-      if (p.startsWith('## ')) return '<h3>' + esc(p.slice(3)) + '</h3>';
-      if (p.startsWith('> '))  return '<blockquote><p>' + esc(p.slice(2)) + '</p></blockquote>';
-      return '<p>' + esc(p).replace(/\n/g,'<br>') + '</p>';
-    }).join('\n');
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  TABLE OF CONTENTS
-  // ══════════════════════════════════════════════════════
-  function buildTOC() {
-    var body = $('article-body');
-    if (!body) return;
-    
-    var headings = body.querySelectorAll('h2, h3');
-    if (headings.length < 3) return;
-
-    var tocSection = $('toc-section');
-    var tocList    = $('toc-list');
-    if (!tocSection || !tocList) return;
-
-    tocList.innerHTML = '';
-    
-    headings.forEach(function(h, i) {
-      var id = 'heading-' + i;
-      h.id = id;
-      
-      var li = document.createElement('li');
-      var a  = document.createElement('a');
-      a.href = '#' + id;
-      a.textContent = h.textContent;
-      
-      if (h.tagName === 'H3') a.style.paddingLeft = '20px';
-      
-      li.appendChild(a);
-      tocList.appendChild(li);
-    });
-
-    tocSection.style.display = '';
-
-    // Highlight active heading on scroll
-    var tocLinks = tocList.querySelectorAll('a');
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          tocLinks.forEach(function(l){ 
-            l.classList.remove('active'); 
-          });
-          var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
-          if (active) active.classList.add('active');
-        }
-      });
-    }, { rootMargin: '-60px 0px -70% 0px' });
-
-    headings.forEach(function(h){ 
-      observer.observe(h); 
-    });
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  RELATED ARTICLES
-  // ══════════════════════════════════════════════════════
-  function renderRelated(current, all) {
-    var others = all.filter(function(a) {
-      return a.id !== current.id;
-    });
-    
-    var sameCat = others.filter(function(a){ 
-      return a.category === current.category; 
-    });
-    var rest = others.filter(function(a){ 
-      return a.category !== current.category; 
-    });
-    
-    var picks = sameCat.concat(rest).slice(0, 3);
-
-    if (!picks.length) return;
-
-    var grid = $('related-grid');
-    if (!grid) return;
-
-    grid.innerHTML = picks.map(function(a) {
-      var cover = a.cover_image || FALLBACK_IMG;
-      var url   = articleURL(a);
-      
-      return '<a href="' + url + '" class="rel-card">' +
-        '<div class="rel-img"><img src="' + esc(cover) + '" alt="' + esc(a.title) + '" loading="lazy" onerror="this.src=\'' + FALLBACK_IMG + '\'"></div>' +
-        '<div class="rel-body">' +
-          '<span class="tag ' + tagCls(a.category) + '" style="align-self:flex-start;">' + tagDisplay(a.category) + '</span>' +
-          '<p class="rel-title">' + esc(a.title) + '</p>' +
-          '<p style="font-size:12px;color:var(--muted);font-family:var(--mono);">' + (a.read_time ? a.read_time + ' min' : '') + '</p>' +
-        '</div>' +
-      '</a>';
-    }).join('');
-
-    var section = $('related-section');
-    if (section) section.style.display = '';
-
-    try { 
-      if(window.lucide) lucide.createIcons(); 
-    } catch(e){}
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  SHARE
-  // ══════════════════════════════════════════════════════
-  window.copyLink = function() {
-    var url = window.location.href;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).then(function(){ 
-        showToast('Link copied! 📋'); 
-      }).catch(function(){ 
-        fallbackCopy(url); 
-      });
-    } else {
-      fallbackCopy(url);
-    }
-  };
-
-  function fallbackCopy(text) {
-    var t = document.createElement('textarea');
-    t.value = text;
-    document.body.appendChild(t);
-    t.select();
-    document.execCommand('copy');
-    document.body.removeChild(t);
-    showToast('Link copied! 📋');
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  ERROR
-  // ══════════════════════════════════════════════════════
-  function showError(msg) {
-    hideEl('loading-state');
-    hideEl('article-wrap');
-    showEl('error-state');
-    setText('error-msg', msg || 'Could not load article.');
-    try { 
-      if(window.lucide) lucide.createIcons(); 
-    } catch(e){}
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  META HELPER
-  // ══════════════════════════════════════════════════════
-  function setMeta(name, content, isOG) {
-    if (!content) return;
-    var sel = isOG
-      ? 'meta[property="' + name + '"]'
-      : 'meta[name="' + name + '"]';
-    var el = document.querySelector(sel);
-    if (el) el.setAttribute('content', content);
-  }
-
-  // ══════════════════════════════════════════════════════
-  //  INIT
-  // ══════════════════════════════════════════════════════
-  document.addEventListener('DOMContentLoaded', function() {
-
-    // Initialize Icons
-    try {
-      if (window.lucide) {
-        lucide.createIcons();
-        applyTheme(document.documentElement.getAttribute('data-theme')||'light');
-      } else {
-        var retry = setInterval(function(){
-          if (window.lucide) {
-            clearInterval(retry);
-            lucide.createIcons();
-            applyTheme(document.documentElement.getAttribute('data-theme')||'light');
-          }
-        }, 100);
-        setTimeout(function(){ 
-          clearInterval(retry); 
-        }, 5000);
-      }
-    } catch(e){}
-
-    // Scroll: progress bar + navbar shadow + back-to-top
-    var navbar  = $('navbar');
-    var backTop = $('back-top');
-    var prog    = $('read-progress');
-    
-    window.addEventListener('scroll', function() {
-      var sy   = window.scrollY;
-      var docH = document.documentElement.scrollHeight - window.innerHeight;
-      
-      if (prog && docH > 0) prog.style.width = Math.min(100, sy / docH * 100) + '%';
-      if (navbar)  navbar.classList.toggle('scrolled', sy > 40);
-      if (backTop) backTop.classList.toggle('visible', sy > 500);
-    }, { passive: true });
-
-    // Keyboard: Escape closes menus and popups
-    document.addEventListener('keydown', function(e){
-      if (e.key === 'Escape') {
+    // ══════════════════════════════════════════════════════
+    //  MOBILE MENU
+    // ══════════════════════════════════════════════════════
+    window.toggleMenu = function() {
         var m = $('mobile-menu');
-        if (m && m.classList.contains('open')) toggleMenu();
-        
+        m.classList.toggle('open');
+        document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
+    };
+
+    // ══════════════════════════════════════════════════════
+    //  SUBSCRIPTION POPUP LOGIC
+    // ══════════════════════════════════════════════════════
+    window.showSubPopup = function() {
         var ov = $('sub-popup-overlay');
-        if (ov && ov.classList.contains('open')) closeSubPopup();
-      }
-    });
+        if (ov) {
+            ov.classList.add('open');
+        }
+    };
+
+    window.closeSubPopup = function() {
+        var ov = $('sub-popup-overlay');
+        if (ov) {
+            ov.classList.remove('open');
+        }
+    };
     
-    // Close popup on overlay click
-    var ov = $('sub-popup-overlay');
-    if (ov) {
-      ov.addEventListener('click', function(e){
-        if (e.target === ov) closeSubPopup();
-      });
+    function checkPopupAutoShow() {
+        var shownBefore = false;
+        try { 
+            shownBefore = localStorage.getItem('dekho_sub_popup_shown'); 
+        } catch(e) {}
+        
+        if (!shownBefore) {
+            setTimeout(function() {
+                if ($('article-wrap').style.display !== 'none') {
+                    showSubPopup();
+                    try { 
+                        localStorage.setItem('dekho_sub_popup_shown', 'true'); 
+                    } catch(e) {}
+                }
+            }, 5000); 
+        }
     }
 
-    // Handle Subscription Form Submit
-    var subForm = $('sub-form');
-    if (subForm) {
-      subForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var emailInput = subForm.querySelector('.sub-input');
-        var email = emailInput ? emailInput.value.trim() : '';
-        if (!email) return;
+    // ══════════════════════════════════════════════════════
+    //  FETCH ARTICLE
+    // ══════════════════════════════════════════════════════
+    function fetchArticle() {
+        var slug = getParam('slug');
+        
+        // Remove any leading slashes that might have accidentally been saved in the DB
+        if (slug) {
+            slug = slug.replace(/^\/+/, '');
+        }
+        
+        var id = getParam('id');
 
-        var btn = subForm.querySelector('.sub-btn');
-        var originalText = btn.textContent;
-        btn.textContent = 'Subscribing...';
-        btn.disabled = true;
+        console.log('🔍 DEBUG: URL Parameters parsed ->', { slug: slug, id: id });
 
-        // Send to Supabase 'subscribers' table
-        sbInsert('subscribers', { email: email })
-          .then(function() {
-            showToast('Thanks for subscribing! Check your inbox soon.');
-            closeSubPopup();
-            emailInput.value = ''; // clear the input
-          })
-          .catch(function(err) {
-            console.error('Subscription error:', err);
-            showToast('Oops! Something went wrong. Try again.');
-          })
-          .finally(function() {
-            btn.textContent = originalText;
-            btn.disabled = false;
-          });
-      });
+        if (!slug && !id) {
+            console.warn('⚠️ DEBUG: No slug or id found in the URL.');
+            showError('No article specified.');
+            return;
+        }
+
+        var filter = slug
+            ? 'slug=eq.' + encodeURIComponent(slug)
+            : 'id=eq.'   + encodeURIComponent(id);
+
+        console.log('📡 DEBUG: Fetching from Supabase ->', filter);
+
+        sbFetchOne(filter, '*')
+            .then(function (article) {
+                console.log('✅ DEBUG: Supabase raw response ->', article);
+                
+                if (!article) {
+                    console.error('❌ DEBUG: Supabase returned null. Checking RLS policies or row existence.');
+                    showError('Article not found.');
+                    return;
+                }
+                
+                var status = (article.status || '').toLowerCase().trim();
+                if (status && status !== 'published') {
+                    console.warn('⚠️ DEBUG: Article found, but status is not "published".');
+                    showError('This article is not published yet.');
+                    return;
+                }
+                
+                console.log('🚀 DEBUG: Validation passed. Rendering article...');
+                renderArticle(article);
+                
+                // Load related articles
+                sbFetchMany('status=eq.published', 'id,slug,title,category,cover_image,read_time,excerpt', 20)
+                    .then(function(all) { 
+                        renderRelated(article, all); 
+                    })
+                    .catch(function(err) { 
+                        console.warn('⚠️ DEBUG: Failed to load related articles ->', err); 
+                    });
+                    
+                // Trigger popup logic
+                checkPopupAutoShow();
+            })
+            .catch(function (e) {
+                console.error('💥 DEBUG: Network or API Error ->', e);
+                showError('Could not load article. ' + (e && e.message ? e.message : 'Check connection.'));
+            });
     }
 
-    // Fetch the article
-    fetchArticle();
-  });
+    // ══════════════════════════════════════════════════════
+    //  RENDER ARTICLE
+    // ══════════════════════════════════════════════════════
+    function renderArticle(a) {
+        hideEl('loading-state');
+        showEl('article-wrap');
+
+        var title    = a.title || 'Untitled';
+        var slug     = a.slug || '';
+        var cat      = a.category || '';
+        var tag      = a.tag || '';
+        var cover    = a.cover_image || FALLBACK_IMG;
+        var author   = a.author_name || 'DEKHO';
+        var date     = fmtDate(a.published_at || a.created_at);
+        var readTime = a.read_time ? a.read_time + ' min read' : '';
+        var rating   = a.rating ? parseFloat(a.rating).toFixed(1) : '';
+        var excerpt  = a.excerpt || '';
+        var content  = a.content || '';
+        var pageURL  = articleURL(a);
+
+        // ── SEO / meta ──
+        var metaTitle = a.seo_meta_title || title;
+        var metaDesc  = a.seo_meta_desc  || excerpt;
+        var ogImg     = a.seo_og_image   || cover;
+        
+        document.title = metaTitle + ' — DEKHO by elv8 dgtl';
+        setMeta('description', metaDesc);
+        
+        setMeta('og:title',       metaTitle, true);
+        setMeta('og:description', metaDesc,  true);
+        setMeta('og:image',       ogImg,     true);
+        setMeta('og:url',         pageURL,   true);
+        
+        setMeta('twitter:title',       metaTitle, false);
+        setMeta('twitter:description', metaDesc,  false);
+        setMeta('twitter:image',       ogImg,     false);
+        
+        var canonical = a.seo_canonical || pageURL;
+        var canEl = $('meta-canonical'); 
+        if (canEl) {
+            canEl.setAttribute('href', canonical);
+        }
+
+        // JSON-LD
+        var ld = {
+            '@context':   'https://schema.org',
+            '@type':      'Article',
+            headline:     title,
+            description:  excerpt,
+            image:        cover,
+            datePublished: a.published_at || a.created_at,
+            dateModified:  a.updated_at   || a.published_at || a.created_at,
+            author: { 
+                '@type': 'Person', 
+                name: author 
+            },
+            publisher: {
+                '@type': 'Organization',
+                name: 'DEKHO by elv8 dgtl',
+                url:  'https://dekho.elv8dgtl.in'
+            },
+            mainEntityOfPage: { 
+                '@type': 'WebPage', 
+                '@id': pageURL 
+            }
+        };
+        var ldEl = $('json-ld'); 
+        if (ldEl) {
+            ldEl.textContent = JSON.stringify(ld);
+        }
+
+        // ── Hero-to-Card Layout ──
+        var heroImg = $('hero-img');
+        if (heroImg) { 
+            heroImg.src = cover; 
+            heroImg.alt = title; 
+        }
+
+        var heroTag = $('hero-tag');
+        if (heroTag && cat) {
+            heroTag.textContent = tagDisplay(cat);
+            heroTag.className = 'tag ' + tagCls(cat);
+        }
+
+        var heroRating = $('hero-rating');
+        if (heroRating && rating) {
+            heroRating.style.display = '';
+            heroRating.innerHTML = rating + '<span>/ 10</span>';
+        }
+        
+        setText('article-title-card', title);
+        
+        var avatarEl = $('meta-avatar');
+        if (avatarEl) {
+            avatarEl.textContent = author.charAt(0).toUpperCase();
+        }
+        
+        setText('meta-author', author);
+        setText('meta-date',   date);
+        setText('meta-read',   readTime);
+
+        // ── Breadcrumb ──
+        setText('breadcrumb-cat',   tagDisplay(cat));
+        setText('breadcrumb-title', title);
+
+        // ── Sidebar stats ──
+        setText('stat-cat',  tagDisplay(cat));
+        setText('stat-read', readTime || '—');
+        setText('stat-date', date || '—');
+
+        // ── Author box ──
+        var avgLg = $('author-avatar-lg');
+        if (avgLg) {
+            avgLg.textContent = author.charAt(0).toUpperCase();
+        }
+        setText('author-name-box', author);
+
+        // ── Share links ──
+        var encoded = encodeURIComponent(pageURL);
+        var encTitle = encodeURIComponent(title);
+        var waEl = $('share-wa');
+        var twEl = $('share-tw');
+        var liEl = $('share-li');
+        
+        if (waEl) {
+            waEl.href = 'https://wa.me/?text=' + encodeURIComponent(title + ' ' + pageURL);
+        }
+        if (twEl) {
+            twEl.href = 'https://twitter.com/intent/tweet?url=' + encoded + '&text=' + encTitle;
+        }
+        if (liEl) {
+            liEl.href = 'https://www.linkedin.com/shareArticle?mini=true&url=' + encoded + '&title=' + encTitle;
+        }
+
+        // ── Body ──
+        var bodyEl = $('article-body');
+        if (bodyEl) {
+            if (content) {
+                var isHTML = /<[a-z][\s\S]*>/i.test(content);
+                bodyEl.innerHTML = isHTML ? content : plainToHTML(content);
+
+                // --- NEW LINK FIXER ---
+                // Automatically repairs authored links that are missing 'https://'
+                var articleLinks = bodyEl.querySelectorAll('a');
+                articleLinks.forEach(function(link) {
+                    var href = link.getAttribute('href');
+                    
+                    // If the link does not start with http/https/mailto/tel and looks like a domain name
+                    if (href && !href.match(/^(http|https|mailto|tel|\/|#)/i) && href.includes('.')) {
+                        link.setAttribute('href', 'https://' + href);
+                    }
+                });
+
+            } else {
+                bodyEl.innerHTML = '<p style="color:var(--muted);font-style:italic;">No content available.</p>';
+            }
+        }
+
+        // ── Tags row ──
+        var tagsEl = $('tags-row');
+        if (tagsEl) {
+            var allTags = [];
+            
+            if (cat) {
+                allTags.push(tagDisplay(cat));
+            }
+            
+            if (tag && typeof tag === 'string') {
+                tag.split(',').forEach(function(t) { 
+                    var v = t.trim(); 
+                    if (v) allTags.push(v); 
+                });
+            } else if (Array.isArray(tag)) {
+                tag.forEach(function(t) { 
+                    var v = String(t).trim(); 
+                    if (v) allTags.push(v); 
+                });
+            }
+            
+            if (a.seo_tags && typeof a.seo_tags === 'string') {
+                a.seo_tags.split(',').forEach(function(t) { 
+                    var v = t.trim(); 
+                    if (v && !allTags.includes(v)) allTags.push(v); 
+                });
+            }
+            
+            tagsEl.innerHTML = allTags.map(function(t) {
+                return '<span class="tag ' + tagCls(t.toLowerCase()) + '">' + esc(t) + '</span>';
+            }).join('');
+        }
+
+        // ── TOC ──
+        buildTOC();
+
+        // Re-initialize icons and apply theme correctly for new elements
+        try { 
+            if (window.lucide) {
+                lucide.createIcons(); 
+            }
+        } catch(e) {}
+        
+        applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  PLAIN TEXT → HTML
+    // ══════════════════════════════════════════════════════
+    function plainToHTML(text) {
+        return text.split(/\n\n+/).map(function(para) {
+            var p = para.trim();
+            
+            if (!p) return '';
+            
+            if (p.startsWith('# ')) {
+                return '<h2>' + esc(p.slice(2)) + '</h2>';
+            }
+            if (p.startsWith('## ')) {
+                return '<h3>' + esc(p.slice(3)) + '</h3>';
+            }
+            if (p.startsWith('> ')) {
+                return '<blockquote><p>' + esc(p.slice(2)) + '</p></blockquote>';
+            }
+            
+            return '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>';
+        }).join('\n');
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  TABLE OF CONTENTS
+    // ══════════════════════════════════════════════════════
+    function buildTOC() {
+        var body = $('article-body');
+        if (!body) return;
+        
+        var headings = body.querySelectorAll('h2, h3');
+        if (headings.length < 3) return;
+
+        var tocSection = $('toc-section');
+        var tocList    = $('toc-list');
+        
+        if (!tocSection || !tocList) return;
+
+        tocList.innerHTML = '';
+        
+        headings.forEach(function(h, i) {
+            var id = 'heading-' + i;
+            h.id = id;
+            
+            var li = document.createElement('li');
+            var a  = document.createElement('a');
+            
+            a.href = '#' + id;
+            a.textContent = h.textContent;
+            
+            if (h.tagName === 'H3') {
+                a.style.paddingLeft = '20px';
+            }
+            
+            li.appendChild(a);
+            tocList.appendChild(li);
+        });
+
+        tocSection.style.display = '';
+
+        // Highlight active heading on scroll
+        var tocLinks = tocList.querySelectorAll('a');
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(function(l) { 
+                        l.classList.remove('active'); 
+                    });
+                    
+                    var active = tocList.querySelector('a[href="#' + entry.target.id + '"]');
+                    if (active) {
+                        active.classList.add('active');
+                    }
+                }
+            });
+        }, { rootMargin: '-60px 0px -70% 0px' });
+
+        headings.forEach(function(h) { 
+            observer.observe(h); 
+        });
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  RELATED ARTICLES
+    // ══════════════════════════════════════════════════════
+    function renderRelated(current, all) {
+        var others = all.filter(function(a) {
+            return a.id !== current.id;
+        });
+        
+        var sameCat = others.filter(function(a) { 
+            return a.category === current.category; 
+        });
+        var rest = others.filter(function(a) { 
+            return a.category !== current.category; 
+        });
+        
+        var picks = sameCat.concat(rest).slice(0, 3);
+
+        if (!picks.length) return;
+
+        var grid = $('related-grid');
+        if (!grid) return;
+
+        grid.innerHTML = picks.map(function(a) {
+            var cover = a.cover_image || FALLBACK_IMG;
+            var url   = articleURL(a);
+            
+            return '<a href="' + url + '" class="rel-card">' +
+                '<div class="rel-img">' +
+                    '<img src="' + esc(cover) + '" alt="' + esc(a.title) + '" loading="lazy" onerror="this.src=\'' + FALLBACK_IMG + '\'">' +
+                '</div>' +
+                '<div class="rel-body">' +
+                    '<span class="tag ' + tagCls(a.category) + '" style="align-self:flex-start;">' + tagDisplay(a.category) + '</span>' +
+                    '<p class="rel-title">' + esc(a.title) + '</p>' +
+                    '<p style="font-size:12px;color:var(--muted);font-family:var(--mono);">' + (a.read_time ? a.read_time + ' min' : '') + '</p>' +
+                '</div>' +
+            '</a>';
+        }).join('');
+
+        var section = $('related-section');
+        if (section) {
+            section.style.display = '';
+        }
+
+        try { 
+            if (window.lucide) {
+                lucide.createIcons(); 
+            }
+        } catch(e) {}
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  SHARE
+    // ══════════════════════════════════════════════════════
+    window.copyLink = function() {
+        var url = window.location.href;
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(function() { 
+                showToast('Link copied! 📋'); 
+            }).catch(function() { 
+                fallbackCopy(url); 
+            });
+        } else {
+            fallbackCopy(url);
+        }
+    };
+
+    function fallbackCopy(text) {
+        var t = document.createElement('textarea');
+        t.value = text;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+        showToast('Link copied! 📋');
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  ERROR
+    // ══════════════════════════════════════════════════════
+    function showError(msg) {
+        hideEl('loading-state');
+        hideEl('article-wrap');
+        showEl('error-state');
+        setText('error-msg', msg || 'Could not load article.');
+        
+        try { 
+            if (window.lucide) {
+                lucide.createIcons(); 
+            }
+        } catch(e) {}
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  META HELPER
+    // ══════════════════════════════════════════════════════
+    function setMeta(name, content, isOG) {
+        if (!content) return;
+        
+        var sel = isOG
+            ? 'meta[property="' + name + '"]'
+            : 'meta[name="' + name + '"]';
+            
+        var el = document.querySelector(sel);
+        if (el) {
+            el.setAttribute('content', content);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════
+    //  INIT
+    // ══════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Initialize Icons
+        try {
+            if (window.lucide) {
+                lucide.createIcons();
+                applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
+            } else {
+                var retry = setInterval(function() {
+                    if (window.lucide) {
+                        clearInterval(retry);
+                        lucide.createIcons();
+                        applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
+                    }
+                }, 100);
+                
+                setTimeout(function() { 
+                    clearInterval(retry); 
+                }, 5000);
+            }
+        } catch(e) {}
+
+        // Scroll: progress bar + navbar shadow + back-to-top
+        var navbar  = $('navbar');
+        var backTop = $('back-top');
+        var prog    = $('read-progress');
+        
+        window.addEventListener('scroll', function() {
+            var sy   = window.scrollY;
+            var docH = document.documentElement.scrollHeight - window.innerHeight;
+            
+            if (prog && docH > 0) {
+                prog.style.width = Math.min(100, sy / docH * 100) + '%';
+            }
+            if (navbar) {
+                navbar.classList.toggle('scrolled', sy > 40);
+            }
+            if (backTop) {
+                backTop.classList.toggle('visible', sy > 500);
+            }
+        }, { passive: true });
+
+        // Keyboard: Escape closes menus and popups
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                var m = $('mobile-menu');
+                if (m && m.classList.contains('open')) {
+                    toggleMenu();
+                }
+                
+                var ov = $('sub-popup-overlay');
+                if (ov && ov.classList.contains('open')) {
+                    closeSubPopup();
+                }
+            }
+        });
+        
+        // Close popup on overlay click
+        var ov = $('sub-popup-overlay');
+        if (ov) {
+            ov.addEventListener('click', function(e) {
+                if (e.target === ov) {
+                    closeSubPopup();
+                }
+            });
+        }
+
+        // Handle Subscription Form Submit
+        var subForm = $('sub-form');
+        if (subForm) {
+            subForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                var emailInput = subForm.querySelector('.sub-input');
+                var email = emailInput ? emailInput.value.trim() : '';
+                
+                if (!email) return;
+
+                var btn = subForm.querySelector('.sub-btn');
+                var originalText = btn.textContent;
+                btn.textContent = 'Subscribing...';
+                btn.disabled = true;
+
+                // Send to Supabase 'subscribers' table
+                sbInsert('subscribers', { email: email })
+                    .then(function() {
+                        showToast('Thanks for subscribing! Check your inbox soon.');
+                        closeSubPopup();
+                        emailInput.value = ''; 
+                    })
+                    .catch(function(err) {
+                        console.error('Subscription error:', err);
+                        showToast('Oops! Something went wrong. Try again.');
+                    })
+                    .finally(function() {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    });
+            });
+        }
+
+        // Fetch the article
+        fetchArticle();
+    });
 
 })();
 </script>
