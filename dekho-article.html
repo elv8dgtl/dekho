@@ -265,7 +265,7 @@
             padding: 7px 18px; 
             border-radius: 999px;
             border: 1.5px solid var(--border); 
-            background: var(--card-bg);
+            background: #ffffff;
             font-family: var(--mono); 
             font-size: 11px; 
             color: var(--ink);
@@ -1541,9 +1541,7 @@
     }
 
     function articleURL(a) {
-        // Automatically clean the slug by removing any leading slashes
-        var cleanSlug = a.slug ? a.slug.replace(/^\/+/, '') : '';
-        return SITE + '/dekho-article.html?' + (cleanSlug ? 'slug=' + encodeURIComponent(cleanSlug) : 'id=' + encodeURIComponent(a.id));
+        return SITE + '/dekho-article.html?' + (a.slug ? 'slug=' + encodeURIComponent(a.slug) : 'id=' + encodeURIComponent(a.id));
     }
 
     // ══════════════════════════════════════════════════════
@@ -1632,13 +1630,7 @@
     // ══════════════════════════════════════════════════════
     function fetchArticle() {
         var slug = getParam('slug');
-        
-        // Remove any leading slashes that might have accidentally been saved in the DB
-        if (slug) {
-            slug = slug.replace(/^\/+/, '');
-        }
-        
-        var id = getParam('id');
+        var id   = getParam('id');
 
         console.log('🔍 DEBUG: URL Parameters parsed ->', { slug: slug, id: id });
 
