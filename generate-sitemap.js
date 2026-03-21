@@ -43,8 +43,8 @@ async function generateSitemap() {
   </url>${articleUrls}
 </urlset>`;
 
-    fs.writeFileSync('sitemap.xml', xml);
-    console.log('✅ sitemap.xml generated successfully!');
+fs.writeFileSync('article-sitemap.xml', xml);
+console.log('✅ article-sitemap.xml generated successfully!');
     
   } catch (error) {
     console.error('❌ Failed to generate sitemap:', error);
