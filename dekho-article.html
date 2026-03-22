@@ -1665,7 +1665,23 @@
                 
                 console.log('🚀 DEBUG: Validation passed. Rendering article...');
                 renderArticle(article);
-                
+
+                // ── Track view (fire and forget) ──────────────────────────
+                fetch(SUPABASE_URL + '/functions/v1/articles', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':  'application/json',
+                        'apikey':        SUPABASE_ANON,
+                        'Authorization': 'Bearer ' + SUPABASE_ANON
+                    },
+                    body: JSON.stringify({
+                        action: 'incrementView',
+                        slug:   article.slug || null,
+                        id:     article.id   || null
+                    })
+                });
+                // ─────────────────────────────────────────────────────────
+
                 // Load related articles
                 sbFetchMany('status=eq.published', 'id,slug,title,category,cover_image,read_time,excerpt', 20)
                     .then(function(all) { 
@@ -1683,7 +1699,6 @@
                 showError('Could not load article. ' + (e && e.message ? e.message : 'Check connection.'));
             });
     }
-
     // ══════════════════════════════════════════════════════
     //  RENDER ARTICLE
     // ══════════════════════════════════════════════════════
