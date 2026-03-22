@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEKHO — Analytics</title>
+<meta name="robots" content="noindex,nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#0D0D0D;--paper:#FAFAF8;--surface:#F4F3F0;--border:#E2E0DA;
+  --muted:#8A8880;--accent:#E8380D;--green:#16A34A;--blue:#1A6BFF;
+  --red:#DC2626;--yellow:#CA8A04;
+}
+html,body{min-height:100%;font-size:15px;}
+body{font-family:'Instrument Sans',sans-serif;background:var(--surface);color:var(--ink);}
+button,input{font-family:inherit;font-size:inherit;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+#pg-login,#pg-app{display:none;}
+#pg-login.on{display:flex;}
+#pg-app.on{display:block;}
+
+/* LOGIN */
+#pg-login{min-height:100vh;align-items:center;justify-content:center;background:#0D0D0D;background-image:radial-gradient(ellipse at 20% 70%,rgba(232,56,13,.22) 0%,transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(204,243,129,.07) 0%,transparent 50%);position:fixed;inset:0;z-index:200;overflow-y:auto;}
+.lbox{width:min(460px,94vw);background:#181818;border:1.5px solid #2a2a2a;border-radius:20px;padding:2.75rem 2.5rem;box-shadow:0 24px 64px rgba(0,0,0,.6);}
+.llogo{text-align:center;margin-bottom:2rem;}
+.llogo h1{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:#fff;letter-spacing:.1em;line-height:1;}
+.llogo h1 span{color:var(--accent);}
+.llogo p{font-family:'DM Mono',monospace;font-size:10px;color:#555;letter-spacing:.3em;margin-top:6px;text-transform:uppercase;}
+.ll{display:block;font-family:'DM Mono',monospace;font-size:10px;color:#666;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;}
+.li{width:100%;background:#111;border:1.5px solid #2a2a2a;border-radius:9px;padding:13px 16px;font-size:14px;color:#fff;outline:none;transition:border-color .2s;}
+.li:focus{border-color:var(--accent);}
+.li::placeholder{color:#444;}
+.pwrap{position:relative;}
+.pwrap .li{padding-right:46px;}
+.peye{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;padding:4px;display:flex;align-items:center;}
+.peye:hover{color:#aaa;}
+.lbtn{width:100%;margin-top:1.5rem;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+.lbtn:hover{opacity:.88;}
+.lbtn:disabled{opacity:.4;cursor:not-allowed;}
+.lerr{display:none;margin-top:.85rem;padding:10px 14px;background:#2a0f0f;border:1px solid #5a1f1f;border-radius:7px;font-size:12px;color:#ff9a9a;line-height:1.6;}
+
+/* APP SHELL */
+#pg-app{min-height:100vh;}
+.topbar{background:#fff;border-bottom:1.5px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-l{display:flex;align-items:center;gap:.75rem;}
+.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:.1em;line-height:1;}
+.topbar-logo span{color:var(--accent);}
+.topbar-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;background:var(--surface);border:1.5px solid var(--border);border-radius:5px;padding:3px 8px;color:var(--muted);}
+.topbar-r{display:flex;align-items:center;gap:.65rem;}
+.topbar-user{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;}
+.topbar-user strong{color:var(--ink);}
+.btn-out{display:flex;align-items:center;gap:5px;padding:6px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;color:var(--muted);background:none;cursor:pointer;transition:all .2s;}
+.btn-out:hover{border-color:var(--red);color:var(--red);}
+
+/* TABS */
+.tab-nav{background:#fff;border-bottom:1.5px solid var(--border);padding:0 2rem;display:flex;}
+.tab-btn{padding:12px 18px;font-size:13px;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);border-bottom:2.5px solid transparent;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.tab-btn.on{color:var(--ink);border-bottom-color:var(--accent);}
+.tab-btn:hover:not(.on){color:var(--ink);}
+.tab-btn svg{width:14px;height:14px;}
+.tab-panel{display:none;}
+.tab-panel.on{display:block;}
+
+/* MAIN */
+.main{max-width:1400px;margin:0 auto;padding:2rem 2rem 4rem;}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1rem;margin-bottom:2rem;}
+.stat-card{background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:1.1rem 1.25rem;transition:border-color .2s,box-shadow .2s;}
+.stat-card:hover{border-color:#d0cec8;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.stat-lbl{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.35rem;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;color:var(--accent);}
+.stat-val.green{color:var(--green);}
+.stat-val.blue{color:var(--blue);}
+.stat-val.ink{color:var(--ink);}
+.stat-val.yellow{color:var(--yellow);}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem;}
+@media(max-width:900px){.two-col{grid-template-columns:1fr;}}
+
+/* CARD */
+.card{background:#fff;border:1.5px solid var(--border);border-radius:13px;}
+.card-head{padding:.9rem 1.25rem;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.card-head-title{font-size:13px;font-weight:700;}
+.card-body{padding:1.25rem;}
+
+/* BAR CHART */
+.bar-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem;}
+.bar-label{font-size:12px;color:var(--ink);width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+.bar-label a{color:var(--ink);transition:color .15s;}
+.bar-label a:hover{color:var(--accent);}
+.bar-track{flex:1;height:8px;background:var(--surface);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .7s cubic-bezier(.4,0,.2,1);}
+.bar-val{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);min-width:42px;text-align:right;flex-shrink:0;}
+
+/* CAT PILLS */
+.cat-pills{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.4rem;}
+.cat-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Mono',monospace;background:var(--surface);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s;}
+.cat-pill.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.cat-pill:hover:not(.on){border-color:var(--ink);color:var(--ink);}
+.cat-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+
+/* CAT BREAKDOWN */
+.cat-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.65rem;}
+.cat-row-label{font-size:12px;color:var(--ink);width:90px;font-weight:500;font-family:'DM Mono',monospace;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cat-row-track{flex:1;height:6px;background:var(--surface);border-radius:3px;overflow:hidden;}
+.cat-row-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.cat-row-meta{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);white-space:nowrap;}
+
+/* TABLE */
+.tw{overflow-x:auto;}
+table.t{width:100%;border-collapse:collapse;}
+table.t th{background:var(--surface);font-size:10px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);padding:9px 14px;text-align:left;border-bottom:1.5px solid var(--border);white-space:nowrap;}
+table.t td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
+table.t tr:last-child td{border-bottom:none;}
+table.t tr:hover td{background:var(--paper);}
+.te{text-align:center;padding:2.5rem;color:var(--muted);font-size:13px;}
+.pill{display:inline-block;padding:2px 9px;border-radius:4px;font-size:10px;font-family:'DM Mono',monospace;font-weight:500;letter-spacing:.06em;}
+.p-review{background:#F5F0FF;color:#6B3FD4;border:1px solid #CDB8FF;}
+.p-guide{background:#EFF6FF;color:var(--blue);border:1px solid #BAE6FD;}
+.p-top{background:#F0FDE8;color:var(--green);border:1px solid #B6EDAA;}
+.p-comparison{background:#FEF3C7;color:var(--yellow);border:1px solid #FCD57A;}
+.p-news{background:#FFF0ED;color:var(--accent);border:1px solid #FCCABB;}
+.p-opinion{background:#F8F8F8;color:var(--muted);border:1px solid var(--border);}
+.mini-bar-wrap{display:flex;align-items:center;gap:6px;}
+.mini-bar{height:4px;border-radius:2px;opacity:.35;flex-shrink:0;}
+
+/* CONTROLS */
+.topn-row{display:flex;align-items:center;gap:.35rem;}
+.topn-btn{padding:3px 9px;font-size:11px;font-family:'DM Mono',monospace;border:1.5px solid var(--border);border-radius:5px;background:none;color:var(--muted);cursor:pointer;transition:all .15s;}
+.topn-btn.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.topn-btn:hover:not(.on){border-color:var(--ink);color:var(--ink);}
+.refresh-btn{display:flex;align-items:center;gap:5px;font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);cursor:pointer;background:none;border:1.5px solid var(--border);padding:5px 10px;border-radius:6px;transition:all .15s;}
+.refresh-btn:hover{background:var(--surface);color:var(--ink);border-color:#ccc;}
+.refresh-btn svg{width:12px;height:12px;}
+.search-inp{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;padding:7px 12px;font-size:12px;color:var(--ink);outline:none;transition:border-color .2s;width:190px;}
+.search-inp:focus{border-color:var(--accent);}
+.search-inp::placeholder{color:var(--muted);}
+.last-updated{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);}
+
+/* GA TAB */
+.ga-main{max-width:1400px;margin:0 auto;padding:2rem 2rem 4rem;}
+.ga-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;}
+.ga-top h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.05em;line-height:1;}
+.ga-top p{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;}
+.ga-btns{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.ga-btn{display:flex;align-items:center;gap:5px;padding:8px 16px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Instrument Sans',sans-serif;}
+.ga-btn.p{background:var(--accent);color:#fff;}
+.ga-btn.p:hover{opacity:.85;}
+.ga-btn.g{background:var(--surface);color:var(--ink);border:1.5px solid var(--border);}
+.ga-btn.g:hover{border-color:var(--ink);}
+.ga-shortcut-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.ga-sc{background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:1.1rem 1.25rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .2s,box-shadow .2s;}
+.ga-sc:hover{border-color:#ccc;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.ga-sc-label{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;}
+.ga-sc-desc{font-size:13px;color:var(--ink);line-height:1.5;}
+.ga-sc-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;margin-top:.15rem;}
+.ga-sc-link:hover{text-decoration:underline;}
+.ga-frame-card{background:#fff;border:1.5px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:1.5rem;}
+.ga-frame-head{padding:.75rem 1.25rem;border-bottom:1.5px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.ga-frame-label{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.ga-frame-hint{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);}
+#ga-iframe{width:100%;height:700px;border:none;display:block;}
+.ga-explainer{background:linear-gradient(135deg,#0C0C0C,#1a1a1a);border-radius:13px;padding:1.5rem;display:flex;align-items:flex-start;gap:1rem;}
+.ga-exp-icon{width:38px;height:38px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.ga-exp-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:#fff;letter-spacing:.06em;margin-bottom:.4rem;}
+.ga-exp-text{font-size:12px;color:#777;font-family:'DM Mono',monospace;line-height:1.75;}
+.ga-exp-text a{color:var(--accent);}
+.ga-exp-text strong{color:#bbb;}
+
+/* TOASTS */
+#toasts{position:fixed;bottom:1.25rem;right:1.25rem;z-index:999;display:flex;flex-direction:column;gap:.4rem;pointer-events:none;}
+.toast{display:flex;align-items:center;gap:.6rem;padding:.6rem 1.1rem;border-radius:9px;font-size:13px;min-width:220px;background:#fff;border:1.5px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,.1);animation:tin .3s ease;}
+.toast.ok{background:#F0FDE8;border-color:#B6EDAA;color:var(--green);}
+.toast.bad{background:#FFF0ED;border-color:#FCCABB;color:var(--accent);}
+@keyframes tin{from{transform:translateY(8px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+@keyframes rot{to{transform:rotate(360deg);}}
+.an-spin{animation:rot .7s linear infinite;}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;vertical-align:middle;}
+
+@media(max-width:768px){
+  .main,.ga-main{padding:1rem 1rem 3rem;}
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .topbar{padding:0 1rem;}
+  .topbar-user{display:none;}
+  .bar-label{width:110px;}
+  .search-inp{width:130px;}
+  #ga-iframe{height:500px;}
+}
+@media(max-width:480px){.stat-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══════════════════════════════════════════════════════════════════ -->
+<div id="pg-login">
+  <div class="lbox">
+    <div class="llogo">
+      <h1>DEK<span>HO</span></h1>
+      <p>ANALYTICS · ADMIN ONLY</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.85rem;">
+      <div>
+        <label class="ll" for="l-email">Email Address</label>
+        <input class="li" id="l-email" type="email" placeholder="admin@elv8dgtl.in" autocomplete="email">
+      </div>
+      <div>
+        <label class="ll" for="l-pass">Password</label>
+        <div class="pwrap">
+          <input class="li" id="l-pass" type="password" placeholder="Your password" autocomplete="current-password">
+          <button class="peye" type="button" onclick="eyeToggle()" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="l-err" class="lerr"></div>
+      <button class="lbtn" id="l-btn" onclick="doLogin()">Sign In</button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#3a3a3a;margin-top:1.25rem;font-family:'DM Mono',monospace;line-height:1.7;">Admin access only.<br>Same credentials as DEKHO CMS.</p>
+  </div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════════════════════════════════ -->
+<div id="pg-app">
+
+  <div class="topbar">
+    <div class="topbar-l">
+      <div class="topbar-logo">DEK<span>HO</span></div>
+      <div class="topbar-badge">Analytics</div>
+    </div>
+    <div class="topbar-r">
+      <div class="topbar-user">Signed in as <strong id="tb-user">—</strong></div>
+      <button class="btn-out" onclick="doLogout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn on" id="tab-views-btn" onclick="switchTab('views')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Article Views
+    </button>
+    <button class="tab-btn" id="tab-ga-btn" onclick="switchTab('ga')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Google Analytics
+    </button>
+  </div>
+
+  <!-- ── ARTICLE VIEWS TAB ──────────────────────────────────────────────────── -->
+  <div class="tab-panel on" id="tab-views">
+    <div class="main">
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-lbl">Total Views</div><div class="stat-val" id="s-total-views">&mdash;</div><div class="stat-sub">All published articles</div></div>
+        <div class="stat-card"><div class="stat-lbl">Published Articles</div><div class="stat-val green" id="s-pub-count">&mdash;</div><div class="stat-sub">Live on DEKHO</div></div>
+        <div class="stat-card"><div class="stat-lbl">Top Article Views</div><div class="stat-val ink" id="s-top-views" style="font-size:2rem;">&mdash;</div><div class="stat-sub" id="s-top-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;">&mdash;</div></div>
+        <div class="stat-card"><div class="stat-lbl">Avg Views / Article</div><div class="stat-val blue" id="s-avg-views">&mdash;</div><div class="stat-sub">Across all published</div></div>
+        <div class="stat-card"><div class="stat-lbl">Zero-View Articles</div><div class="stat-val yellow" id="s-zero-views">&mdash;</div><div class="stat-sub">Need promotion</div></div>
+        <div class="stat-card"><div class="stat-lbl">Active Categories</div><div class="stat-val ink" id="s-cats">&mdash;</div><div class="stat-sub">Content types</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-head-title">Top Articles by Views</div>
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+              <div class="topn-row">
+                <button class="topn-btn on" onclick="setTopN(5,this)">Top 5</button>
+                <button class="topn-btn" onclick="setTopN(10,this)">Top 10</button>
+                <button class="topn-btn" onclick="setTopN(20,this)">All</button>
+              </div>
+              <button class="refresh-btn" onclick="loadData()">
+                <svg id="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3"/></svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+          <div class="card-body" id="bars-wrap"><div class="te">Loading&hellip;</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-head-title">Views by Category</div>
+            <span class="last-updated" id="last-updated-lbl"></span>
+          </div>
+          <div class="card-body" id="cat-breakdown-wrap"><div class="te">Loading&hellip;</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:2rem;">
+        <div class="card-head">
+          <div>
+            <div class="card-head-title">All Published Articles</div>
+            <div class="cat-pills" id="cat-filter-pills"></div>
+          </div>
+          <input class="search-inp" id="art-search" placeholder="Search titles&hellip;" oninput="renderTable()">
+        </div>
+        <div class="tw">
+          <table class="t">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th style="cursor:pointer;" onclick="toggleSort('views')">Views <span id="sort-views-icon">&darr;</span></th>
+                <th style="cursor:pointer;" onclick="toggleSort('title')">A&ndash;Z <span id="sort-title-icon"></span></th>
+                <th>Read Time</th>
+                <th>Published</th>
+              </tr>
+            </thead>
+            <tbody id="art-tbody"><tr><td colspan="6" class="te">Loading&hellip;</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <p style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;line-height:1.7;text-align:center;">
+        View counts tracked by Supabase (view_count column, incremented on every article page load).<br>
+        <span style="opacity:.5;">DEKHO Analytics &nbsp;&middot;&nbsp; elv8 dgtl</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ── GOOGLE ANALYTICS TAB ──────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-ga">
+    <div class="ga-main">
+
+      <div class="ga-top">
+        <div>
+          <h2>Google Analytics</h2>
+          <p>Property G-V77HPC9EX8 &nbsp;&middot;&nbsp; dekho.elv8dgtl.in &nbsp;&middot;&nbsp; Real-time sessions, traffic sources &amp; device data</p>
+        </div>
+        <div class="ga-btns">
+          <button class="ga-btn p" onclick="window.open('https://analytics.google.com/analytics/web/','_blank')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open Full GA4
+          </button>
+          <button class="ga-btn g" onclick="reloadFrame()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3"/></svg>
+            Reload Frame
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick report shortcuts -->
+      <div class="ga-shortcut-grid">
+        <div class="ga-sc">
+          <div class="ga-sc-label">Real-time</div>
+          <div class="ga-sc-desc">Active users right now. Pages being read this minute.</div>
+          <button class="ga-sc-link" onclick="window.open('https://analytics.google.com/analytics/web/#/p427985972/realtime/overview','_blank')">Open Real-time &rarr;</button>
+        </div>
+        <div class="ga-sc">
+          <div class="ga-sc-label">Traffic Sources</div>
+          <div class="ga-sc-desc">Organic search, direct, social, referral breakdown.</div>
+          <button class="ga-sc-link" onclick="window.open('https://analytics.google.com/analytics/web/#/p427985972/reports/explorer?params=_u..nav%3Dmaui&r=acquisition-traffic-acquisition&collectionId=acquisition','_blank')">Open Sources &rarr;</button>
+        </div>
+        <div class="ga-sc">
+          <div class="ga-sc-label">Top Pages</div>
+          <div class="ga-sc-desc">Most visited pages by sessions and avg engagement time.</div>
+          <button class="ga-sc-link" onclick="window.open('https://analytics.google.com/analytics/web/#/p427985972/reports/explorer?params=_u..nav%3Dmaui&r=all-pages-and-screens','_blank')">Open Pages &rarr;</button>
+        </div>
+        <div class="ga-sc">
+          <div class="ga-sc-label">Device Breakdown</div>
+          <div class="ga-sc-desc">Mobile vs desktop vs tablet — bounce rate per device.</div>
+          <button class="ga-sc-link" onclick="window.open('https://analytics.google.com/analytics/web/#/p427985972/reports/explorer?params=_u..nav%3Dmaui&r=user-technology-detail&collectionId=user','_blank')">Open Devices &rarr;</button>
+        </div>
+        <div class="ga-sc">
+          <div class="ga-sc-label">Geographic</div>
+          <div class="ga-sc-desc">India city-level data — Lucknow, Delhi, Mumbai and more.</div>
+          <button class="ga-sc-link" onclick="window.open('https://analytics.google.com/analytics/web/#/p427985972/reports/explorer?params=_u..nav%3Dmaui&r=user-demographics-detail&collectionId=user','_blank')">Open Geo &rarr;</button>
+        </div>
+        <div class="ga-sc">
+          <div class="ga-sc-label">Engagement</div>
+          <div class="ga-sc-desc">Scroll depth, session duration, engaged sessions vs bounces.</div>
+          <button class="ga-sc-link" onclick="window.open('https://analytics.google.com/analytics/web/#/p427985972/reports/explorer?params=_u..nav%3Dmaui&r=engagement-overview&collectionId=life-cycle','_blank')">Open Engagement &rarr;</button>
+        </div>
+      </div>
+
+      <!-- Embedded GA frame -->
+      <div class="ga-frame-card">
+        <div class="ga-frame-head">
+          <span class="ga-frame-label">GA4 &mdash; Embedded Dashboard</span>
+          <span class="ga-frame-hint">If you see a login page, sign in inside the frame once</span>
+        </div>
+        <iframe id="ga-iframe"
+          src="https://analytics.google.com/analytics/web/#/p427985972/reports/reportinghub"
+          allow="same-origin"
+          title="Google Analytics Dashboard">
+        </iframe>
+      </div>
+
+      <!-- Explainer -->
+      <div class="ga-explainer">
+        <div class="ga-exp-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="#fff"/></svg>
+        </div>
+        <div>
+          <div class="ga-exp-title">How The Embedded View Works</div>
+          <div class="ga-exp-text">
+            Google doesn't allow headless GA4 embedding — the frame above loads GA4 directly from Google's servers inside this page.
+            <strong>First time: sign in to Google inside the frame</strong>, it will persist via your browser session.<br><br>
+            For fastest access use the direct report links above — they open exactly the report you need.<br><br>
+            Property ID: <strong style="color:var(--accent);">G-V77HPC9EX8</strong> &nbsp;&middot;&nbsp;
+            <a href="https://analytics.google.com" target="_blank">analytics.google.com</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div id="toasts"></div>
+
+<script>
+var SUPABASE_URL  = 'https://xtooblgzedrkyxdmwvpp.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0b29ibGd6ZWRya3l4ZG13dnBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzc2NzQsImV4cCI6MjA4ODkxMzY3NH0.sLwUrLeHo1YJqGPcN8voeaLYlrS5e6o4px7tvez_4M4';
+var API_BASE = SUPABASE_URL + '/functions/v1';
+
+var S = { token:null, user:null, articles:[], catFilter:'', sortKey:'views', sortDir:-1, topN:5 };
+
+var CAT_COLORS = { review:'#6B3FD4', guide:'#1A6BFF', top:'#16A34A', comparison:'#CA8A04', news:'#E8380D', opinion:'#8A8880' };
+
+// ── SESSION ──────────────────────────────────────────────────────────────────
+var CKEY = 'dekho_analytics_s';
+function setCk(t,u){try{var v=encodeURIComponent(JSON.stringify({t:t,u:u,ts:Date.now()}));document.cookie=CKEY+'='+v+'; expires='+new Date(Date.now()+7*3600000).toUTCString()+'; path=/; SameSite=Strict';}catch(e){}}
+function getCk(){try{var m=document.cookie.split(';').map(function(c){return c.trim();}).find(function(c){return c.startsWith(CKEY+'=');});if(!m)return null;var o=JSON.parse(decodeURIComponent(m.split('=').slice(1).join('=')));if(!o||!o.t||!o.u||Date.now()-o.ts>7*3600000)return null;return o;}catch(e){return null;}}
+function clrCk(){try{document.cookie=CKEY+'=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict';}catch(e){}}
+
+// ── API ───────────────────────────────────────────────────────────────────────
+function call(action, body) {
+  var fn={login:'articles',logout:'articles',getMe:'articles',listPublished:'articles'}[action]||'articles';
+
+  // Public actions (no user JWT needed) use anon key as Bearer.
+  // Authenticated actions use the real user JWT.
+  var PUBLIC_ACTIONS = { login: true, logout: true, listPublished: true };
+  var bearer = PUBLIC_ACTIONS[action] ? SUPABASE_ANON : (S.token || SUPABASE_ANON);
+
+  return fetch(API_BASE+'/'+fn,{
+    method:'POST',
+    headers:{
+      'Content-Type':  'application/json',
+      'apikey':        SUPABASE_ANON,
+      'Authorization': 'Bearer ' + bearer
+    },
+    body:JSON.stringify(Object.assign({action:action},body||{}))
+  }).then(function(r){return r.json();}).catch(function(e){return{ok:false,error:'Network: '+(e.message||'')};});
+}
+
+// ── BOOT ─────────────────────────────────────────────────────────────────────
+(function boot(){
+  var t='';try{t=localStorage.getItem('dekho_token')||'';}catch(e){}
+  if(!t||t.split('.').length!==3){t='';try{localStorage.removeItem('dekho_token');}catch(e){}}
+  if(!t){showLogin();return;}
+  var cs=getCk();
+  if(cs&&cs.t===t&&cs.u&&cs.u.role==='admin'){S.token=t;S.user=cs.u;bootApp();return;}
+  S.token=t;
+  call('getMe',{token:t}).then(function(r){
+    if(!r.ok||!r.user){S.token=null;clrCk();showLogin();return;}
+    if(r.user.role!=='admin'){S.token=null;clrCk();try{localStorage.removeItem('dekho_token');}catch(e){}showLErr('Admin access only. Role: "'+r.user.role+'".');showLogin();return;}
+    S.user=r.user;setCk(t,r.user);bootApp();
+  }).catch(function(){S.token=null;showLogin();});
+})();
+
+function showLogin(){document.getElementById('pg-login').classList.add('on');document.getElementById('pg-app').classList.remove('on');}
+function showLErr(m){var e=document.getElementById('l-err');e.textContent=m;e.style.display='block';}
+function bootApp(){document.getElementById('pg-login').classList.remove('on');document.getElementById('pg-app').classList.add('on');document.getElementById('tb-user').textContent=S.user.name||S.user.email;loadData();}
+
+// ── LOGIN / LOGOUT ────────────────────────────────────────────────────────────
+function doLogin(){
+  var email=document.getElementById('l-email').value.trim(),pass=document.getElementById('l-pass').value,btn=document.getElementById('l-btn');
+  document.getElementById('l-err').style.display='none';
+  if(!email||!pass){showLErr('Enter both email and password.');return;}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Signing in&hellip;';
+  call('login',{email:email,password:pass}).then(function(r){
+    btn.disabled=false;btn.textContent='Sign In';
+    if(!r.ok){showLErr(r.error||'Login failed.');return;}
+    if(r.user.role!=='admin'){showLErr('Admin access only. Your role is "'+r.user.role+'".');return;}
+    S.token=r.token;S.user=r.user;
+    try{localStorage.setItem('dekho_token',r.token);}catch(e){}
+    setCk(r.token,r.user);bootApp();
+  });
+}
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&document.getElementById('pg-login').classList.contains('on'))doLogin();});
+
+function doLogout(){
+  if(S.token)call('logout',{token:S.token});
+  S.token=null;S.user=null;S.articles=[];
+  try{localStorage.removeItem('dekho_token');}catch(e){}
+  clrCk();
+  document.getElementById('l-email').value='';document.getElementById('l-pass').value='';
+  document.getElementById('l-err').style.display='none';
+  showLogin();
+}
+function eyeToggle(){var i=document.getElementById('l-pass');i.type=i.type==='password'?'text':'password';}
+
+// ── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(name){
+  ['views','ga'].forEach(function(t){
+    document.getElementById('tab-'+t).classList.toggle('on',t===name);
+    document.getElementById('tab-'+t+'-btn').classList.toggle('on',t===name);
+  });
+}
+function reloadFrame(){var f=document.getElementById('ga-iframe');var s=f.src;f.src='';f.src=s;}
+
+// ── LOAD DATA ─────────────────────────────────────────────────────────────────
+function loadData(){
+  var icon=document.getElementById('refresh-icon');if(icon)icon.classList.add('an-spin');
+  call('listPublished',{}).then(function(r){
+    if(icon)icon.classList.remove('an-spin');
+    if(!r.ok){toast(r.error||'Failed to load.','bad');return;}
+    S.articles=(r.articles||[]).sort(function(a,b){return(b.view_count||b.viewCount||0)-(a.view_count||a.viewCount||0);});
+    S.catFilter='';S.sortKey='views';S.sortDir=-1;
+    var now=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    var lbl=document.getElementById('last-updated-lbl');if(lbl)lbl.textContent='Updated '+now;
+    renderStats();renderCatFilterPills();renderBars();renderCatBreakdown();renderTable();
+  });
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+function renderStats(){
+  var arts=S.articles,total=arts.reduce(function(s,a){return s+(a.view_count||a.viewCount||0);},0);
+  var top=arts[0]||{},topV=top.view_count||top.viewCount||0,avg=arts.length?Math.round(total/arts.length):0;
+  var zero=arts.filter(function(a){return!(a.view_count||a.viewCount);}).length;
+  var cats=new Set(arts.map(function(a){return a.category;}).filter(Boolean)).size;
+  set('s-total-views',total.toLocaleString('en-IN'));set('s-pub-count',arts.length);
+  set('s-top-views',topV.toLocaleString('en-IN'));set('s-avg-views',avg.toLocaleString('en-IN'));
+  set('s-zero-views',zero);set('s-cats',cats);
+  var t=document.getElementById('s-top-title');if(t){t.textContent=top.title||'—';t.title=top.title||'';}
+}
+
+// ── CAT PILLS ─────────────────────────────────────────────────────────────────
+function renderCatFilterPills(){
+  var cats=['All'];S.articles.forEach(function(a){if(a.category&&cats.indexOf(a.category)===-1)cats.push(a.category);});
+  var wrap=document.getElementById('cat-filter-pills');if(!wrap)return;
+  wrap.innerHTML=cats.map(function(c){
+    var on=(c==='All'&&S.catFilter==='')||S.catFilter===c,col=CAT_COLORS[c]||'var(--muted)';
+    return '<button class="cat-pill'+(on?' on':'')+'" onclick="setCatFilter(\''+c+'\')">'+(c!=='All'?'<span class="cat-dot" style="background:'+col+';"></span>':'')+c+'</button>';
+  }).join('');
+}
+function setCatFilter(cat){
+  S.catFilter=(cat==='All')?'':cat;
+  document.querySelectorAll('.cat-pill').forEach(function(p){p.classList.toggle('on',p.textContent.trim()===cat||(cat==='All'&&S.catFilter===''));});
+  renderBars();renderTable();
+}
+
+// ── BARS ─────────────────────────────────────────────────────────────────────
+function setTopN(n,btn){S.topN=n;document.querySelectorAll('.topn-btn').forEach(function(b){b.classList.remove('on');});if(btn)btn.classList.add('on');renderBars();}
+function renderBars(){
+  var wrap=document.getElementById('bars-wrap');if(!wrap)return;
+  var arts=S.catFilter?S.articles.filter(function(a){return a.category===S.catFilter;}):S.articles;
+  arts=arts.slice(0,S.topN);
+  if(!arts.length){wrap.innerHTML='<div class="te">No published articles yet.</div>';return;}
+  var max=(arts[0].view_count||arts[0].viewCount||0);if(max===0)max=1;
+  wrap.innerHTML=arts.map(function(a){
+    var v=a.view_count||a.viewCount||0,pct=Math.round((v/max)*100),slug=a.slug||a.id,col=CAT_COLORS[a.category]||'var(--accent)';
+    return '<div class="bar-row">'+
+      '<div class="bar-label"><a href="https://dekho.elv8dgtl.in/dekho-article.html?slug='+encodeURIComponent(slug)+'" target="_blank">'+
+        esc((a.title||'Untitled').substring(0,28)+((a.title||'').length>28?'…':''))+'</a></div>'+
+      '<div class="bar-track"><div class="bar-fill" style="width:0%;background:'+col+';" data-pct="'+pct+'"></div></div>'+
+      '<div class="bar-val">'+v.toLocaleString('en-IN')+'</div></div>';
+  }).join('');
+  requestAnimationFrame(function(){wrap.querySelectorAll('.bar-fill').forEach(function(el){setTimeout(function(){el.style.width=el.getAttribute('data-pct')+'%';},60);});});
+}
+
+// ── CAT BREAKDOWN ─────────────────────────────────────────────────────────────
+function renderCatBreakdown(){
+  var wrap=document.getElementById('cat-breakdown-wrap');if(!wrap)return;
+  var map={};S.articles.forEach(function(a){var c=a.category||'other',v=a.view_count||a.viewCount||0;if(!map[c])map[c]={views:0,count:0};map[c].views+=v;map[c].count++;});
+  var cats=Object.keys(map).sort(function(a,b){return map[b].views-map[a].views;});
+  if(!cats.length){wrap.innerHTML='<div class="te">No data.</div>';return;}
+  var maxV=cats.reduce(function(m,c){return Math.max(m,map[c].views);},1);
+  wrap.innerHTML=cats.map(function(c){
+    var d=map[c],pct=Math.round((d.views/maxV)*100),col=CAT_COLORS[c]||'var(--muted)';
+    return '<div class="cat-row"><div class="cat-row-label" style="color:'+col+';">'+esc(c)+'</div>'+
+      '<div class="cat-row-track"><div class="cat-row-fill" style="background:'+col+';width:0%;" data-pct="'+pct+'"></div></div>'+
+      '<div class="cat-row-meta">'+d.views.toLocaleString('en-IN')+' &middot; '+d.count+' arts</div></div>';
+  }).join('');
+  requestAnimationFrame(function(){wrap.querySelectorAll('.cat-row-fill').forEach(function(el){setTimeout(function(){el.style.width=el.getAttribute('data-pct')+'%';},80);});});
+}
+
+// ── TABLE ─────────────────────────────────────────────────────────────────────
+function toggleSort(key){if(S.sortKey===key)S.sortDir*=-1;else{S.sortKey=key;S.sortDir=key==='views'?-1:1;}set('sort-views-icon',S.sortKey==='views'?(S.sortDir===-1?'↓':'↑'):'');set('sort-title-icon',S.sortKey==='title'?(S.sortDir===1?'↑':'↓'):'');renderTable();}
+function renderTable(){
+  var q=(document.getElementById('art-search')||{}).value||'';q=q.toLowerCase();
+  var arts=S.catFilter?S.articles.filter(function(a){return a.category===S.catFilter;}):S.articles.slice();
+  if(q)arts=arts.filter(function(a){return(a.title||'').toLowerCase().indexOf(q)>-1;});
+  arts.sort(function(a,b){if(S.sortKey==='views')return S.sortDir*((b.view_count||b.viewCount||0)-(a.view_count||a.viewCount||0));var ta=(a.title||'').toLowerCase(),tb=(b.title||'').toLowerCase();return S.sortDir*(ta<tb?-1:ta>tb?1:0);});
+  var tbody=document.getElementById('art-tbody');if(!tbody)return;
+  if(!arts.length){tbody.innerHTML='<tr><td colspan="6" class="te">No articles found.</td></tr>';return;}
+  var maxV=(S.articles[0]&&(S.articles[0].view_count||S.articles[0].viewCount))||1;
+  tbody.innerHTML=arts.map(function(a,i){
+    var v=a.view_count||a.viewCount||0,slug=a.slug||a.id,pubD=a.publishedAt||a.published_at||a.updatedAt||a.updated_at||'',bw=Math.round((v/maxV)*50),col=CAT_COLORS[a.category]||'var(--muted)';
+    var rank=S.sortKey==='views'?('<span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--muted);margin-right:4px;">#'+(i+1)+'</span>'):'';
+    return '<tr><td style="max-width:260px;"><div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;">'+rank+
+      '<a href="https://dekho.elv8dgtl.in/dekho-article.html?slug='+encodeURIComponent(slug)+'" target="_blank" style="color:var(--ink);text-decoration:none;" onmouseover="this.style.color=\'var(--accent)\'" onmouseout="this.style.color=\'var(--ink)\'">'+esc(a.title||'Untitled')+' &#x2197;</a></div></td>'+
+      '<td><span class="pill p-'+esc(a.category||'opinion')+'">'+esc(a.category||'—')+'</span></td>'+
+      '<td><div class="mini-bar-wrap"><span style="font-family:\'DM Mono\',monospace;font-size:12px;font-weight:600;color:'+col+';">'+v.toLocaleString('en-IN')+'</span>'+(bw>0?'<div class="mini-bar" style="width:'+bw+'px;background:'+col+';"></div>':'')+'</div></td>'+
+      '<td style="font-size:12px;color:var(--muted);">'+esc(String(a.readTime||a.read_time||'—'))+' min</td>'+
+      '<td style="font-size:12px;color:var(--muted);white-space:nowrap;">'+fmtD(pubD)+'</td></tr>';
+  }).join('');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function set(id,val){var e=document.getElementById(id);if(e)e.textContent=val;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtD(iso){if(!iso)return'—';try{return new Date(iso).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(e){return'—';}}
+function toast(msg,type,ms){ms=ms||3500;var c=document.getElementById('toasts'),t=document.createElement('div');t.className='toast'+(type==='ok'?' ok':type==='bad'?' bad':'');t.innerHTML=String(msg);c.appendChild(t);setTimeout(function(){t.style.transition='all .3s';t.style.opacity='0';t.style.transform='translateX(12px)';setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},300);},ms);}
+</script>
+</body>
+</html>
