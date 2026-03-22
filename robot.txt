@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /*?cat=
+Disallow: /*?*cat=
+Disallow: /*?s=
+Disallow: /*?search=
+
+Allow: /
+
+Sitemap: https://dekho.elv8dgtl.in/article-sitemap.xml
